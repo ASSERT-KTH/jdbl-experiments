@@ -1,5 +1,6 @@
 # ****************** Other ******************* #
 
+*.pyc
 # Folder with the projects that we use as case studies
 projects/*
 
