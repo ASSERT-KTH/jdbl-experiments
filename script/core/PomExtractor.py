@@ -1,10 +1,17 @@
 import xml.etree.ElementTree as xml
-from xml.etree.ElementTree import Element, SubElement, Comment
+from xml.etree.ElementTree import Element, SubElement, Comment, tostring
 from xml.dom import minidom
 
 from pathlib import Path
 
 
+def indent(elem, level=0):
+    if len(elem):
+        if elem.tail:
+            elem.tail = elem.tail.strip()
+        for subelem in elem:
+            indent(subelem, level+1)
+    return elem 
 
 class PomExtractor:
     def __init__(self, path):
@@ -16,6 +23,15 @@ class PomExtractor:
             f = xml.parse(p)
             self.poms.append({"path": p, "root": f.getroot()})
     
+    def write_pom(self):
+        for pom in self.poms:
+            indent(pom["root"])
+            rough_string = tostring(pom["root"], encoding="UTF-8").decode().replace("ns0:", '').replace('\n','')
+            reparsed = minidom.parseString(rough_string)
+            pom_content = reparsed.toprettyxml(indent="\t")
+            with open(pom["path"], 'w') as fd:
+                fd.write(pom_content)
+
     def get_artifact(self):
         return self.poms[0]["root"].find('xmlns:artifactId', namespaces=self.namespaces).text
 
@@ -36,7 +52,34 @@ class PomExtractor:
                     return version
         return None
 
+    def change_depency_path(self, group_id, artifact_id, path):
+        for pom in self.poms:
+            deps = pom["root"].findall('*//xmlns:dependency', namespaces=self.namespaces)
+            for dep in deps:
+                gr = dep.find('xmlns:groupId', namespaces=self.namespaces).text
+                ar = dep.find('xmlns:artifactId', namespaces=self.namespaces).text
+                if gr == group_id and ar == artifact_id:
+                    scope = dep.find('xmlns:scope', namespaces=self.namespaces)
+                    if scope is None:
+                        scope = SubElement(dep, "scope")
+                    scope.text = "system"
+                    SubElement(dep, "systemPath").text = path
+                    return True
+        return False
+
     def add_plugin(self, group_id, artifact_id, version, config):
+        # check if plugin is already defined if yes, remove it
+        declared_plugins = self.poms[0]["root"].findall('*//xmlns:plugin', namespaces=self.namespaces)
+        for declared_plugin in declared_plugins:
+            gr = declared_plugin.find('xmlns:groupId', namespaces=self.namespaces)
+            if gr != group_id:
+                continue
+            ar = declared_plugin.find('xmlns:artifactId', namespaces=self.namespaces)
+            if ar != artifact_id:
+                continue
+            # the plugin is the same remove it
+            declared_plugin.remove()
+
         plugins_section = None
         plugins = self.poms[0]["root"].findall('*//xmlns:plugins', namespaces=self.namespaces)
         if len(plugins) == 0:
@@ -52,7 +95,8 @@ class PomExtractor:
         else:
             plugins_section = plugins[0]
         new_plugin = SubElement(plugins_section, 'plugin')
-        SubElement(new_plugin, 'groupId').text = group_id
+        if group_id is not None:
+            SubElement(new_plugin, 'groupId').text = group_id
         SubElement(new_plugin, 'artifactId').text = artifact_id
         SubElement(new_plugin, 'version').text = version
 

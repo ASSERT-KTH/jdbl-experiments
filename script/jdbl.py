@@ -19,8 +19,4 @@ if __name__ == "__main__":
 
     jdbl = JDBL(dep, client, groupId=args.groupId, artifactId=args.artifactId)
     jdbl.run()
-    # dep_pom = PomExtractor("/var/folders/z4/sdq_r5xs4h91kjx05vqn7ntr0000gn/T/tmpyfa2c12_/pdfbox/")
-    # client_pom = PomExtractor("/var/folders/z4/sdq_r5xs4h91kjx05vqn7ntr0000gn/T/tmpyfa2c12_/serverless/")
-    # # dep_pom.get_artifact()
-    # print(client_pom.get_version_dependency(group_id=dep_pom.get_group(), artifact_id="pdfbox"))
     pass

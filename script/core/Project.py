@@ -3,7 +3,9 @@ import subprocess
 import os
 from github import Github
 
-g = Github("eac54c8e366cb4781d7d42f8167f16358247d74d")
+from core.PomExtractor import PomExtractor
+
+g = Github()
 
 class Project:
     def __init__(self, url):
@@ -11,12 +13,14 @@ class Project:
         self.name = os.path.basename(url).replace(".git", '')
         self.repo = url.replace("https://github.com/", '').replace(".git", '')
         self.path = None
+        self.pom = None
         self.releases = []
     
     def clone(self, path):
         cmd = "cd %s; ls .;git clone --depth=1 %s;ls .;" % (path, self.url)
         subprocess.check_call(cmd, shell=True)
         self.path = os.path.join(path, self.name)
+        self.pom = PomExtractor(self.path)
 
     def checkout_version(self, version):
         releases = self.get_releases()
@@ -29,8 +33,10 @@ class Project:
                 if len(v) > len(temp_version):
                     temp_version += '.0'
                 if v == temp_version:
-                    self.checkout_commit(r.commit.sha)
-                    return True
+                    if self.checkout_commit(r.commit.sha):
+                        self.pom = PomExtractor(self.path)
+                        return True
+                    return False
             except:
                 continue
         return False
@@ -40,9 +46,6 @@ class Project:
         subprocess.check_call(cmd, shell=True)
         return True
 
-    def modules(self):
-        pass
-
     def get_releases(self):
         if len(self.releases) != 0:
             return self.releases
@@ -50,18 +53,73 @@ class Project:
         self.releases = repo.get_tags()
         return self.releases
     
+    def test(self):
+        cmd = 'cd %s; mvn clean; mvn test --fail-never;' % (self.path)
+        subprocess.check_call(cmd, shell=True)
+
     def package(self):
-        cmd = 'cd %s; mvn package' % (self.path)
+        cmd = 'cd %s; mvn clean; mvn package --fail-never;' % (self.path)
         subprocess.check_call(cmd, shell=True)
     
-    def copyJar(self, dst):
-        cmd = 'cd %s/target;ls .; cp *.jar %s; ls %s' % (self.path, dst, dst)
+    def copy_jar(self, dst):
+        cmd = 'cd %s/target;ls .; cp *jar-with-dependencies.jar %s; ls %s' % (self.path, dst, dst)
         subprocess.check_call(cmd, shell=True)
     
-    def copyTestResults(self, dst):
+    def copy_test_results(self, dst):
         cmd = 'cd %s/target/; cp -r surefire-reports %s; ls %s' % (self.path, dst, dst)
         subprocess.check_call(cmd, shell=True)
     
-    def copyJacoco(self, dst):
-        cmd = 'cd %s/target/; cp -r report.xml %s; ls %s' % (self.path, dst, dst)
+    def copy_jacoco(self, dst):
+        cmd = 'cd %s/target/; cp -r jacoco.exec %s; ls %s' % (self.path, dst, dst)
         subprocess.check_call(cmd, shell=True)
+    
+    def copy_pom(self, dst):
+        cmd = 'cd %s; cp -r %s %s' % (self.path, self.pom.poms[0]['path'], dst)
+        subprocess.check_call(cmd, shell=True)
+
+    def inject_debloat_library(self, group_id, artifact_id, version):
+        path_jar = os.path.join("/", "results", "%s:%s" % (group_id, artifact_id), version, "debloat", "debloat.jar")
+        cmd = "cd %s; mvn install:install-file -Dfile=%s -DgroupId=%s -DartifactId=%s -Dversion=%s -Dpackaging=jar" % (self.path, path_jar, group_id, artifact_id, version)
+        subprocess.check_call(cmd, shell=True)
+
+        # self.pom.change_depency_path(group_id, artifact_id, path_jar)
+        # self.pom.write_pom()
+    
+    def inject_assembly_plugin(self):
+        self.pom.add_plugin(None, "maven-assembly-plugin", "3.2.0", [{
+            "name": "executions",
+            "children": [
+                {
+                    "name": "execution",
+                    "children": [
+                        {
+                            "name": "phase",
+                            "text": "package"
+                        },
+                        {
+                            "name": "goals",
+                            "children": [
+                                {
+                                    "name": "goal",
+                                    "text": "single"
+                                }
+                            ]
+                        }
+                    ]
+                }]
+            }, {
+                "name": "configuration",
+                "children": [
+                    {
+                        "name": "descriptorRefs",
+                        "children": [
+                            {
+                                "name": "descriptorRef",
+                                "text": "jar-with-dependencies"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ])
+        self.pom.write_pom()
