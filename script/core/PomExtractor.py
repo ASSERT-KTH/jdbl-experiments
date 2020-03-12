@@ -18,7 +18,6 @@ class PomExtractor:
         self.namespaces = {'xmlns' : 'http://maven.apache.org/POM/4.0.0'}
         self.path = path
         self.poms = []
-        print(Path(path), Path(path).rglob('pom.xml'))
         for p in Path(path).rglob('pom.xml'):
             f = xml.parse(p)
             self.poms.append({"path": p, "root": f.getroot()})

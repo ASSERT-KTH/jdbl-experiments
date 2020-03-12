@@ -1,0 +1,139 @@
+{
+ "commons-cli:commons-cli": {
+  "1.2": {
+   "original_test": {
+    "execution_time": 0.3130000000000001, 
+    "passing": 187, 
+    "failing": 0, 
+    "error": 0
+   }, 
+   "clients": {
+    "net.iponweb.disthene:disthene": {
+     "original_test": {
+      "execution_time": 0, 
+      "passing": 0, 
+      "failing": 0, 
+      "error": 0
+     }, 
+     "debloat_test": {
+      "execution_time": 0, 
+      "passing": 0, 
+      "failing": 0, 
+      "error": 0
+     }
+    }, 
+    "org.jperf:jperf": {
+     "original_test": {
+      "execution_time": 1.906, 
+      "passing": 2, 
+      "failing": 0, 
+      "error": 0
+     }, 
+     "debloat_test": {
+      "execution_time": 1.894, 
+      "passing": 2, 
+      "failing": 0, 
+      "error": 0
+     }
+    }, 
+    "com.ibm.wex.relevancyprofiler:relevancy-profiler": {
+     "original_test": {
+      "execution_time": 45.195, 
+      "passing": 80, 
+      "failing": 0, 
+      "error": 0
+     }, 
+     "debloat_test": {
+      "execution_time": 45.204, 
+      "passing": 80, 
+      "failing": 0, 
+      "error": 0
+     }
+    }, 
+    "com.codefutures:tpcc": {
+     "original_test": {
+      "execution_time": 0, 
+      "passing": 0, 
+      "failing": 0, 
+      "error": 0
+     }, 
+     "debloat_test": {
+      "execution_time": 0, 
+      "passing": 0, 
+      "failing": 0, 
+      "error": 0
+     }
+    }
+   }, 
+   "debloat_test": {
+    "execution_time": 0.43200000000000016, 
+    "passing": 187, 
+    "failing": 0, 
+    "error": 0
+   }
+  }
+ }, 
+ "com.alibaba:fastjson": {
+  "1.2.23": {
+   "original_test": {
+    "execution_time": 22.529000000000025, 
+    "passing": 3555, 
+    "failing": 0, 
+    "error": 0
+   }, 
+   "clients": {}, 
+   "debloat_test": {
+    "execution_time": 0, 
+    "passing": 0, 
+    "failing": 0, 
+    "error": 0
+   }
+  }
+ }, 
+ "commons-codec:commons-codec": {
+  "1.10": {
+   "original_test": {
+    "execution_time": 3.6749999999999994, 
+    "passing": 662, 
+    "failing": 0, 
+    "error": 0
+   }, 
+   "clients": {
+    "com.it.netty.rpc:MyRpc": {
+     "original_test": {
+      "execution_time": 0, 
+      "passing": 0, 
+      "failing": 0, 
+      "error": 0
+     }, 
+     "debloat_test": {
+      "execution_time": 0, 
+      "passing": 0, 
+      "failing": 0, 
+      "error": 0
+     }
+    }, 
+    "org.springframework.samples:spring-mvc-showcase": {
+     "original_test": {
+      "execution_time": 1.3879999999999995, 
+      "passing": 35, 
+      "failing": 1, 
+      "error": 0
+     }, 
+     "debloat_test": {
+      "execution_time": 1.4429999999999996, 
+      "passing": 35, 
+      "failing": 1, 
+      "error": 0
+     }
+    }
+   }, 
+   "debloat_test": {
+    "execution_time": 4.950999999999999, 
+    "passing": 662, 
+    "failing": 0, 
+    "error": 0
+   }
+  }
+ }
+}
