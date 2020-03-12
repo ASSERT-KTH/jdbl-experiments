@@ -101,12 +101,13 @@ class JDBL:
                 }
 
                 self.library.inject_assembly_plugin()
-                current_status['success'] = self.library.package()
-
                 if not os.path.exists(lib_original_path):
                     os.mkdir(lib_original_path)
                 
-                current_status['success'] = current_status['success'] and self.library.copy_pom(lib_original_path + "/pom.xml")
+                current_status['success'] = self.library.copy_pom(lib_original_path + "/pom.xml")
+
+                current_status['success'] = current_status['success'] and  self.library.package()
+
                 current_status['success'] = current_status['success'] and self.library.copy_jar(lib_original_path + "/original.jar")
                 current_status['success'] = current_status['success'] and self.library.copy_test_results(lib_original_path + "/test-results")
                 
@@ -117,7 +118,8 @@ class JDBL:
                 current_status['end'] = previous_time
                 results['steps'].append(current_status)
             else:
-                print("Library %s:%s with version %s already compile" % (dep_group, dep_artifact, expected_dep_version))
+                self.library.inject_assembly_plugin()
+                print("Library %s:%s with version %s already compiled" % (dep_group, dep_artifact, expected_dep_version))
 
             lib_debloat_path = os.path.join(result_path, "debloat")
             if not os.path.exists(os.path.join(lib_debloat_path, "debloat.jar")):
@@ -153,7 +155,7 @@ class JDBL:
             client_results_path = os.path.join(result_path, "clients", "%s:%s" % (self.client.pom.get_group(), self.client.pom.get_artifact()))
             if not os.path.exists(client_results_path):
                 os.makedirs(client_results_path)
-            else:
+            elif os.path.exists(os.path.join(client_results_path, "/test-results")):
                 print("[Exit] client result already present %s" % client_results_path)
                 return
 

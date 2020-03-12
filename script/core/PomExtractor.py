@@ -80,20 +80,20 @@ class PomExtractor:
             # the plugin is the same remove it
             declared_plugin.remove()
 
+        build_section = None
         plugins_section = None
-        plugins = self.poms[0]["root"].findall('*//xmlns:plugins', namespaces=self.namespaces)
-        if len(plugins) == 0:
-            build_section = None
-            build = self.poms[0]["root"].findall('*//xmlns:build', namespaces=self.namespaces)
-            if len(build) == 0:
-                # create build section
-                build_section = SubElement(self.poms[0]["root"], 'build')
-            else:
-                build_section = build[0]
+        build = self.poms[0]["root"].findall('xmlns:build', namespaces=self.namespaces)
+        print(build)
+        if len(build) == 0:
+            # create build section
+            build_section = SubElement(self.poms[0]["root"], 'build')
+
             # create plugin section
-            build_section = SubElement(build_section, 'plugins')
+            plugins_section = SubElement(build_section, 'plugins')
         else:
-            plugins_section = plugins[0]
+            build_section = build[0]
+            plugins_section =  build_section.find('xmlns:plugins', namespaces=self.namespaces)
+
         new_plugin = SubElement(plugins_section, 'plugin')
         if group_id is not None:
             SubElement(new_plugin, 'groupId').text = group_id
