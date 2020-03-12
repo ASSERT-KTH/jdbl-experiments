@@ -71,13 +71,13 @@ for lib in os.listdir(PATH):
             client_results = {}
             original_client_path = os.path.join(clients_path, client, 'original')
 
-            if not os.path.exists(os.path.join(original_client_path, 'original.jar')):
+            if not os.path.exists(os.path.join(original_client_path, 'test-results')):
                 build_errors['client'] += 1
                 continue
 
             debloat_client_path = os.path.join(clients_path, client, 'debloat')
 
-            if not os.path.exists(os.path.join(debloat_client_path, 'debloat.jar')):
+            if not os.path.exists(os.path.join(debloat_client_path, 'test-results')):
                 build_errors['client_debloat'] += 1
             
             client_results['original_test'] = readTestResults(original_client_path)
