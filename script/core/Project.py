@@ -5,6 +5,9 @@ from github import Github
 
 from core.PomExtractor import PomExtractor
 
+token = None
+if 'GITHUB_OAUTH' in os.environ:
+    token = os.environ['GITHUB_OAUTH']
 g = Github()
 
 class Project:
