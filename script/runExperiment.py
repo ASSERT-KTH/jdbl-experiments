@@ -4,6 +4,8 @@ import subprocess
 
 PATH_file = os.path.join(os.path.dirname(__file__), '..', 'dependants', 'single_module_java_projects_with_5_stars.json')
 
+timeout = 15 * 60 # 15min
+
 runs = []
 OUTPUT = os.path.abspath(os.path.join(os.path.dirname(__file__), "results"))
 with open(PATH_file) as fd:
@@ -22,5 +24,5 @@ with open(PATH_file) as fd:
                 cmd = 'docker run -v %s:/results -it --rm jdbl -d https://github.com/%s.git -c https://github.com/%s.git' % (OUTPUT, lib['repo_name'], client['repo_name'])
                 runs.append(cmd)
                 with open(os.path.join(OUTPUT, 'executions', '%s_%s.log' % (lib_name, client_name)), 'w') as fd:
-                    subprocess.call(cmd, shell=True, stderr=subprocess.STDOUT, universal_newlines=True, stdout=fd)
+                    subprocess.call(cmd, shell=True, stderr=subprocess.STDOUT, universal_newlines=True, stdout=fd, timeout=timeout)
                 break
