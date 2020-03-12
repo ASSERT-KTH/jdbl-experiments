@@ -51,7 +51,7 @@ class Project:
 
     def checkout_commit(self, commit):
         try:
-            cmd = 'cd %s; git fetch origin %s; git checkout %s' %(self.path, commit, commit)
+            cmd = 'cd %s; git fetch origin %s; git checkout -q %s' %(self.path, commit, commit)
             subprocess.check_call(cmd, shell=True)
             return True
         except:
@@ -65,7 +65,7 @@ class Project:
         return self.releases
     
     def test(self):
-        cmd = 'cd %s; mvn clean; mvn test --fail-never;' % (self.path)
+        cmd = 'cd %s; mvn clean -B; mvn test --fail-never -B;' % (self.path)
         try:
             subprocess.check_call(cmd, shell=True)
             return True
@@ -73,7 +73,7 @@ class Project:
             return False
 
     def package(self):
-        cmd = 'cd %s; mvn clean; mvn package --fail-never;' % (self.path)
+        cmd = 'cd %s; mvn clean -B; mvn package --fail-never -B;' % (self.path)
         try:
             subprocess.check_call(cmd, shell=True)
             return True
@@ -124,7 +124,7 @@ class Project:
 
     def inject_debloat_library(self, group_id, artifact_id, version):
         path_jar = os.path.join("/", "results", "%s:%s" % (group_id, artifact_id), version, "debloat", "debloat.jar")
-        cmd = "cd %s; mvn install:install-file -Dfile=%s -DgroupId=%s -DartifactId=%s -Dversion=%s -Dpackaging=jar" % (self.path, path_jar, group_id, artifact_id, version)
+        cmd = "cd %s; mvn install:install-file -Dfile=%s -DgroupId=%s -DartifactId=%s -Dversion=%s -Dpackaging=jar -B" % (self.path, path_jar, group_id, artifact_id, version)
         try:
             subprocess.check_call(cmd, shell=True)
             return True
