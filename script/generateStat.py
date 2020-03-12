@@ -9,6 +9,7 @@ build_errors = {
     'debloat': 0,
     'client': 0,
     'client_debloat': 0,
+    'none': 0
 }
 def readTestResults(path):
     output = {
@@ -74,15 +75,16 @@ for lib in os.listdir(PATH):
             if not os.path.exists(os.path.join(original_client_path, 'test-results')):
                 build_errors['client'] += 1
                 continue
+            client_results['original_test'] = readTestResults(original_client_path)
 
             debloat_client_path = os.path.join(clients_path, client, 'debloat')
-
             if not os.path.exists(os.path.join(debloat_client_path, 'test-results')):
                 build_errors['client_debloat'] += 1
-            
-            client_results['original_test'] = readTestResults(original_client_path)
+                continue
+
             client_results['debloat_test'] = readTestResults(debloat_client_path)
             results[lib][version]['clients'][client] = client_results
+            build_errors['none'] += 1
 print("Number of error", build_errors)
 with open(os.path.join(PATH, '..', '..', 'raw_results.json'), 'w') as fd:
     json.dump(results, fd, indent=1)
