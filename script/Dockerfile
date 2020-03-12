@@ -11,6 +11,7 @@ RUN pip3 install --requirement requirements.txt
 
 RUN mkdir /results
 ENV M2_HOME=/root/.m2/
+ENV GITHUB_OAUTH=''
 
 COPY __init__.py /__init__.py
 COPY jdbl.py /jdbl.py

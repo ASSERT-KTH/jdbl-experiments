@@ -6,9 +6,9 @@ from github import Github
 from core.PomExtractor import PomExtractor
 
 token = None
-if 'GITHUB_OAUTH' in os.environ:
+if 'GITHUB_OAUTH' in os.environ and len(os.environ['GITHUB_OAUTH']) > 0:
     token = os.environ['GITHUB_OAUTH']
-g = Github()
+g = Github(token)
 
 class Project:
     def __init__(self, url):
@@ -21,7 +21,7 @@ class Project:
     
     def clone(self, path):
         try:
-            cmd = "cd %s; ls .;git clone --depth=1 %s;ls .;" % (path, self.url)
+            cmd = "cd %s; ls .;git clone -q --depth=1 %s;ls .;" % (path, self.url)
             subprocess.check_call(cmd, shell=True)
             self.path = os.path.join(path, self.name)
             self.pom = PomExtractor(self.path)
