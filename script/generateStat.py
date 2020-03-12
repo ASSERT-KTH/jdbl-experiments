@@ -4,6 +4,12 @@ import xml.etree.ElementTree as xml
 
 PATH = os.path.join(os.path.dirname(__file__), 'results')
 
+build_errors = {
+    'lib': 0,
+    'debloat': 0,
+    'client': 0,
+    'client_debloat': 0,
+}
 def readTestResults(path):
     output = {
         'error': 0,
@@ -44,6 +50,14 @@ for lib in os.listdir(PATH):
         original_path = os.path.join(version_path, 'original')
         debloat_path = os.path.join(version_path, 'debloat')
 
+        if not os.path.exists(os.path.join(original_path, 'original.jar')):
+            build_errors['lib'] += 1
+            continue
+
+        if not os.path.exists(os.path.join(debloat_path, 'debloat.jar')):
+            build_errors['debloat'] += 1
+            continue
+
         clients_path = os.path.join(version_path, 'clients')
 
         results[lib][version]['original_test'] = readTestResults(original_path)
@@ -57,10 +71,19 @@ for lib in os.listdir(PATH):
                 continue
             client_results = {}
             original_client_path = os.path.join(clients_path, client, 'original')
+
+            if not os.path.exists(os.path.join(original_client_path, 'original.jar')):
+                build_errors['client'] += 1
+                continue
+
             debloat_client_path = os.path.join(clients_path, client, 'debloat')
-            print(original_client_path)
+
+            if not os.path.exists(os.path.join(original_client_path, 'debloat.jar')):
+                build_errors['client_debloat'] += 1
+            
             client_results['original_test'] = readTestResults(original_client_path)
             client_results['debloat_test'] = readTestResults(debloat_client_path)
             results[lib][version]['clients'][client] = client_results
+print("Number of error", build_errors)
 with open(os.path.join(PATH, '..', '..', 'raw_results.json'), 'w') as fd:
     json.dump(results, fd, indent=1)
