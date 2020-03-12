@@ -22,6 +22,7 @@ class Project:
             subprocess.check_call(cmd, shell=True)
             self.path = os.path.join(path, self.name)
             self.pom = PomExtractor(self.path)
+            self.path = os.path.dirname(self.pom.poms[0]['path'])
             return True
         except:
             return False
