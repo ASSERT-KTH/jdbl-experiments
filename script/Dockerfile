@@ -1,6 +1,6 @@
 FROM maven:3-jdk-8
 
-RUN apt update
+RUN apt-get update
 RUN apt-get install -y python3 python3-pip git
 
 RUN git clone https://github.com/castor-software/jdbl.git

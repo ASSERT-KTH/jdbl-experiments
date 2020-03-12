@@ -17,10 +17,14 @@ class Project:
         self.releases = []
     
     def clone(self, path):
-        cmd = "cd %s; ls .;git clone --depth=1 %s;ls .;" % (path, self.url)
-        subprocess.check_call(cmd, shell=True)
-        self.path = os.path.join(path, self.name)
-        self.pom = PomExtractor(self.path)
+        try:
+            cmd = "cd %s; ls .;git clone --depth=1 %s;ls .;" % (path, self.url)
+            subprocess.check_call(cmd, shell=True)
+            self.path = os.path.join(path, self.name)
+            self.pom = PomExtractor(self.path)
+            return True
+        except:
+            return False
 
     def checkout_version(self, version):
         releases = self.get_releases()
@@ -42,9 +46,12 @@ class Project:
         return False
 
     def checkout_commit(self, commit):
-        cmd = 'cd %s; git fetch origin %s; git checkout %s' %(self.path, commit, commit)
-        subprocess.check_call(cmd, shell=True)
-        return True
+        try:
+            cmd = 'cd %s; git fetch origin %s; git checkout %s' %(self.path, commit, commit)
+            subprocess.check_call(cmd, shell=True)
+            return True
+        except:
+            return False
 
     def get_releases(self):
         if len(self.releases) != 0:
@@ -55,32 +62,70 @@ class Project:
     
     def test(self):
         cmd = 'cd %s; mvn clean; mvn test --fail-never;' % (self.path)
-        subprocess.check_call(cmd, shell=True)
+        try:
+            subprocess.check_call(cmd, shell=True)
+            return True
+        except:
+            return False
 
     def package(self):
         cmd = 'cd %s; mvn clean; mvn package --fail-never;' % (self.path)
-        subprocess.check_call(cmd, shell=True)
+        try:
+            subprocess.check_call(cmd, shell=True)
+            return True
+        except:
+            return False
     
     def copy_jar(self, dst):
         cmd = 'cd %s/target;ls .; cp *jar-with-dependencies.jar %s; ls %s' % (self.path, dst, dst)
-        subprocess.check_call(cmd, shell=True)
+        try:
+            subprocess.check_call(cmd, shell=True)
+            return True
+        except:
+            return False
     
     def copy_test_results(self, dst):
-        cmd = 'cd %s/target/; cp -r surefire-reports %s; ls %s' % (self.path, dst, dst)
-        subprocess.check_call(cmd, shell=True)
+        if not os.path.exists(os.path.join(self.path, "target", "surefire-reports")):
+            return False
+        cmd = 'cd %s/target/; cp -r surefire-reports %s' % (self.path, dst)
+        try:
+            subprocess.check_call(cmd, shell=True)
+            return True
+        except:
+            return False
     
     def copy_jacoco(self, dst):
         cmd = 'cd %s/target/; cp -r jacoco.exec %s; ls %s' % (self.path, dst, dst)
-        subprocess.check_call(cmd, shell=True)
+        try:
+            subprocess.check_call(cmd, shell=True)
+            return True
+        except:
+            return False
     
     def copy_pom(self, dst):
         cmd = 'cd %s; cp -r %s %s' % (self.path, self.pom.poms[0]['path'], dst)
-        subprocess.check_call(cmd, shell=True)
+        try:
+            subprocess.check_call(cmd, shell=True)
+            return True
+        except:
+            return False
+
+    def copy_report(self, dst):
+        cmd = 'cd %s; cp -r debloat-report.csv %s' % (self.path, dst)
+        try:
+            subprocess.check_call(cmd, shell=True)
+            return True
+        except:
+            return False
 
     def inject_debloat_library(self, group_id, artifact_id, version):
         path_jar = os.path.join("/", "results", "%s:%s" % (group_id, artifact_id), version, "debloat", "debloat.jar")
         cmd = "cd %s; mvn install:install-file -Dfile=%s -DgroupId=%s -DartifactId=%s -Dversion=%s -Dpackaging=jar" % (self.path, path_jar, group_id, artifact_id, version)
-        subprocess.check_call(cmd, shell=True)
+        try:
+            subprocess.check_call(cmd, shell=True)
+            return True
+        except:
+            return False
 
         # self.pom.change_depency_path(group_id, artifact_id, path_jar)
         # self.pom.write_pom()
@@ -123,3 +168,4 @@ class Project:
             }
         ])
         self.pom.write_pom()
+        return True

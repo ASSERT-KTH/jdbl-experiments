@@ -74,5 +74,9 @@ class Debloat:
     def run(self):
         self.inject_library()
 
-        cmd = 'cd %s; mvn clean; mvn package;' % (self.project.path)
-        subprocess.check_call(cmd, shell=True)        
+        cmd = 'cd %s; mvn clean; mvn package -e;' % (self.project.path)
+        try:
+            subprocess.check_call(cmd, shell=True)
+            return True
+        except:
+            return False
