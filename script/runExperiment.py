@@ -24,5 +24,8 @@ with open(PATH_file) as fd:
                 cmd = 'docker run -v %s:/results -it --rm jdbl -d https://github.com/%s.git -c https://github.com/%s.git' % (OUTPUT, lib['repo_name'], client['repo_name'])
                 runs.append(cmd)
                 with open(os.path.join(OUTPUT, 'executions', '%s_%s.log' % (lib_name, client_name)), 'w') as fd:
-                    subprocess.call(cmd, shell=True, stderr=subprocess.STDOUT, universal_newlines=True, stdout=fd, timeout=timeout)
+                    try:
+                        subprocess.call(cmd, shell=True, stderr=subprocess.STDOUT, universal_newlines=True, stdout=fd, timeout=timeout)
+                    except:
+                        pass
                 break
