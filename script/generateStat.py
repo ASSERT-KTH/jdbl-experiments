@@ -58,11 +58,10 @@ for lib in os.listdir(PATH):
             build_errors['debloat'] += 1
             continue
 
-        clients_path = os.path.join(version_path, 'clients')
-
         results[lib][version]['original_test'] = readTestResults(original_path)
         results[lib][version]['debloat_test'] = readTestResults(debloat_path)
         
+        clients_path = os.path.join(version_path, 'clients')
         if not os.path.exists(clients_path):
             continue
 
@@ -78,7 +77,7 @@ for lib in os.listdir(PATH):
 
             debloat_client_path = os.path.join(clients_path, client, 'debloat')
 
-            if not os.path.exists(os.path.join(original_client_path, 'debloat.jar')):
+            if not os.path.exists(os.path.join(debloat_client_path, 'debloat.jar')):
                 build_errors['client_debloat'] += 1
             
             client_results['original_test'] = readTestResults(original_client_path)
