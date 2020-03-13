@@ -25,11 +25,22 @@ def readTestResults(path):
         if ".xml" not in test:
             continue
         test_path = os.path.join(test_results_path, test)
-        test_results = xml.parse(test_path).getroot()
-        output['execution_time'] += float(test_results.get('time'))        
-        output['error'] += int(test_results.get('errors'))
-        output['failing'] += int(test_results.get('failures'))
-        output['passing'] += int(test_results.get('tests')) - int(test_results.get('errors')) - int(test_results.get('failures'))
+        try:
+            test_results = xml.parse(test_path).getroot()
+            if test_results.get('time') is not None:
+                output['execution_time'] += float(test_results.get('time'))  
+            if test_results.get('errors') is not None:
+                output['error'] += int(test_results.get('errors'))
+            if test_results.get('failures') is not None:
+                output['failing'] += int(test_results.get('failures'))
+            if test_results.get('failed') is not None:
+                output['failing'] += int(test_results.get('failed'))
+            if test_results.get('tests') is not None:
+                output['passing'] += int(test_results.get('tests')) - int(test_results.get('errors')) - int(test_results.get('failures'))
+            if test_results.get('passed') is not None:
+                output['passing'] += int(test_results.get('passed'))
+        except:
+            pass
     return output       
 
 results = {}
