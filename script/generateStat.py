@@ -27,7 +27,7 @@ def readTestResults(path):
         test_path = os.path.join(test_results_path, test)
         test_results = xml.parse(test_path).getroot()
         output['execution_time'] += float(test_results.get('time'))        
-        output['error'] = int(test_results.get('errors'))
+        output['error'] += int(test_results.get('errors'))
         output['failing'] += int(test_results.get('failures'))
         output['passing'] += int(test_results.get('tests')) - int(test_results.get('errors')) - int(test_results.get('failures'))
     return output       
@@ -85,6 +85,7 @@ for lib in os.listdir(PATH):
             client_results['debloat_test'] = readTestResults(debloat_client_path)
             results[lib][version]['clients'][client] = client_results
             build_errors['none'] += 1
+            print("Client %s on %s run the debloat version (o_test %d, d_test %d)" % (client, lib, client_results['original_test']['passing'], client_results['debloat_test']['passing']))
 print("Number of error", build_errors)
 with open(os.path.join(PATH, '..', '..', 'raw_results.json'), 'w') as fd:
     json.dump(results, fd, indent=1)
