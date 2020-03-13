@@ -51,6 +51,9 @@ class JDBL:
             current_status['end'] = previous_time
             results['steps'].append(current_status)
 
+            dep_artifact = self.library.pom.get_artifact()
+            dep_group = self.library.pom.get_group()
+
             if self.version is None:
                 print("3. Extract library version")
                 
@@ -58,9 +61,6 @@ class JDBL:
                     "name": 'extract library version',
                     "start": previous_time,
                 }
-
-                dep_artifact = self.library.pom.get_artifact()
-                dep_group = self.library.pom.get_group()
 
                 self.version = self.client.pom.get_version_dependency(group_id=dep_group, artifact_id=dep_artifact)
 
