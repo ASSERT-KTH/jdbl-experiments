@@ -46,8 +46,10 @@ class PomExtractor:
             for dep in deps:
                 gr = dep.find('xmlns:groupId', namespaces=self.namespaces).text
                 ar = dep.find('xmlns:artifactId', namespaces=self.namespaces).text
-                version = dep.find('xmlns:version', namespaces=self.namespaces).text
                 if gr == group_id and ar == artifact_id:
+                    version = dep.find('xmlns:version', namespaces=self.namespaces)
+                    if version is not None:
+                        version = version.text
                     return version
         return None
 

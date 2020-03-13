@@ -10,9 +10,10 @@ from core.Debloat import Debloat
 OUTPUT_dir = '/' 
 
 class JDBL:
-    def __init__(self, library, client, working_directory=None):
+    def __init__(self, library, client, version=None, working_directory=None):
         self.library = library
         self.client = client
+        self.version = version
         self.working_directory = working_directory
         if working_directory is None:
             self.working_directory = tempfile.mkdtemp()
@@ -50,26 +51,27 @@ class JDBL:
             current_status['end'] = previous_time
             results['steps'].append(current_status)
 
-            print("3. Extract library version")
+            if self.version is None:
+                print("3. Extract library version")
+                
+                current_status = {
+                    "name": 'extract library version',
+                    "start": previous_time,
+                }
 
-            current_status = {
-                "name": 'extract library version',
-                "start": previous_time,
-            }
+                dep_artifact = self.library.pom.get_artifact()
+                dep_group = self.library.pom.get_group()
 
-            dep_artifact = self.library.pom.get_artifact()
-            dep_group = self.library.pom.get_group()
+                self.version = self.client.pom.get_version_dependency(group_id=dep_group, artifact_id=dep_artifact)
 
-            expected_dep_version = self.client.pom.get_version_dependency(group_id=dep_group, artifact_id=dep_artifact)
-
-            current_status['success'] = expected_dep_version is not None
-            
-            if not current_status['success']:
-                print("[exit] The library version has not been found")
-                return
-            previous_time = time.time()
-            current_status['end'] = previous_time
-            results['steps'].append(current_status)
+                current_status['success'] = self.version is not None
+                
+                if not current_status['success']:
+                    print("[exit] The library version has not been found")
+                    return
+                previous_time = time.time()
+                current_status['end'] = previous_time
+                results['steps'].append(current_status)
 
             
             print("4. Checkout library version")
@@ -79,16 +81,16 @@ class JDBL:
                 "start": previous_time,
             }
 
-            current_status['success'] = self.library.checkout_version(expected_dep_version)
+            current_status['success'] = self.library.checkout_version(self.version)
             
             if not current_status['success']:
-                print("[exit] Unable to checkout commit %s" % (expected_dep_version))
+                print("[exit] Unable to checkout commit %s" % (self.version))
                 return
             previous_time = time.time()
             current_status['end'] = previous_time
             results['steps'].append(current_status)
             
-            result_path = os.path.join(OUTPUT_dir, "results", "%s:%s" % (dep_group, dep_artifact), expected_dep_version)
+            result_path = os.path.join(OUTPUT_dir, "results", "%s:%s" % (dep_group, dep_artifact), self.version)
             if not os.path.exists(result_path):
                 os.makedirs(result_path)
             
@@ -119,7 +121,7 @@ class JDBL:
                 results['steps'].append(current_status)
             else:
                 self.library.inject_assembly_plugin()
-                print("Library %s:%s with version %s already compiled" % (dep_group, dep_artifact, expected_dep_version))
+                print("Library %s:%s with version %s already compiled" % (dep_group, dep_artifact, self.version))
 
             lib_debloat_path = os.path.join(result_path, "debloat")
             if not os.path.exists(os.path.join(lib_debloat_path, "debloat.jar")):
@@ -147,7 +149,7 @@ class JDBL:
                 current_status['end'] = previous_time
                 results['steps'].append(current_status)
             else:
-                print("Library %s:%s with version %s already debloated" % (dep_group, dep_artifact, expected_dep_version))
+                print("Library %s:%s with version %s already debloated" % (dep_group, dep_artifact, self.version))
 
             print("7. Execute test library debloat")
             # TODO        
@@ -188,7 +190,7 @@ class JDBL:
                 "start": previous_time,
             }
 
-            current_status['success'] = self.client.inject_debloat_library(dep_group, dep_artifact, expected_dep_version)
+            current_status['success'] = self.client.inject_debloat_library(dep_group, dep_artifact, self.version)
             
             if not current_status['success']:
                 print("[exit] Unable to inject debloated library in client")

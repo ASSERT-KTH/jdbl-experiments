@@ -33,11 +33,11 @@ class Project:
     def checkout_version(self, version):
         releases = self.get_releases()
         for r in releases:
-            v = r.name.replace('v.', '').replace('v', '')
+            v = r.name.lower().replace('v.', '').replace('v', '').replace('_', '.').replace('-', '.')
             try:
                 index = v.index(version)
                 v = v[index:]
-                temp_version = version
+                temp_version = version.replace('_', '.').replace('-', '.')
                 if len(v) > len(temp_version):
                     temp_version += '.0'
                 if v == temp_version:
@@ -51,7 +51,7 @@ class Project:
 
     def checkout_commit(self, commit):
         try:
-            cmd = 'cd %s; git fetch origin %s; git checkout -q %s' %(self.path, commit, commit)
+            cmd = 'cd %s; git fetch -q origin %s; git checkout -q %s' %(self.path, commit, commit)
             subprocess.check_call(cmd, shell=True)
             return True
         except:
