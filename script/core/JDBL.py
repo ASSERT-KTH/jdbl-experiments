@@ -175,7 +175,8 @@ class JDBL:
             results['steps'].append(current_status)
 
             original_client_results_path = os.path.join(client_results_path, "original")
-            os.mkdir(original_client_results_path)
+            if not os.path.exists(original_client_results_path):
+                os.mkdir(original_client_results_path)
             current_status['success'] = current_status['success'] and self.client.copy_pom(original_client_results_path + "/pom.xml")
             current_status['success'] = current_status['success'] and self.client.copy_test_results(original_client_results_path + "/test-results")
 
@@ -209,7 +210,8 @@ class JDBL:
             }
 
             debloat_client_results_path = os.path.join(client_results_path, "debloat")
-            os.mkdir(debloat_client_results_path)
+            if not os.path.exists(debloat_client_results_path):
+                os.mkdir(debloat_client_results_path)
             current_status['success'] = self.client.copy_pom(debloat_client_results_path + "/pom.xml")
 
             current_status['success'] = current_status['success'] and self.client.test()
