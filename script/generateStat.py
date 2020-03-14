@@ -43,6 +43,8 @@ def readTestResults(path):
             pass
     return output       
 
+lib_with_clients = set()
+count_debloated_clients = 0
 results = {}
 for lib in os.listdir(PATH):
     if lib == 'executions' or lib == '.DS_Store':
@@ -96,7 +98,12 @@ for lib in os.listdir(PATH):
             client_results['debloat_test'] = readTestResults(debloat_client_path)
             results[lib][version]['clients'][client] = client_results
             build_errors['none'] += 1
+            lib_with_clients.add(lib)
+            if client_results['original_test']['passing'] == client_results['debloat_test']['passing']:
+                count_debloated_clients += 1
             print("Client %s on %s run the debloat version (o_test %d, d_test %d)" % (client, lib, client_results['original_test']['passing'], client_results['debloat_test']['passing']))
 print("Number of error", build_errors)
+print("Lib with clients", len(lib_with_clients))
+print("# successful debloated clients", count_debloated_clients)
 with open(os.path.join(PATH, '..', '..', 'raw_results.json'), 'w') as fd:
     json.dump(results, fd, indent=1)
