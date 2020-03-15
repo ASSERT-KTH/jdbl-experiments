@@ -1,6 +1,6 @@
 {
  "org.hashids:hashids": {
-  "artifactId": "hashids",
+  "artifactId": "   ",
   "groupId": "org.hashids",
   "repo_name": "10cella/hashids-java",
   "java_version": "1.6",
@@ -6294,7 +6294,7 @@
  "org.jfree:jfreechart": {
   "artifactId": "jfreechart",
   "groupId": "org.jfree",
-  "repo_name": "rajarshisarkar/Projects",
+  "repo_name": "jfree/jfreechart",
   "java_version": "${project.source.level}",
   "version": "1.0.19",
   "clients": {
@@ -8959,7 +8959,7 @@
  "org.neo4j:neo4j": {
   "artifactId": "neo4j",
   "groupId": "org.neo4j",
-  "repo_name": "GretaCB/Routing-Project",
+  "repo_name": "neo4j/neo4j",
   "version": "0.0.1-SNAPSHOT",
   "clients": {
    "3.1.2": [
@@ -9869,7 +9869,7 @@
  "org.apache.hbase:hbase": {
   "artifactId": "hbase",
   "groupId": "org.apache.hbase",
-  "repo_name": "zwqjsj0404/HBase-Research",
+  "repo_name": "apache/hbase",
   "version": "0.94.9-SNAPSHOT",
   "clients": {
    "0.90.5": [
@@ -10891,7 +10891,7 @@
  "joda-time:joda-time": {
   "artifactId": "joda-time",
   "groupId": "joda-time",
-  "repo_name": "meinicke/VarexJ",
+  "repo_name": "JodaOrg/joda-time",
   "java_version": "1.5",
   "version": "2.4-SNAPSHOT",
   "clients": {
@@ -15106,7 +15106,7 @@
  "com.thetransactioncompany:cors-filter": {
   "artifactId": "cors-filter",
   "groupId": "com.thetransactioncompany",
-  "repo_name": "LuisSala/CORS-Java-Servlet-Filter",
+  "repo_name": "sdcuike/cors-filter",
   "java_version": "1.5",
   "version": "1.3.2",
   "clients": {
@@ -15206,7 +15206,7 @@
  "com.esotericsoftware.kryo:kryo": {
   "artifactId": "kryo",
   "groupId": "com.esotericsoftware.kryo",
-  "repo_name": "svn2github/kryo",
+  "repo_name": "EsotericSoftware/kryo",
   "version": "2.23-SNAPSHOT",
   "clients": {
    "2.24.0": [
@@ -17737,7 +17737,7 @@
  "cc.mallet:mallet": {
   "artifactId": "mallet",
   "groupId": "cc.mallet",
-  "repo_name": "shangjingbo1226/DPPred",
+  "repo_name": "mimno/Mallet",
   "version": "2.0.7-SNAPSHOT",
   "clients": {
    "2.0.8": [
@@ -34672,7 +34672,7 @@
  "jfree:jfreechart": {
   "artifactId": "jfreechart",
   "groupId": "jfree",
-  "repo_name": "apetresc/JFreeChart",
+  "repo_name": "jfree/jfreechart",
   "java_version": "1.6",
   "version": "1.0.14",
   "clients": {
@@ -35175,7 +35175,7 @@
  "org.yaml:snakeyaml": {
   "artifactId": "snakeyaml",
   "groupId": "org.yaml",
-  "repo_name": "spariev/snakeyaml",
+  "repo_name": "bmoliveira/snake-yaml",
   "java_version": "1.5",
   "version": "1.7-SNAPSHOT",
   "clients": {
@@ -36357,7 +36357,7 @@
  "com.zaxxer:HikariCP": {
   "artifactId": "HikariCP",
   "groupId": "com.zaxxer",
-  "repo_name": "openbouquet/HikariCP",
+  "repo_name": "brettwooldridge/HikariCP",
   "version": "2.4.2-SNAPSHOT",
   "clients": {
    "3.4.2": [
@@ -36907,7 +36907,7 @@
  "org.twitter4j:twitter4j-core": {
   "artifactId": "twitter4j-core",
   "groupId": "org.twitter4j",
-  "repo_name": "burakdede/lyricfrenzy-android",
+  "repo_name": "invincibleJai/twitter4j-core",
   "java_version": "1.5",
   "version": "2.2.0-SNAPSHOT",
   "clients": {
@@ -41090,7 +41090,7 @@
  "com.googlecode.java-diff-utils:diffutils": {
   "artifactId": "diffutils",
   "groupId": "com.googlecode.java-diff-utils",
-  "repo_name": "is/java-diff-utils",
+  "repo_name": "KengoTODA/java-diff-utils",
   "java_version": "1.5",
   "version": "1.4.0-SNAPSHOT",
   "clients": {
@@ -41309,7 +41309,7 @@
  "com.google.code.gson:gson": {
   "artifactId": "gson",
   "groupId": "com.google.code.gson",
-  "repo_name": "vparfonov/gson",
+  "repo_name": "google/gson",
   "java_version": "1.5",
   "version": "2.2.3-SNAPSHOT",
   "clients": {
@@ -48862,7 +48862,7 @@
  "com.googlecode.json-simple:json-simple": {
   "artifactId": "json-simple",
   "groupId": "com.googlecode.json-simple",
-  "repo_name": "guetux/json-simple",
+  "repo_name": "fangyidong/json-simple",
   "java_version": "1.2",
   "version": "1.1.1",
   "clients": {
@@ -50278,7 +50278,7 @@
  "com.baomidou:mybatis-plus": {
   "artifactId": "mybatis-plus",
   "groupId": "com.baomidou",
-  "repo_name": "gavin2lee/mybatis-plus",
+  "repo_name": "baomidou/mybatis-plus",
   "version": "2.0-rc",
   "clients": {
    "2.0.5": [
@@ -50380,7 +50380,7 @@
  "com.nimbusds:nimbus-jose-jwt": {
   "artifactId": "nimbus-jose-jwt",
   "groupId": "com.nimbusds",
-  "repo_name": "gesellix/Nimbus-JOSE-JWT",
+  "repo_name": "felx/nimbus-jose-jwt",
   "version": "2.5",
   "clients": {
    "8.2": [
@@ -57130,7 +57130,7 @@
  "org.mybatis.generator:mybatis-generator-core": {
   "artifactId": "mybatis-generator-core",
   "groupId": "org.mybatis.generator",
-  "repo_name": "ranjinpeng/FineMybitesGenerator",
+  "repo_name": "cxjava/mybatis-generator-core",
   "java_version": "1.8",
   "version": "1.3.2-fix",
   "clients": {
@@ -58299,7 +58299,7 @@
  "org.apache.commons:commons-math": {
   "artifactId": "commons-math",
   "groupId": "org.apache.commons",
-  "repo_name": "mobilesensing-usc/MovementTrackr",
+  "repo_name": "apache/commons-math",
   "version": "2.1",
   "clients": {
    "2.2": [
@@ -58762,7 +58762,7 @@
  "org.json:json": {
   "artifactId": "json",
   "groupId": "org.json",
-  "repo_name": "unfoldingWord-dev/uw-android",
+  "repo_name": "stleary/JSON-java",
   "java_version": "1.8",
   "version": "20141113",
   "clients": {
@@ -70331,7 +70331,7 @@
  "com.google.inject:guice": {
   "artifactId": "guice",
   "groupId": "com.google.inject",
-  "repo_name": "pascallouisperez/guice-jit-providers",
+  "repo_name": "google/guice",
   "java_version": "1.5",
   "version": "1.0-RC2",
   "clients": {
@@ -74429,7 +74429,7 @@
  "log4j:log4j": {
   "artifactId": "log4j",
   "groupId": "log4j",
-  "repo_name": "tech-srl/prime",
+  "repo_name": "apache/log4j",
   "java_version": "1.3",
   "version": "1.2.16",
   "clients": {
