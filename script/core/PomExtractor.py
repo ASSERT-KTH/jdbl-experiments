@@ -32,13 +32,22 @@ class PomExtractor:
                 fd.write(pom_content)
 
     def get_artifact(self):
-        return self.poms[0]["root"].find('xmlns:artifactId', namespaces=self.namespaces).text
+        r = self.poms[0]["root"].find('xmlns:artifactId', namespaces=self.namespaces)
+        if r is not None:
+            return r.text
+        return ''
 
     def get_group(self):
-        return self.poms[0]["root"].find('xmlns:groupId', namespaces=self.namespaces).text
+        r = self.poms[0]["root"].find('xmlns:groupId', namespaces=self.namespaces)
+        if r is not None:
+            return r.text
+        return ''
 
     def get_version(self):
-        return self.poms[0]["root"].findall('*//xmlns:version', namespaces=self.namespaces)[0].text
+        r = self.poms[0]["root"].findall('*//xmlns:version', namespaces=self.namespaces)[0]
+        if r is not None:
+            return r.text
+        return ''
 
     def get_version_dependency(self, group_id, artifact_id):
         for pom in self.poms:
