@@ -8,6 +8,8 @@ from threading import Thread
 import time
 import signal
 import sys
+import random
+
 
 token = None
 if 'GITHUB_OAUTH' in os.environ and len(os.environ['GITHUB_OAUTH']) > 0:
@@ -45,7 +47,7 @@ class RunnerWorker(Thread):
         self.callback = callback
         self.daemon = True
         self.tasks = tasks
-        self.pool = ThreadPool(12)
+        self.pool = ThreadPool(8)
 
     def run(self):
         for task in self.tasks:
@@ -100,8 +102,6 @@ tasks = []
 with open(PATH_file) as fd:
     libraries = json.load(fd)
     for id in libraries:
-        if "commons" not in id:
-            continue
         lib = libraries[id]
         lib_name = os.path.basename(lib['repo_name'])
         versions = lib['clients']
@@ -116,6 +116,7 @@ with open(PATH_file) as fd:
 def taskDoneCallback(task):
     pass
 
+random.shuffle(tasks)
 worker = RunnerWorker(tasks, taskDoneCallback)
 worker.start()
 while worker.is_alive():

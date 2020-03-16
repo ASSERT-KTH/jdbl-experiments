@@ -151,7 +151,9 @@ for lib in os.listdir(PATH):
             line = "\t".join(out)
             print(line)
             csv += (line) + '\n'
-
+print("Number of error", build_errors)
+print("Lib with clients", len(lib_with_clients))
+print("# successful debloated clients", count_debloated_clients)
 with open(os.path.join(PATH, '..', '..', 'raw_results.csv'), 'w') as fd:
     fd.write(csv)
 with open(os.path.join(PATH, '..', '..', 'raw_results.json'), 'w') as fd:
