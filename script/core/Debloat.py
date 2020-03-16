@@ -74,7 +74,7 @@ class Debloat:
     def run(self):
         self.inject_library()
 
-        cmd = 'cd %s; mvn clean -B; mvn package -e -B;' % (self.project.path)
+        cmd = 'cd %s; mvn clean -B; mvn package -Dmaven.test.failure.ignore=true -e -B;' % (self.project.path)
         try:
             subprocess.check_call(cmd, shell=True)
             return True
