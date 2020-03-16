@@ -65,7 +65,7 @@ class Project:
         return self.releases
     
     def test(self):
-        cmd = 'cd %s; mvn clean -B; mvn test --fail-never -B;' % (self.path)
+        cmd = 'cd %s; mvn clean -B; mvn test --fail-never -Dmaven.test.failure.ignore=true -B;' % (self.path)
         try:
             subprocess.check_call(cmd, shell=True)
             return True
@@ -73,7 +73,7 @@ class Project:
             return False
 
     def package(self):
-        cmd = 'cd %s; mvn clean -B; mvn package --fail-never -B;' % (self.path)
+        cmd = 'cd %s; mvn clean -B; mvn package --fail-never -Dmaven.test.failure.ignore=true -B;' % (self.path)
         try:
             subprocess.check_call(cmd, shell=True)
             return True
