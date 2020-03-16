@@ -115,7 +115,7 @@ class Project:
             return False
 
     def copy_report(self, dst):
-        cmd = 'cd %s; cp -r debloat-report.csv %s' % (self.path, dst)
+        cmd = 'cd %s; cp -r debloat-* %s;' % (self.path, dst)
         try:
             subprocess.check_call(cmd, shell=True)
             return True
