@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import os
 import json
 import xml.etree.ElementTree as xml
@@ -43,6 +45,7 @@ def readTestResults(path):
             pass
     return output       
 
+csv = ""
 lib_with_clients = set()
 count_debloated_clients = 0
 results = {}
@@ -78,7 +81,7 @@ for lib in os.listdir(PATH):
         clients_path = os.path.join(version_path, 'clients')
         if not os.path.exists(clients_path):
             continue
-
+        
         for client in os.listdir(clients_path):
             if client == '.DS_Store':
                 continue
@@ -101,9 +104,55 @@ for lib in os.listdir(PATH):
             lib_with_clients.add(lib)
             if client_results['original_test']['passing'] == client_results['debloat_test']['passing']:
                 count_debloated_clients += 1
-            print("Client %s on %s run the debloat version (o_test %d, d_test %d)" % (client, lib, client_results['original_test']['passing'], client_results['debloat_test']['passing']))
-print("Number of error", build_errors)
-print("Lib with clients", len(lib_with_clients))
-print("# successful debloated clients", count_debloated_clients)
+            out = []
+            out.append(lib.split(":")[0])
+            out.append(lib.split(":")[1])
+            out.append(version)
+            out.append(str(os.stat(os.path.join(original_path, 'original.jar')).st_size))
+            out.append(str(os.stat(os.path.join(debloat_path, 'debloat.jar')).st_size))
+
+            nbClass = 0
+            nbMethod = 0
+            nbDebloatClass = 0
+            nbDebloatMethod = 0
+            if os.path.exists(os.path.join(debloat_path, 'debloat-report.csv')):
+                with open(os.path.join(debloat_path, 'debloat-report.csv')) as fd:
+                    lines = fd.readlines()
+                    for l in lines:
+                        (type, name) = l.split(", ")
+                        if "Method" in type:
+                            nbMethod += 1
+                            if "BloatedMethod" in type:
+                                nbDebloatMethod += 1
+                        elif "Class" in type:
+                            nbClass += 1
+                            if "BloatedClass" in type:
+                                nbDebloatClass += 1 
+
+            # nb classes
+            out.append(str(nbClass))
+            # nb methods
+            out.append(str(nbMethod))
+            # nb debloated classes
+            out.append(str(nbDebloatClass))
+            # nb debloated methods
+            out.append(str(nbDebloatMethod))
+
+            out.append(client.split(":")[0])
+            out.append(client.split(":")[1])
+            out.append(str(client_results['original_test']['error']))
+            out.append(str(client_results['original_test']['failing']))
+            out.append(str(client_results['original_test']['passing']))
+
+            out.append(str(client_results['debloat_test']['error']))
+            out.append(str(client_results['debloat_test']['failing']))
+            out.append(str(client_results['debloat_test']['passing']))
+            
+            line = "\t".join(out)
+            print(line)
+            csv += (line) + '\n'
+
+with open(os.path.join(PATH, '..', '..', 'raw_results.csv'), 'w') as fd:
+    fd.write(csv)
 with open(os.path.join(PATH, '..', '..', 'raw_results.json'), 'w') as fd:
     json.dump(results, fd, indent=1)
