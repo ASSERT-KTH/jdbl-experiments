@@ -31,6 +31,7 @@ class Project:
             return False
 
     def checkout_version(self, version):
+        version = version.lower().replace('v.', '').replace('v', '').replace('_', '.').replace('-', '.')
         releases = self.get_releases()
         for r in releases:
             v = r.name.lower().replace('v.', '').replace('v', '').replace('_', '.').replace('-', '.')
@@ -45,7 +46,7 @@ class Project:
                         self.pom = PomExtractor(self.path)
                         return True
                     return False
-            except:
+            except Exception as e:
                 continue
         return False
 
@@ -64,8 +65,12 @@ class Project:
         self.releases = repo.get_tags()
         return self.releases
     
+    def get_commit(self):
+        cmd = 'cd %s; git rev-parse HEAD' % (self.path)
+        return subprocess.check_output(cmd, shell=True).decode('UTF-8').strip()
+
     def test(self):
-        cmd = 'cd %s; mvn clean -B; mvn test --fail-never -Dmaven.test.failure.ignore=true -B;' % (self.path)
+        cmd = 'cd %s; mvn clean -B; mvn test --fail-never -ntp -Dmaven.test.failure.ignore=true -B;' % (self.path)
         try:
             subprocess.check_call(cmd, shell=True)
             return True
@@ -73,7 +78,7 @@ class Project:
             return False
 
     def package(self):
-        cmd = 'cd %s; mvn clean -B; mvn package --fail-never -Dmaven.test.failure.ignore=true -B;' % (self.path)
+        cmd = 'cd %s; mvn clean -B; mvn package --fail-never -ntp -Dmaven.test.error.ignore=true -Dmaven.test.failure.ignore=true -B;' % (self.path)
         try:
             subprocess.check_call(cmd, shell=True)
             return True

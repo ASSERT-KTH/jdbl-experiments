@@ -79,21 +79,25 @@ class PomExtractor:
 
     def add_plugin(self, group_id, artifact_id, version, config):
         # check if plugin is already defined if yes, remove it
-        declared_plugins = self.poms[0]["root"].findall('*//xmlns:plugin', namespaces=self.namespaces)
-        for declared_plugin in declared_plugins:
-            gr = declared_plugin.find('xmlns:groupId', namespaces=self.namespaces)
-            if gr != group_id:
-                continue
-            ar = declared_plugin.find('xmlns:artifactId', namespaces=self.namespaces)
-            if ar != artifact_id:
-                continue
-            # the plugin is the same remove it
-            declared_plugin.remove()
+        prop_parents = self.poms[0]["root"].findall('*//xmlns:plugin/..', namespaces=self.namespaces)
+        for parent in prop_parents:
+            for declared_plugin in parent:
+                gr = declared_plugin.find('xmlns:groupId', namespaces=self.namespaces)
+                if gr is not None:
+                    gr = gr.text
+                if group_id != gr:
+                    continue
+                ar = declared_plugin.find('xmlns:artifactId', namespaces=self.namespaces)
+                if ar is not None:
+                    ar = ar.text
+                if ar != artifact_id:
+                    continue
+                # the plugin is the same remove it
+                parent.remove(declared_plugin)
 
         build_section = None
         plugins_section = None
         build = self.poms[0]["root"].findall('xmlns:build', namespaces=self.namespaces)
-        print(build)
         if len(build) == 0:
             # create build section
             build_section = SubElement(self.poms[0]["root"], 'build')
