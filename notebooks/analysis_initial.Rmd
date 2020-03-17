@@ -1,0 +1,58 @@
+---
+title: "Initial analysis"
+output: html_notebook
+---
+
+# Load libraries
+
+```{r}
+# Import the header 
+source("header.R")
+# Clear the R environment
+rm(list=ls())
+```
+
+# Prepare dataset
+
+```{r}
+# Read the data
+raw_results <- read.delim("Data/raw_results.csv", sep = "\t", header = T)
+
+# Prepare the data
+raw_results <- raw_results %>%
+  mutate(lib = paste(groupId, artifactId, sep = ":")) %>% 
+  mutate(lib_gav = paste(paste(lib, version, sep = ":"), version, sep = ":")) %>% 
+  mutate(client = paste(paste(client_groupId, client_artifactId, sep = ":"), version, sep = ":"))
+
+raw_results$groupId <- NULL
+raw_results$artifactId <- NULL
+raw_results$client_groupId <- NULL
+raw_results$client_artifactId <- NULL
+
+# View(raw_results)
+
+results <- raw_results 
+```
+
+# Let's make some plots
+
+```{r}
+# size of the original vs size debloated
+results_size <- results %>% select(lib_gav, size_original, size_debloated) %>% 
+  gather(libs, size, size_original:size_debloated) %>% 
+  distinct() 
+
+results_size %>%  ggplot(aes(x = libs, y =size, fill = libs)) +
+  geom_boxplot() +
+   scale_y_continuous(breaks=c(0, 1,10,100,1000, 10000, 100000, 1000000, 1000000, 1000000), trans="log1p") 
+  
+results_size %>%  ggplot(aes(x = lib_gav, y =size, fill = libs)) +
+  geom_bar(stat = "identity", position = position_dodge()) +
+  scale_y_continuous(breaks=c(0, 1,10,100,1000, 10000, 100000, 1000000, 1000000, 1000000), trans="log1p") +
+  coord_flip() + 
+theme(
+    axis.text.x = element_text(angle = 90, hjust = 1, size =  4),
+  )
+
+```
+

@@ -1,40 +1,15 @@
 ---
-title: "R Notebook"
+title: "Barplots for comparison"
 output: html_notebook
 ---
 
 ### Import required data and libraries
 
 ```{r message=FALSE, warning=FALSE, paged.print=FALSE}
+# import the header 
+source("header.R")
 # clear the R environment
 rm(list=ls())
-
-library(tidyverse)
-library(latex2exp)
-library(scales)
-library(extrafont)
-library(viridis)
-library(ggridges)
-library(forcats)
-# set fonts
-loadfonts(device = "pdf")
-# font_import()
-# link www.fontsquirrel.com/fonts/latin-modern-roman
-
-# execute once to add fonts:
-# font_import(pattern = "lmroman*")
-# theme(legend.position = "top", text=element_text(size=14, family="LM Roman 10"))
-
-# set ggplot global theme
-theme_set(theme_bw() +
-            theme(legend.position = "top") +
-            theme(text = element_text(size = 16, family = "LM Roman 10")))
-
-# multiple figures together
-if(!require(devtools)) install.packages("devtools")
-devtools::install_github("thomasp85/patchwork")
-library(patchwork)
-
 ```
 
 ```{r}
@@ -104,24 +79,4 @@ jar_size_barplot <- df %>% ggplot(aes(x = Application, y = Size, fill = Tool)) +
 
 ggsave(filename = "Figures/jar_size_barplot.pdf", plot = jar_size_barplot,
        height = 3, width = 7,  units = c("in"), device = "pdf")
-
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

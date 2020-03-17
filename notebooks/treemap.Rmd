@@ -181,15 +181,11 @@ treemap(treeClone_df,
         title.legend = "size (Kb)",
         range = c(0,80),
         mapping = c(80,40,0))
-
 ```
-
 
 Plot as a dendogram
 
 ```{r}
-
 plot(as.dendrogram(treeClone, heightAttribute = "totalSize"))
-
 ```
 
