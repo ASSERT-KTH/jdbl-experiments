@@ -12,13 +12,17 @@ for f in os.listdir(PATH):
     if '.json' not in f:
         continue
     with open(os.path.join(PATH, f)) as fd:
-        data = json.load(fd)
-        for s in data['steps']:
-            total_time += s['end'] - s['start']
-            if s['success'] == False:
-                name = s['name']
-                if name not in steps:
-                    steps[name] = 0
-                steps[name] += 1
+        try:
+            data = json.load(fd)
+            for s in data['steps']:
+                total_time += s['end'] - s['start']
+                if s['success'] == False:
+                    name = s['name']
+                    if name not in steps:
+                        steps[name] = 0
+                    steps[name] += 1
+        except:
+            print("%s is not a valid json" % f)
+            continue
 print(steps)
 print("Total execution time", total_time)
