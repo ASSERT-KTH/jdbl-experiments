@@ -5,7 +5,7 @@ output: html_notebook
 
 # Load libraries
 
-```{r}
+```{r message=F, warning=F}
 # Import the header 
 source("header.R")
 # Clear the R environment
@@ -34,25 +34,282 @@ raw_results$client_artifactId <- NULL
 results <- raw_results 
 ```
 
-# Let's make some plots
+# Library plots
+
+## Size of the original vs size debloated
 
 ```{r}
-# size of the original vs size debloated
 results_size <- results %>% select(lib_gav, size_original, size_debloated) %>% 
   gather(libs, size, size_original:size_debloated) %>% 
   distinct() 
 
-results_size %>%  ggplot(aes(x = libs, y =size, fill = libs)) +
-  geom_boxplot() +
-   scale_y_continuous(breaks=c(0, 1,10,100,1000, 10000, 100000, 1000000, 1000000, 1000000), trans="log1p") 
-  
-results_size %>%  ggplot(aes(x = lib_gav, y =size, fill = libs)) +
-  geom_bar(stat = "identity", position = position_dodge()) +
-  scale_y_continuous(breaks=c(0, 1,10,100,1000, 10000, 100000, 1000000, 1000000, 1000000), trans="log1p") +
-  coord_flip() + 
-theme(
-    axis.text.x = element_text(angle = 90, hjust = 1, size =  4),
-  )
+# violin plot of the sizes
+violinplot_size <- results_size %>%  ggplot(aes(x = libs, y =size, fill = libs)) +
+   geom_violin() +
+  geom_boxplot(width = 0.1) +
+   scale_y_continuous(breaks=c(0, 1,10,100,1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000), trans="log1p") +
+  scale_fill_manual(values = c("dodgerblue3","goldenrod"))
 
+# save the plot
+ggsave(filename = "Figures/analysis_initial/violinplot_size.pdf", plot = violinplot_size ,
+       height = 5, width = 7,  units = c("in"), device=cairo_pdf)
+
+# barplot of the sizes
+barplot_size <- results_size %>%  ggplot(aes(x = reorder(lib_gav, size), y = size, fill = libs)) +
+  geom_bar(stat = "identity", position = position_dodge()) +
+  scale_y_continuous(
+    breaks = c(0, 1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000),
+    trans = "log1p"
+  ) +
+  labs(x = "libs") +
+  coord_flip() +
+  scale_fill_manual(values = c("dodgerblue3","goldenrod")) +
+  theme(axis.text.x = element_text(hjust = 1, size =  6), 
+        axis.text.y = element_text(hjust = 1, size =  6))
+
+# save the plot
+ggsave(filename = "Figures/analysis_initial/barplot_size.pdf", plot = barplot_size , 
+       height = 10, width = 7,  units = c("in"), device=cairo_pdf)
 ```
 
+## Nb classes of the original vs Nb classes debloated
+
+```{r}
+results_classes <- results %>% select(lib_gav, nb_class_original, nb_debloated_classes) %>% 
+  gather(libs, classes, nb_class_original:nb_debloated_classes) %>% 
+  distinct()
+
+# violin plot of the classes
+violinplot_classes <- results_classes %>%  ggplot(aes(x = libs, y = classes, fill = libs)) +
+  geom_violin() +
+  geom_boxplot(width = 0.1) +
+  scale_fill_manual(values = c("goldenrod","dodgerblue3")) +
+  scale_y_continuous(breaks=c(0, 1,10,100,1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000), trans="log1p") 
+
+# save the plot
+ggsave(filename = "Figures/analysis_initial/violinplot_classes.pdf", plot = violinplot_classes,
+       height = 5, width = 7,  units = c("in"), device=cairo_pdf)
+
+
+# barplot of the classes
+barplot_classes <- results_classes %>%  ggplot(aes(x = reorder(lib_gav, classes), y = classes, fill = libs)) +
+  geom_bar(stat = "identity", position = position_dodge()) +
+  scale_y_continuous(
+    breaks = c(0, 1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000),
+    trans = "log1p"
+  ) +
+  labs(x = "libs") +
+  coord_flip() +
+  scale_fill_manual(values = c("goldenrod","dodgerblue3")) +
+  theme(axis.text.x = element_text(hjust = 1, size =  6), 
+        axis.text.y = element_text(hjust = 1, size =  6))
+
+# save the plot
+ggsave(filename = "Figures/analysis_initial/barplot_classes.pdf", plot = barplot_classes , 
+       height = 10, width = 7,  units = c("in"), device=cairo_pdf)
+```
+
+
+## Nb methods of the original vs Nb methods debloated
+
+```{r}
+results_methods <- results %>% select(lib_gav, nb_method_original, nb_debloated_methods) %>% 
+  gather(libs, methods, nb_method_original:nb_debloated_methods) %>% 
+  distinct()
+
+# violin plot of the methods
+violinplot_methods <- results_methods %>%  ggplot(aes(x = libs, y = methods, fill = libs)) +
+  geom_violin() +
+  geom_boxplot(width = 0.1) +
+  scale_y_continuous(breaks=c(0, 1,10,100,1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000), trans="log1p") +
+  scale_fill_manual(values = c("dodgerblue3","goldenrod")) 
+
+# save the plot
+ggsave(filename = "Figures/analysis_initial/violinplot_methods.pdf", plot = violinplot_methods,
+       height = 5, width = 7,  units = c("in"), device=cairo_pdf)
+
+# barplot of the methods
+barplot_methods <- results_methods %>%  ggplot(aes(x = reorder(lib_gav, methods), y = methods, fill = libs)) +
+  geom_bar(stat = "identity", position = position_dodge()) +
+  scale_y_continuous(
+    breaks = c(0, 1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000),
+    trans = "log1p"
+  ) +
+  labs(x = "libs") +
+  coord_flip() +
+  scale_fill_manual(values = c("dodgerblue3","goldenrod")) +
+  theme(axis.text.x = element_text(hjust = 1, size =  6), 
+        axis.text.y = element_text(hjust = 1, size =  6))
+
+# save the plot
+ggsave(filename = "Figures/analysis_initial/barplot_methods.pdf", plot = barplot_methods, 
+       height = 10, width = 7,  units = c("in"), device=cairo_pdf)
+```
+
+
+# Client plots
+
+## Test errors of the original vs test errors debloated
+
+```{r}
+results %>% filter(client_original_test_error > 0) %>% nrow()
+results %>% filter(client_debloat_test_error > 0) %>% nrow()
+
+results %>% filter(client_original_test_error == 0 ) %>% nrow()
+results %>% filter(client_debloat_test_error == 0) %>% nrow()
+
+results %>% filter(client_original_test_error == 0 && client_debloat_test_error != 0) %>% nrow()
+results %>% filter(client_original_test_error != 0 && client_debloat_test_error != 0) %>% nrow()
+
+# -----------------------------------------------------------------------
+
+results_errors <- results %>% select(client, client_original_test_error, client_debloat_test_error) %>% 
+  gather(clients, test_errors, client_original_test_error:client_debloat_test_error)
+
+# violin plot of the test errors
+violinplot_errors <- results_errors %>%  
+  filter(test_errors != 0) %>%  # libs that have at least one test error
+  ggplot(aes(x = clients, y = test_errors, fill = clients)) +
+  geom_violin() +
+  geom_boxplot(width = 0.1) +
+  scale_y_continuous(breaks=c(0, 1,10,100,1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000), trans="log1p") +
+  scale_fill_manual(values = c("dodgerblue3","goldenrod")) 
+
+# save the plot
+ggsave(filename = "Figures/analysis_initial/violinplot_errors.pdf", plot = violinplot_errors,
+       height = 5, width = 7,  units = c("in"), device=cairo_pdf)
+
+results_errors <- results %>% 
+  filter(client_original_test_error != client_debloat_test_error) %>% 
+  select(client, client_original_test_error, client_debloat_test_error) %>% 
+  gather(clients, test_errors, client_original_test_error:client_debloat_test_error)
+
+# barplot of the test errors
+barplot_errors <- results_errors %>%  
+  ggplot(aes(x = reorder(client, test_errors), y = test_errors, fill = clients)) +
+  geom_bar(stat = "identity", position = position_dodge()) +
+  scale_y_continuous(
+    breaks = c(0, 1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000),
+    trans = "log1p"
+  ) +
+  labs(x = "clients") +
+  coord_flip() +
+  scale_fill_manual(values = c("dodgerblue3","goldenrod")) +
+  theme(axis.text.x = element_text(hjust = 1, size =  4), 
+        axis.text.y = element_text(hjust = 1, size =  4))
+
+# save the plot
+ggsave(filename = "Figures/analysis_initial/barplot_errors.pdf", plot = barplot_errors, 
+       height = 12, width = 10,  units = c("in"), device=cairo_pdf)
+```
+
+
+## Test failing of the original vs test failing debloated
+
+```{r}
+results %>% filter(client_original_test_failing > 0) %>% nrow()
+results %>% filter(client_debloat_test_failing > 0) %>% nrow()
+
+results %>% filter(client_original_test_failing == 0 ) %>% nrow()
+results %>% filter(client_debloat_test_failing == 0) %>% nrow()
+
+results %>% filter(client_original_test_failing == 0 && client_debloat_test_failing != 0) %>% nrow()
+results %>% filter(client_original_test_failing != 0 && client_debloat_test_failing != 0) %>% nrow()
+
+# -----------------------------------------------------------------------
+
+results_fails <- results %>% 
+  select(client, client_original_test_failing, client_debloat_test_failing) %>% 
+  gather(clients, test_fails, client_original_test_failing:client_debloat_test_failing)
+
+# violin plot of the test fails
+violinplot_fails <- results_fails %>%  
+  filter(test_fails != 0) %>%  # libs that have at least one test fail
+  ggplot(aes(x = clients, y = test_fails, fill = clients)) +
+  geom_violin() +
+  geom_boxplot(width = 0.1) +
+  scale_y_continuous(breaks=c(0, 1,10,100,1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000), trans="log1p") +
+  scale_fill_manual(values = c("dodgerblue3","goldenrod")) 
+
+# save the plot
+ggsave(filename = "Figures/analysis_initial/violinplot_fails.pdf", plot = violinplot_fails,
+       height = 5, width = 7,  units = c("in"), device=cairo_pdf)
+
+results_fails <- results %>% 
+  filter(client_original_test_failing != client_debloat_test_failing) %>% 
+  select(client, client_original_test_failing, client_debloat_test_failing) %>% 
+  gather(clients, test_fails, client_original_test_failing:client_debloat_test_failing)
+
+# barplot of the test fails
+barplot_fails <- results_fails %>%  
+  ggplot(aes(x = reorder(client, test_fails), y = test_fails, fill = clients)) +
+  geom_bar(stat = "identity", position = position_dodge()) +
+  scale_y_continuous(
+    breaks = c(0, 1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000),
+    trans = "log1p"
+  ) +
+  labs(x = "clients") +
+  coord_flip() +
+  scale_fill_manual(values = c("dodgerblue3","goldenrod")) +
+  theme(axis.text.x = element_text(hjust = 1, size =  4), 
+        axis.text.y = element_text(hjust = 1, size =  4))
+
+# save the plot
+ggsave(filename = "Figures/analysis_initial/barplot_fails.pdf", plot = barplot_fails, 
+       height = 12, width = 10,  units = c("in"), device=cairo_pdf)
+```
+
+
+## Test pass of the original vs test pass debloated
+
+```{r}
+results %>% filter(client_original_test_passing > 0) %>% nrow()
+results %>% filter(client_debloat_test_passing > 0) %>% nrow()
+
+results %>% filter(client_original_test_passing == 0 ) %>% nrow()
+results %>% filter(client_debloat_test_passing == 0) %>% nrow()
+
+results %>% filter(client_original_test_passing == 0 && client_debloat_test_passing != 0) %>% nrow()
+results %>% filter(client_original_test_passing != 0 && client_debloat_test_passing != 0) %>% nrow()
+
+# -----------------------------------------------------------------------
+
+results_passs <- results %>% 
+  select(client, client_original_test_passing, client_debloat_test_passing) %>% 
+  gather(clients, test_passs, client_original_test_passing:client_debloat_test_passing)
+
+# violin plot of the test passs
+violinplot_passs <- results_passs %>%  
+  filter(test_passs != 0) %>%  # libs that have at least one test pass
+  ggplot(aes(x = clients, y = test_passs, fill = clients)) +
+  geom_violin() +
+  geom_boxplot(width = 0.1) +
+  scale_y_continuous(breaks=c(0, 1,10,100,1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000), trans="log1p") +
+  scale_fill_manual(values = c("dodgerblue3","goldenrod")) 
+
+# save the plot
+ggsave(filename = "Figures/analysis_initial/violinplot_passs.pdf", plot = violinplot_passs,
+       height = 5, width = 7,  units = c("in"), device=cairo_pdf)
+
+results_passs <- results %>% 
+  filter(client_original_test_passing != client_debloat_test_passing) %>% 
+  select(client, client_original_test_passing, client_debloat_test_passing) %>% 
+  gather(clients, test_passs, client_original_test_passing:client_debloat_test_passing)
+
+# barplot of the test passs
+barplot_passs <- results_passs %>%  
+  ggplot(aes(x = reorder(client, test_passs), y = test_passs, fill = clients)) +
+  geom_bar(stat = "identity", position = position_dodge()) +
+  scale_y_continuous(
+    breaks = c(0, 1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000),
+    trans = "log1p"
+  ) +
+  labs(x = "clients") +
+  coord_flip() +
+  scale_fill_manual(values = c("dodgerblue3","goldenrod")) +
+  theme(axis.text.x = element_text(hjust = 1, size =  4), 
+        axis.text.y = element_text(hjust = 1, size =  4))
+
+# save the plot
+ggsave(filename = "Figures/analysis_initial/barplot_passs.pdf", plot = barplot_passs, 
+       height = 12, width = 10,  units = c("in"), device=cairo_pdf)
