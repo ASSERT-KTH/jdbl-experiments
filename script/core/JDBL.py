@@ -29,6 +29,7 @@ class JDBL:
             current_status = {
                 "name": 'clone Library',
                 "start": previous_time,
+                "seccess": False
             }
             results['steps'].append(current_status)
             current_status['success'] = self.library.clone(self.working_directory)
@@ -43,6 +44,7 @@ class JDBL:
             current_status = {
                 "name": 'clone client',
                 "start": previous_time,
+                "success": False
             }
             results['steps'].append(current_status)
             current_status['success'] = self.client.clone(self.working_directory)
@@ -63,6 +65,7 @@ class JDBL:
                 current_status = {
                     "name": 'extract library version',
                     "start": previous_time,
+                    "success": False
                 }
                 results['steps'].append(current_status)
 
@@ -82,6 +85,7 @@ class JDBL:
             current_status = {
                 "name": 'checkout library version',
                 "start": previous_time,
+                "success": False
             }
             results['steps'].append(current_status)
 
@@ -104,6 +108,7 @@ class JDBL:
                 current_status = {
                     "name": 'compile original version of the library',
                     "start": previous_time,
+                    "success": False
                 }
                 results['steps'].append(current_status)
 
@@ -134,6 +139,7 @@ class JDBL:
                 current_status = {
                     "name": 'create debloated jar',
                     "start": previous_time,
+                    "success": False
                 }
                 results['steps'].append(current_status)
 
@@ -170,6 +176,7 @@ class JDBL:
             current_status = {
                 "name": 'execute client tests',
                 "start": previous_time,
+                "success": False
             }
             results['steps'].append(current_status)
 
@@ -193,6 +200,7 @@ class JDBL:
             current_status = {
                 "name": 'inject debloated library in client',
                 "start": previous_time,
+                "success": False
             }
             results['steps'].append(current_status)
 
@@ -211,6 +219,7 @@ class JDBL:
             current_status = {
                 "name": 'execute client tests with debloated library',
                 "start": previous_time,
+                "success": False
             }
             results['steps'].append(current_status)
 
