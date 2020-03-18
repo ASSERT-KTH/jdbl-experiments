@@ -67,7 +67,19 @@ def render():
     else:
         average_time_per_run = 0
     reming_time = timedelta(seconds=int((len(tasks) - len(finished)) * average_time_per_run))
-    output = "%d/%d Finished in %s still %s to go" % (len(finished), len(tasks), timedelta(seconds=int(now-start)), reming_time)
+    output = "%d/%d Finished in %s still %s to go\n" % (len(finished), len(tasks), timedelta(seconds=int(now-start)), reming_time)
+
+    output += "Running: \n"
+    line_number = 1
+    now = time.time()
+    for t in running:
+        if t.start is not None:
+            diff = now - t.start
+        else:
+            diff = 0
+        dt = timedelta(seconds=int(diff))
+        output += "\t %d. %s (%s) with %s in %s\n" % (line_number, t.library['repo_name'], t.version, t.client['repo_name'], dt)
+        line_number += 1
     print(output)
 
 class Task():
@@ -76,8 +88,10 @@ class Task():
         self.client = client
         self.version = version
         self.status = ""
+        self.start = None
 
     def run(self):
+        self.start = time.time()
         lib_name = os.path.basename(self.library['repo_name'])
         client_name = os.path.basename(self.client['repo_name'])
         # print("Run %s %s" % (self.library['repo_name'], self.client['repo_name']))
@@ -98,7 +112,7 @@ class RunnerWorker(Thread):
         self.callback = callback
         self.daemon = True
         self.tasks = tasks
-        self.pool = ThreadPool(8)
+        self.pool = ThreadPool(6)
 
     def run(self):
         for task in self.tasks:
@@ -118,6 +132,7 @@ class Worker(Thread):
     def run(self):
         while True:
             (task, callback) = self.tasks.get()
+            running.append(task)
             task.status = "STARTED"
             try:
                 task.run()
@@ -169,6 +184,7 @@ running = []
 
 def taskDoneCallback(task):
     finished.append(task)
+    running.remove(task)
     pass
 
 random.shuffle(tasks)
