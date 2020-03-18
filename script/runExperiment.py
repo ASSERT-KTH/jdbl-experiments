@@ -6,6 +6,7 @@ import subprocess
 from queue import Queue
 from threading import Thread
 import time
+from datetime import timedelta
 import signal
 import sys
 import random
@@ -20,6 +21,55 @@ OUTPUT = os.path.abspath(os.path.join(os.path.dirname(__file__), "results"))
 
 timeout = 60 * 60 # 1h
 
+def get_terminal_size():
+    env = os.environ
+
+    def ioctl_GWINSZ(fd):
+        try:
+            import fcntl, termios, struct, os
+            cr = struct.unpack('hh', fcntl.ioctl(fd, termios.TIOCGWINSZ, '1234'))
+        except:
+            return
+        return cr
+
+    cr = ioctl_GWINSZ(0) or ioctl_GWINSZ(1) or ioctl_GWINSZ(2)
+    if not cr:
+        try:
+            fd = os.open(os.ctermid(), os.O_RDONLY)
+            cr = ioctl_GWINSZ(fd)
+            os.close(fd)
+        except:
+            pass
+    if not cr:
+        cr = (env.get('LINES', 25), env.get('COLUMNS', 80))
+
+    ### Use get(key[, default]) instead of a try/catch
+    # try:
+    #    cr = (env['LINES'], env['COLUMNS'])
+    # except:
+    #    cr = (25, 80)
+    return int(cr[1]), int(cr[0]) - 1
+
+
+def clean_terminal():
+    (width, height) = get_terminal_size()
+
+    for i in range(1, height + 1):
+        sys.stdout.write("\033[F")
+        sys.stdout.write("\033[K")
+start = time.time()
+def render():
+    (width, height) = get_terminal_size()
+    clean_terminal()
+    now = time.time()
+    if len(finished) > 0:
+        average_time_per_run = (now-start)/len(finished)
+    else:
+        average_time_per_run = 0
+    reming_time = timedelta(seconds=int((len(tasks) - len(finished)) * average_time_per_run))
+    output = "%d/%d Finished in %s still %s to go" % (len(finished), len(tasks), timedelta(seconds=int(now-start)), reming_time)
+    print(output)
+
 class Task():
     def __init__(self, library, client, version):
         self.library = library
@@ -30,16 +80,17 @@ class Task():
     def run(self):
         lib_name = os.path.basename(self.library['repo_name'])
         client_name = os.path.basename(self.client['repo_name'])
-        print("Run %s %s" % (self.library['repo_name'], self.client['repo_name']))
-        cmd = 'docker run -e GITHUB_OAUTH="%s" -v %s:/results -it --rm jdbl -d https://github.com/%s.git -c https://github.com/%s.git -v %s' % (token, OUTPUT, self.library['repo_name'], self.client['repo_name'], self.version)
-        with open(os.path.join(OUTPUT, 'executions', '%s_%s.log' % (lib_name, client_name)), 'w') as fd:
-            try:
-                p = subprocess.call(cmd, shell=True, stderr=fd, stdout=fd, universal_newlines=True, timeout=timeout)
-            except KeyboardInterrupt:
-                p.send_signal(signal.SIGINT)
-            except Exception as e:
-                print(e)
-                pass
+        # print("Run %s %s" % (self.library['repo_name'], self.client['repo_name']))
+        log_file = os.path.join(OUTPUT, 'executions', '%s_%s.log' % (lib_name, client_name))
+        cmd = 'docker run -e GITHUB_OAUTH="%s" -v %s:/results --rm jdbl -d https://github.com/%s.git -c https://github.com/%s.git -v %s > %s' % (token, OUTPUT, self.library['repo_name'], self.client['repo_name'], self.version, log_file)
+        try:
+            p = subprocess.call(cmd, shell=True, timeout=timeout)
+            pass
+        except KeyboardInterrupt:
+            self.status = "Kill"
+            # p.send_signal(signal.SIGINT)
+        except Exception as e:
+            self.status = str(e)
 
 class RunnerWorker(Thread):
     def __init__(self, tasks, callback):
@@ -72,7 +123,6 @@ class Worker(Thread):
                 task.run()
             except Exception as e:
                 task.status = "ERROR"
-                print(e)
             finally:
                 if callback is not None:
                     callback(task)
@@ -113,11 +163,17 @@ with open(PATH_file) as fd:
                 client_name = os.path.basename(client['repo_name'])
                 tasks.append(Task(lib, client, version))
 
+
+finished = []
+running = []
+
 def taskDoneCallback(task):
+    finished.append(task)
     pass
 
 random.shuffle(tasks)
 worker = RunnerWorker(tasks, taskDoneCallback)
 worker.start()
 while worker.is_alive():
+    render()
     time.sleep(1)
