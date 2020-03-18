@@ -96,15 +96,16 @@ class Task():
         client_name = os.path.basename(self.client['repo_name'])
         # print("Run %s %s" % (self.library['repo_name'], self.client['repo_name']))
         log_file = os.path.join(OUTPUT, 'executions', '%s_%s.log' % (lib_name, client_name))
-        cmd = 'docker run -e GITHUB_OAUTH="%s" -v %s:/results --rm jdbl -d https://github.com/%s.git -c https://github.com/%s.git -v %s > %s 2>&1' % (token, OUTPUT, self.library['repo_name'], self.client['repo_name'], self.version, log_file)
-        try:
-            p = subprocess.call(cmd, shell=True, timeout=timeout)
-            pass
-        except KeyboardInterrupt:
-            self.status = "Kill"
-            # p.send_signal(signal.SIGINT)
-        except Exception as e:
-            self.status = str(e)
+        cmd = 'docker run -e GITHUB_OAUTH="%s" -v %s:/results --rm jdbl -d https://github.com/%s.git -c https://github.com/%s.git -v %s' % (token, OUTPUT, self.library['repo_name'], self.client['repo_name'], self.version)
+        with open(log_file) as fd:
+            try:
+                p = subprocess.call(cmd, shell=True, timeout=timeout, stdout=fd, stderr=fd)
+                pass
+            except KeyboardInterrupt:
+                self.status = "Kill"
+                # p.send_signal(signal.SIGINT)
+            except Exception as e:
+                self.status = str(e)
 
 class RunnerWorker(Thread):
     def __init__(self, tasks, callback):
