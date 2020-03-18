@@ -154,7 +154,7 @@ class JDBL:
                 current_status['success'] = current_status['success'] and self.library.copy_report(lib_debloat_path)
 
                 previous_time = time.time()
-                current_status['end'] = previous_times
+                current_status['end'] = previous_time
                 if not current_status['success']:
                     print("[exit] Unable to create the debloated jar")
                     return
