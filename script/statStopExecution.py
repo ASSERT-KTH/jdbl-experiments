@@ -6,9 +6,35 @@ import xml.etree.ElementTree as xml
 
 PATH = os.path.join(os.path.dirname(__file__), 'results', 'executions')
 
+def extractException(file):
+    bufMode = False
+    buf = ''
+    errors = []
+    with open(file, 'r') as f:
+        for line in f:
+            if bufMode:
+                if not line.startswith(' '):
+                    bufMode = False
+            else:
+                if 'Traceback' in line:
+                    bufMode = True
+                else:
+                    continue
+            # Truncate lines longer than 400 characters.
+            if len(line) > 400:
+                line = line[:400] + '...\n'
+            buf += line
+            if not bufMode:
+                print(buf)
+                errors.append(buf)
+                buf = ''
+    return set(errors)
+
 steps = {}
 total_time = 0
 for f in os.listdir(PATH):
+    if '.log' in f:
+        extractException(os.path.join(PATH, f))
     if '.json' not in f:
         continue
     with open(os.path.join(PATH, f)) as fd:
