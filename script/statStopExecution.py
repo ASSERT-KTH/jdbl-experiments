@@ -40,9 +40,9 @@ for f in os.listdir(PATH):
     with open(os.path.join(PATH, f)) as fd:
         try:
             data = json.load(fd)
+            total_time += data['end'] - data['start']
             for s in data['steps']:
-                total_time += s['end'] - s['start']
-                if s['success'] == False:
+                if 'success' not in s or  s['success'] == False:
                     name = s['name']
                     if name not in steps:
                         steps[name] = 0
