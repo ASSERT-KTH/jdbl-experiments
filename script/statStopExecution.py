@@ -6,29 +6,32 @@ import xml.etree.ElementTree as xml
 
 PATH = os.path.join(os.path.dirname(__file__), 'results', 'executions')
 
+errors = set()
 def extractException(file):
     bufMode = False
     buf = ''
-    errors = []
     with open(file, 'r') as f:
-        for line in f:
-            if bufMode:
-                if not line.startswith(' '):
-                    bufMode = False
-            else:
-                if 'Traceback' in line:
-                    bufMode = True
+        try:
+            for line in f:
+                if bufMode:
+                    if not line.startswith(' '):
+                        bufMode = False
                 else:
-                    continue
-            # Truncate lines longer than 400 characters.
-            if len(line) > 400:
-                line = line[:400] + '...\n'
-            buf += line
-            if not bufMode:
-                print(buf)
-                errors.append(buf)
-                buf = ''
-    return set(errors)
+                    if 'Traceback' in line:
+                        bufMode = True
+                    else:
+                        continue
+                # Truncate lines longer than 400 characters.
+                if len(line) > 400:
+                    line = line[:400] + '...\n'
+                buf += line
+                if not bufMode:
+                    if buf not in errors:
+                        print(buf)
+                        errors.add(buf)
+                    buf = ''
+        except:
+            pass
 
 steps = {}
 total_time = 0
