@@ -1,5 +1,6 @@
 from pathlib import Path
 import subprocess
+import traceback
 import os
 from github import Github
 
@@ -27,7 +28,8 @@ class Project:
             self.pom = PomExtractor(self.path)
             self.path = os.path.dirname(self.pom.poms[0]['path'])
             return True
-        except:
+        except Exception as e:
+            traceback.print_exc()
             return False
 
     def checkout_version(self, version):
@@ -47,6 +49,7 @@ class Project:
                         return True
                     return False
             except Exception as e:
+                traceback.print_exc()
                 continue
         return False
 
