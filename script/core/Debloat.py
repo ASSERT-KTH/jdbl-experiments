@@ -9,6 +9,7 @@ class Debloat:
         self.project = project
     
     def inject_library(self):
+        self.project.inject_jacoco_plugin()
         self.project.pom.add_plugin("se.kth.castor", "jdbl-maven-plugin", "1.0-SNAPSHOT", [{
             "name": "executions",
             "children": [
@@ -28,45 +29,6 @@ class Debloat:
                 }
             ]
         }])
-
-        self.project.pom.add_plugin("org.jacoco", "jacoco-maven-plugin", "0.8.5", [{
-            "name": "executions",
-            "children": [
-                {
-                    "name": "execution",
-                    "children": [
-                        {
-                            "name": "goals",
-                            "children": [
-                                {
-                                    "name": "goal",
-                                    "text": "prepare-agent"
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "name": "execution",
-                    "children": [
-                        {
-                            "name": "id",
-                            "text": "report"
-                        },{
-                            "name": "phase",
-                            "text": "prepare-agent"
-                        },{
-                            "name": "goals",
-                            "children": [{
-                                "name": "goal",
-                                "text": "report"
-                            }]
-                        }
-                    ]
-                }
-            ]
-        }])
-
 
         self.project.pom.write_pom()
         pass

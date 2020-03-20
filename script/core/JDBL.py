@@ -203,9 +203,9 @@ class JDBL:
                 "success": False
             }
             results['steps'].append(current_status)
-
+            self.client.clean()
             current_status['success'] = self.client.inject_debloat_library(dep_group, dep_artifact, self.version)
-            
+            current_status['success'] = self.client.unzip_debloat(dep_group, dep_artifact, self.version)            
 
             previous_time = time.time()
             current_status['end'] = previous_time
@@ -226,9 +226,10 @@ class JDBL:
             debloat_client_results_path = os.path.join(client_results_path, "debloat")
             if not os.path.exists(debloat_client_results_path):
                 os.mkdir(debloat_client_results_path)
+            self.client.inject_jacoco_plugin()
             current_status['success'] = self.client.copy_pom(debloat_client_results_path + "/pom.xml")
-
-            current_status['success'] = current_status['success'] and self.client.test()
+            current_status['success'] = current_status['success'] and self.client.test(clean=False)
+            current_status['success'] = current_status['success'] and self.client.copy_jacoco(debloat_client_results_path)
             current_status['success'] = current_status['success'] and self.client.copy_test_results(debloat_client_results_path + "/test-results")
 
             previous_time = time.time()

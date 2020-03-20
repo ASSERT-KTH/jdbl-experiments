@@ -48,8 +48,10 @@ class Project:
                         self.pom = PomExtractor(self.path)
                         return True
                     return False
-            except Exception as e:
-                traceback.print_exc()
+            except ValueError:
+                continue
+            except Exception:
+                traceback.print_stack()
                 continue
         return False
 
@@ -72,8 +74,19 @@ class Project:
         cmd = 'cd %s; git rev-parse HEAD' % (self.path)
         return subprocess.check_output(cmd, shell=True).decode('UTF-8').strip()
 
-    def test(self):
-        cmd = 'cd %s; mvn clean -B; mvn test --fail-never -ntp -Dmaven.test.failure.ignore=true -B;' % (self.path)
+    def clean(self):
+        cmd = 'cd %s;mvn clean -B;' % (self.path)
+        try:
+            subprocess.check_call(cmd, shell=True)
+            return True
+        except:
+            return False
+
+    def test(self, clean=True):
+        clean_cmd = 'mvn clean -B;'
+        if clean is False:
+            clean_cmd = ''
+        cmd = 'cd %s;%s mvn test --fail-never -ntp -Dmaven.test.failure.ignore=true -B;' % (self.path, clean_cmd)
         try:
             subprocess.check_call(cmd, shell=True)
             return True
@@ -107,7 +120,7 @@ class Project:
             return False
     
     def copy_jacoco(self, dst):
-        cmd = 'cd %s/target/; cp -r jacoco.exec %s; ls %s' % (self.path, dst, dst)
+        cmd = 'cd %s/target/; cp -r site/jacoco/jacoco.xml %s; cp -r site/jacoco/jacoco.csv %s' % (self.path, dst, dst)
         try:
             subprocess.check_call(cmd, shell=True)
             return True
@@ -130,9 +143,24 @@ class Project:
         except:
             return False
 
+    def unzip_debloat(self, group_id, artifact_id, version):
+        # self.pom.remove_dependency(group_id, artifact_id)
+        path_jar = os.path.join("/", "results", "%s:%s" % (group_id, artifact_id), version, "debloat", "debloat.jar")
+        
+
+        cmd = "mkdir -p %s/target/classes/; cd %s/target/classes/; jar xf %s; ls .;" % (self.path, self.path, path_jar)
+        print(cmd)
+        try:
+            subprocess.check_call(cmd, shell=True)
+            return True
+        except Exception as e:
+            traceback.print_stack()
+            return False
+
     def inject_debloat_library(self, group_id, artifact_id, version):
         path_jar = os.path.join("/", "results", "%s:%s" % (group_id, artifact_id), version, "debloat", "debloat.jar")
-        cmd = "cd %s; mvn install:install-file -Dfile=%s -DgroupId=%s -DartifactId=%s -Dversion=%s -Dpackaging=jar -B" % (self.path, path_jar, group_id, artifact_id, version)
+
+        cmd = "cd %s; mvn install:install-file -Dfile=%s -DgroupId=%s -DartifactId=%s -Dversion=%s -Dpackaging=jar -B;" % (self.path, path_jar, group_id, artifact_id, version)
         try:
             subprocess.check_call(cmd, shell=True)
             return True
@@ -142,6 +170,49 @@ class Project:
         # self.pom.change_depency_path(group_id, artifact_id, path_jar)
         # self.pom.write_pom()
     
+
+    def inject_jacoco_plugin(self):
+        self.pom.add_plugin("org.jacoco", "jacoco-maven-plugin", "0.8.5", [ 
+            {
+            "name": "executions",
+            "children": [
+                {
+                    "name": "execution",
+                    "children": [
+                        {
+                            "name": "goals",
+                            "children": [
+                                {
+                                    "name": "goal",
+                                    "text": "prepare-agent"
+                                }
+                            ]
+                        }
+                    ]
+                },
+                {
+                    "name": "execution",
+                    "children": [
+                        {
+                            "name": "id",
+                            "text": "report"
+                        },{
+                            "name": "phase",
+                            "text": "test"
+                        },{
+                            "name": "goals",
+                            "children": [{
+                                "name": "goal",
+                                "text": "report"
+                            }]
+                        }
+                    ]
+                }
+            ]
+        }])
+        self.pom.write_pom()
+        return True
+
     def inject_assembly_plugin(self):
         self.pom.add_plugin(None, "maven-assembly-plugin", "3.2.0", [{
             "name": "executions",

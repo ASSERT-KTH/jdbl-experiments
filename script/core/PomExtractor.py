@@ -65,6 +65,25 @@ class PomExtractor:
             return r.text
         return ''
 
+    def remove_dependency(self, group_id, artifact_id):
+        for pom in self.poms:
+            prop_parents = self.poms[0]["root"].findall('*//dependency/..')
+            for parent in prop_parents:
+                for dep in parent:
+                    gr = dep.find('groupId')
+                    if gr is not None:
+                        gr = gr.text
+                    if group_id != gr:
+                        continue
+                    ar = dep.find('artifactId')
+                    if ar is not None:
+                        ar = ar.text
+                    if ar != artifact_id:
+                        continue
+                    parent.remove(dep)
+                    return dep
+        return None
+
     def get_version_dependency(self, group_id, artifact_id):
         for pom in self.poms:
             deps = pom["root"].findall('*//dependency')
