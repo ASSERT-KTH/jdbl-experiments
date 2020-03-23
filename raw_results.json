@@ -7,40 +7,1231 @@
    "clients": {}
   },
   "2.9.0": {
-   "clients": {}
+   "clients": {
+    "com:mmall": {
+     "original_test": {
+      "error": 3,
+      "failing": 0,
+      "passing": 3,
+      "execution_time": 98.167
+     },
+     "debloat_test": {
+      "error": 3,
+      "failing": 0,
+      "passing": 3,
+      "execution_time": 15.682
+     }
+    },
+    ":foo": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.352
+     },
+     "debloat_test": {
+      "error": 1,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.023
+     }
+    },
+    "io.codis.jodis:jodis": {
+     "original_test": {
+      "error": 1,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 2.95
+     },
+     "debloat_test": {
+      "error": 1,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 3.2889999999999997
+     }
+    },
+    "doitincloud:rdbcache": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 77,
+      "execution_time": 26.692999999999998
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 77,
+      "execution_time": 28.785999999999998
+     }
+    },
+    "hybricache:hybricache": {
+     "original_test": {
+      "error": 1,
+      "failing": 0,
+      "passing": 4,
+      "execution_time": 0.391
+     },
+     "debloat_test": {
+      "error": 1,
+      "failing": 0,
+      "passing": 4,
+      "execution_time": 0.276
+     }
+    },
+    "com.yoho.bigdata:malicious-detection-spark": {
+     "original_test": {
+      "error": 4,
+      "failing": 1,
+      "passing": 1,
+      "execution_time": 4.032
+     },
+     "debloat_test": {
+      "error": 4,
+      "failing": 1,
+      "passing": 1,
+      "execution_time": 1.966
+     }
+    },
+    "com.nnngu:nguSeckill": {
+     "original_test": {
+      "error": 8,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 20.137999999999998
+     },
+     "debloat_test": {
+      "error": 8,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.015
+     }
+    },
+    "cas:cas": {
+     "original_test": {
+      "error": 5,
+      "failing": 0,
+      "passing": 2,
+      "execution_time": 2.11
+     },
+     "debloat_test": {
+      "error": 5,
+      "failing": 0,
+      "passing": 2,
+      "execution_time": 4.359
+     }
+    },
+    "com.pk:redis-scheduler": {
+     "original_test": {
+      "error": 7,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.412
+     },
+     "debloat_test": {
+      "error": 7,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.319
+     }
+    },
+    "XRTB:XRTB": {
+     "original_test": {
+      "error": 30,
+      "failing": 21,
+      "passing": 6,
+      "execution_time": 26.403000000000002
+     },
+     "debloat_test": {
+      "error": 30,
+      "failing": 21,
+      "passing": 6,
+      "execution_time": 31.486000000000004
+     }
+    },
+    "cn.cie:shop": {
+     "original_test": {
+      "error": 20,
+      "failing": 0,
+      "passing": 6,
+      "execution_time": 1.354
+     },
+     "debloat_test": {
+      "error": 20,
+      "failing": 0,
+      "passing": 6,
+      "execution_time": 1.137
+     }
+    },
+    "com.moilioncircle:redis-cluster-watchdog": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 6.195
+     },
+     "debloat_test": {
+      "error": 1,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 2.772
+     }
+    },
+    "org.nutz:nutzwx": {
+     "original_test": {
+      "error": 1,
+      "failing": 0,
+      "passing": 2,
+      "execution_time": 0.955
+     },
+     "debloat_test": {
+      "error": 1,
+      "failing": 0,
+      "passing": 2,
+      "execution_time": 0.536
+     }
+    },
+    "com:ppmall": {
+     "original_test": {
+      "error": 1,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.041
+     },
+     "debloat_test": {
+      "error": 1,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.076
+     }
+    },
+    "love.wangqi:redis-limiter": {
+     "original_test": {
+      "error": 3,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.449
+     },
+     "debloat_test": {
+      "error": 3,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.229
+     }
+    },
+    "top.crossoverjie.opensource:distributed-redis-tool": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 23,
+      "execution_time": 2.037
+     },
+     "debloat_test": {
+      "error": 20,
+      "failing": 0,
+      "passing": 3,
+      "execution_time": 0.515
+     }
+    },
+    "com.jaeksoft:opensearchserver": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 12,
+      "execution_time": 12.818
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 12,
+      "execution_time": 4.759
+     }
+    },
+    "com.lyn:FlashSale": {
+     "original_test": {
+      "error": 11,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 15.338000000000001
+     },
+     "debloat_test": {
+      "error": 11,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.081
+     }
+    },
+    "org.apache:kafka-connect-redis": {
+     "original_test": {
+      "error": 3,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.376
+     },
+     "debloat_test": {
+      "error": 3,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.354
+     }
+    },
+    "com.imgeek:myzone": {
+     "original_test": {
+      "error": 0,
+      "failing": 4,
+      "passing": 91,
+      "execution_time": 35.21
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 2,
+      "passing": 74,
+      "execution_time": 5.004000000000001
+     }
+    },
+    "RTB4FREE:Bidder": {
+     "original_test": {
+      "error": 7,
+      "failing": 4,
+      "passing": 49,
+      "execution_time": 114.598
+     },
+     "debloat_test": {
+      "error": 8,
+      "failing": 4,
+      "passing": 52,
+      "execution_time": 139.33
+     }
+    },
+    "cn.edu.ncut:spark-rec-v2": {
+     "original_test": {
+      "error": 19,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 30.201
+     },
+     "debloat_test": {
+      "error": 19,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 39.483
+     }
+    },
+    "com.github.crab2died:log4j-redis-appender": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.005
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.003
+     }
+    },
+    "com.github.bingoohuang:westcache": {
+     "original_test": {
+      "error": 1,
+      "failing": 0,
+      "passing": 4,
+      "execution_time": 2.889
+     },
+     "debloat_test": {
+      "error": 1,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 1.758
+     }
+    },
+    "com.catscream:ssm": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 2,
+      "execution_time": 1.456
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 2,
+      "execution_time": 1.091
+     }
+    },
+    "com.cheng.o2o:O2O": {
+     "original_test": {
+      "error": 14,
+      "failing": 0,
+      "passing": 7,
+      "execution_time": 5886.898000000001
+     },
+     "debloat_test": {
+      "error": 14,
+      "failing": 0,
+      "passing": 7,
+      "execution_time": 4974.505
+     }
+    },
+    "com.xp:EScore": {
+     "original_test": {
+      "error": 5,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.14900000000000002
+     },
+     "debloat_test": {
+      "error": 5,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.10500000000000001
+     }
+    },
+    "org.seckill:seckill": {
+     "original_test": {
+      "error": 10,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 8.293
+     },
+     "debloat_test": {
+      "error": 10,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.007
+     }
+    },
+    "com.github.bingoohuang:delayqueue": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 19,
+      "execution_time": 10.647
+     },
+     "debloat_test": {
+      "error": 17,
+      "failing": 0,
+      "passing": 2,
+      "execution_time": 1.327
+     }
+    },
+    "de.flapdoodle.embed:de.flapdoodle.embed.redis": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 18,
+      "execution_time": 6.804999999999998
+     },
+     "debloat_test": {
+      "error": 9,
+      "failing": 0,
+      "passing": 11,
+      "execution_time": 4.112
+     }
+    }
+   },
+   "original_test": {
+    "error": 488,
+    "failing": 1,
+    "passing": 46,
+    "execution_time": 1.0470000000000002
+   },
+   "debloat_test": {
+    "error": 488,
+    "failing": 1,
+    "passing": 46,
+    "execution_time": 3.4659999999999984
+   }
   },
   "2.7.2": {
-   "clients": {}
+   "clients": {
+    "com.feizi:seckill": {
+     "original_test": {
+      "error": 12,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 10.302
+     },
+     "debloat_test": {
+      "error": 12,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.015
+     }
+    },
+    "com.jfinal:jfinal": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 2,
+      "execution_time": 0.027
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 2,
+      "execution_time": 0.030000000000000002
+     }
+    },
+    "com.zhouxu:MyBatisDemo": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 20,
+      "execution_time": 2.8259999999999996
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 20,
+      "execution_time": 3.318
+     }
+    },
+    "com.github.xetorthio:jedisque": {
+     "original_test": {
+      "error": 20,
+      "failing": 0,
+      "passing": 4,
+      "execution_time": 0.11699999999999999
+     },
+     "debloat_test": {
+      "error": 20,
+      "failing": 0,
+      "passing": 4,
+      "execution_time": 0.09
+     }
+    },
+    "io.qntfy.nifi:nifi-redis": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 14,
+      "execution_time": 0.151
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 14,
+      "execution_time": 0.06
+     }
+    },
+    "com.github.blackshadowwalker.spring:spring-distributelock": {
+     "original_test": {
+      "error": 3,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 15.099
+     },
+     "debloat_test": {
+      "error": 3,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.017
+     }
+    }
+   },
+   "original_test": {
+    "error": 415,
+    "failing": 0,
+    "passing": 39,
+    "execution_time": 1.095
+   },
+   "debloat_test": {
+    "error": 415,
+    "failing": 0,
+    "passing": 39,
+    "execution_time": 2.1429999999999993
+   }
   },
   "2.2.1": {
-   "clients": {}
+   "clients": {},
+   "original_test": {
+    "error": 262,
+    "failing": 0,
+    "passing": 19,
+    "execution_time": 0.18600000000000003
+   },
+   "debloat_test": {
+    "error": 262,
+    "failing": 0,
+    "passing": 19,
+    "execution_time": 0.266
+   }
   },
   "2.10.2": {
-   "clients": {}
+   "clients": {},
+   "original_test": {
+    "error": 515,
+    "failing": 3,
+    "passing": 50,
+    "execution_time": 0.7610000000000001
+   },
+   "debloat_test": {
+    "error": 515,
+    "failing": 3,
+    "passing": 50,
+    "execution_time": 1.1089999999999995
+   }
   },
   "2.8.1": {
-   "clients": {}
+   "clients": {
+    "com.ssm:ssm": {
+     "original_test": {
+      "error": 4,
+      "failing": 0,
+      "passing": 2,
+      "execution_time": 0.32200000000000006
+     },
+     "debloat_test": {
+      "error": 4,
+      "failing": 0,
+      "passing": 2,
+      "execution_time": 0.14
+     }
+    },
+    "net.whitbeck:rdb-parser": {
+     "original_test": {
+      "error": 2,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.345
+     },
+     "debloat_test": {
+      "error": 2,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 1.257
+     }
+    },
+    "com.codeforces:commons": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 84,
+      "execution_time": 63.849999999999994
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 84,
+      "execution_time": 89.64599999999999
+     }
+    },
+    "com.king:scylla": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 12,
+      "execution_time": 0.956
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 12,
+      "execution_time": 1.024
+     }
+    },
+    "com.dc:dc_network_disk": {
+     "original_test": {
+      "error": 4,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.064
+     },
+     "debloat_test": {
+      "error": 4,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.07
+     }
+    },
+    "com.jonnyliu.proj.wechat:wechat-core": {
+     "original_test": {
+      "error": 17,
+      "failing": 0,
+      "passing": 4,
+      "execution_time": 1.2919999999999998
+     },
+     "debloat_test": {
+      "error": 17,
+      "failing": 0,
+      "passing": 4,
+      "execution_time": 0.397
+     }
+    },
+    "com.threecore:sostream": {
+     "original_test": {
+      "error": 21,
+      "failing": 6,
+      "passing": 346,
+      "execution_time": 2.326999999999998
+     },
+     "debloat_test": {
+      "error": 21,
+      "failing": 6,
+      "passing": 346,
+      "execution_time": 2.797999999999995
+     }
+    },
+    "com.hnz.ssm:ssm": {
+     "original_test": {
+      "error": 12,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 16.417
+     },
+     "debloat_test": {
+      "error": 13,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 14.596000000000002
+     }
+    },
+    "com.pingao:yiya": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.0
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.0
+     }
+    },
+    "jkxqj:KingIM": {
+     "original_test": {
+      "error": 4,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 48.028999999999996
+     },
+     "debloat_test": {
+      "error": 4,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.011
+     }
+    }
+   },
+   "original_test": {
+    "error": 476,
+    "failing": 1,
+    "passing": 42,
+    "execution_time": 1.3779999999999997
+   },
+   "debloat_test": {
+    "error": 476,
+    "failing": 1,
+    "passing": 42,
+    "execution_time": 1.8699999999999997
+   }
   },
   "2.5.1": {
    "clients": {}
   },
   "2.7.0": {
-   "clients": {}
+   "clients": {
+    "com.test:spider": {
+     "original_test": {
+      "error": 3,
+      "failing": 0,
+      "passing": 4,
+      "execution_time": 317.047
+     },
+     "debloat_test": {
+      "error": 3,
+      "failing": 0,
+      "passing": 4,
+      "execution_time": 671.39
+     }
+    },
+    "com.zuoxiaolong:deerlet-redis-client": {
+     "original_test": {
+      "error": 105,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 1.2309999999999999
+     },
+     "debloat_test": {
+      "error": 105,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 1.8369999999999997
+     }
+    }
+   },
+   "original_test": {
+    "error": 415,
+    "failing": 0,
+    "passing": 39,
+    "execution_time": 1.3839999999999997
+   },
+   "debloat_test": {
+    "error": 415,
+    "failing": 0,
+    "passing": 39,
+    "execution_time": 2.5229999999999992
+   }
   },
   "2.8.0": {
-   "clients": {}
+   "clients": {
+    "com.redis.cluster.monitor:redis-cluster-monitor": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 4,
+      "execution_time": 0.047
+     },
+     "debloat_test": {
+      "error": 4,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.126
+     }
+    },
+    "pretty_ssm:pretty_ssm": {
+     "original_test": {
+      "error": 1,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.019
+     },
+     "debloat_test": {
+      "error": 1,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.006
+     }
+    },
+    "com.yingjun.ssm:beauty_ssm_cluster": {
+     "original_test": {
+      "error": 8,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.017
+     },
+     "debloat_test": {
+      "error": 8,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.040999999999999995
+     }
+    },
+    "com.baidu.fsg:dlock": {
+     "original_test": {
+      "error": 6,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.054000000000000006
+     },
+     "debloat_test": {
+      "error": 6,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.049
+     }
+    },
+    "com.qixingjun:seckill": {
+     "original_test": {
+      "error": 10,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.037
+     },
+     "debloat_test": {
+      "error": 10,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.033
+     }
+    },
+    "dev:VWatch": {
+     "original_test": {
+      "error": 2,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.026000000000000002
+     },
+     "debloat_test": {
+      "error": 2,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.008
+     }
+    },
+    "com.logmonitor:logmonitor": {
+     "original_test": {
+      "error": 1,
+      "failing": 0,
+      "passing": 2,
+      "execution_time": 1.797
+     },
+     "debloat_test": {
+      "error": 1,
+      "failing": 0,
+      "passing": 2,
+      "execution_time": 0.792
+     }
+    },
+    "mdv3:mdv3": {
+     "original_test": {
+      "error": 11,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 31.417
+     },
+     "debloat_test": {
+      "error": 11,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 31.474
+     }
+    },
+    "com.yingjun.ssm:beauty_ssm": {
+     "original_test": {
+      "error": 9,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.517
+     },
+     "debloat_test": {
+      "error": 9,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.46399999999999997
+     }
+    },
+    "io.kodokojo:kodokojo": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 16,
+      "execution_time": 2.4949999999999997
+     },
+     "debloat_test": {
+      "error": 3,
+      "failing": 0,
+      "passing": 13,
+      "execution_time": 0.9400000000000001
+     }
+    },
+    "com.powerreviews:redshift-jdbc-cached-driver": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 21,
+      "execution_time": 2.269
+     },
+     "debloat_test": {
+      "error": 16,
+      "failing": 0,
+      "passing": 5,
+      "execution_time": 1.027
+     }
+    },
+    "org.tomitribe:beryllium": {
+     "original_test": {
+      "error": 42,
+      "failing": 12,
+      "passing": 172,
+      "execution_time": 12.193
+     },
+     "debloat_test": {
+      "error": 42,
+      "failing": 12,
+      "passing": 172,
+      "execution_time": 10.079
+     }
+    }
+   },
+   "original_test": {
+    "error": 472,
+    "failing": 1,
+    "passing": 45,
+    "execution_time": 2.159
+   },
+   "debloat_test": {
+    "error": 472,
+    "failing": 1,
+    "passing": 45,
+    "execution_time": 0.841
+   }
   },
   "3.1.0": {
-   "clients": {}
+   "clients": {
+    "com.cwbase:logback-redis-appender": {
+     "original_test": {
+      "error": 4,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 1.311
+     },
+     "debloat_test": {
+      "error": 4,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 2.014
+     }
+    },
+    ":rsb": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 105,
+      "execution_time": 1.3939999999999995
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 105,
+      "execution_time": 2.596999999999999
+     }
+    },
+    "DiscordBot:DiscordBot": {
+     "original_test": {
+      "error": 1,
+      "failing": 0,
+      "passing": 67,
+      "execution_time": 2.364
+     },
+     "debloat_test": {
+      "error": 1,
+      "failing": 0,
+      "passing": 67,
+      "execution_time": 2.7969999999999997
+     }
+    }
+   },
+   "original_test": {
+    "error": 654,
+    "failing": 4,
+    "passing": 57,
+    "execution_time": 1.5639999999999996
+   },
+   "debloat_test": {
+    "error": 654,
+    "failing": 4,
+    "passing": 57,
+    "execution_time": 1.4649999999999994
+   }
   },
   "3.0.1": {
-   "clients": {}
+   "clients": {
+    "net.greghaines:jesque": {
+     "original_test": {
+      "error": 45,
+      "failing": 0,
+      "passing": 293,
+      "execution_time": 9.585
+     },
+     "debloat_test": {
+      "error": 45,
+      "failing": 0,
+      "passing": 293,
+      "execution_time": 2.216999999999999
+     }
+    },
+    "com.github.UncleCatMySelf:InChat": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 4,
+      "execution_time": 0.057
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 4,
+      "execution_time": 0.056
+     }
+    },
+    "com.amazon:reactive-vertx": {
+     "original_test": {
+      "error": 2,
+      "failing": 0,
+      "passing": 2,
+      "execution_time": 3.523
+     },
+     "debloat_test": {
+      "error": 2,
+      "failing": 0,
+      "passing": 2,
+      "execution_time": 3.393
+     }
+    },
+    "com.redislabs:jredistimeseries": {
+     "original_test": {
+      "error": 12,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 4.544
+     },
+     "debloat_test": {
+      "error": 12,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 1.692
+     }
+    }
+   },
+   "original_test": {
+    "error": 545,
+    "failing": 4,
+    "passing": 51,
+    "execution_time": 3.0949999999999998
+   },
+   "debloat_test": {
+    "error": 545,
+    "failing": 4,
+    "passing": 51,
+    "execution_time": 4.8100000000000005
+   }
   },
   "2.6.1": {
-   "clients": {}
+   "clients": {
+    "org.reborndb:reborn-java": {
+     "original_test": {
+      "error": 1,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.527
+     },
+     "debloat_test": {
+      "error": 1,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.5429999999999999
+     }
+    }
+   },
+   "original_test": {
+    "error": 402,
+    "failing": 0,
+    "passing": 31,
+    "execution_time": 0.3030000000000001
+   },
+   "debloat_test": {
+    "error": 402,
+    "failing": 0,
+    "passing": 31,
+    "execution_time": 0.5379999999999999
+   }
   },
   "2.1.0": {
-   "clients": {}
+   "clients": {
+    "cn.bishiti:base": {
+     "original_test": {
+      "error": 1,
+      "failing": 0,
+      "passing": 2,
+      "execution_time": 0.184
+     },
+     "debloat_test": {
+      "error": 2,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.029
+     }
+    },
+    "com.openshift:blog": {
+     "original_test": {
+      "error": 4,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 1.626
+     },
+     "debloat_test": {
+      "error": 3,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.42100000000000004
+     }
+    },
+    "storm.analytics:storm-analytics": {
+     "original_test": {
+      "error": 1,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.353
+     },
+     "debloat_test": {
+      "error": 1,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.309
+     }
+    },
+    "com.crowdriff:styx": {
+     "original_test": {
+      "error": 12,
+      "failing": 0,
+      "passing": 5,
+      "execution_time": 0.07
+     },
+     "debloat_test": {
+      "error": 17,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.095
+     }
+    },
+    "com.github.knightliao.apollo:apollo": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 11,
+      "execution_time": 0.10500000000000001
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 11,
+      "execution_time": 0.13999999999999999
+     }
+    },
+    "com.coruscations:logback-logstash-redis": {
+     "original_test": {
+      "error": 1,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.346
+     },
+     "debloat_test": {
+      "error": 2,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.238
+     }
+    },
+    "io.stalk:stalk-server": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.012
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.07
+     }
+    }
+   },
+   "original_test": {
+    "error": 229,
+    "failing": 0,
+    "passing": 19,
+    "execution_time": 0.49500000000000016
+   },
+   "debloat_test": {
+    "error": 229,
+    "failing": 0,
+    "passing": 19,
+    "execution_time": 0.549
+   }
   },
   "2.5.2": {
    "clients": {}
@@ -49,10 +1240,176 @@
    "clients": {}
   },
   "2.6.2": {
-   "clients": {}
+   "clients": {
+    "com.googlecode.webutilities:webutilities": {
+     "original_test": {
+      "error": 0,
+      "failing": 1,
+      "passing": 9,
+      "execution_time": 2.8059999999999996
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 1,
+      "passing": 9,
+      "execution_time": 3.649
+     }
+    },
+    "com.zoe.weiya:weiya": {
+     "original_test": {
+      "error": 1,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 2.693
+     },
+     "debloat_test": {
+      "error": 1,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.012
+     }
+    },
+    "quickMVC:quickMVC": {
+     "original_test": {
+      "error": 9,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.14800000000000002
+     },
+     "debloat_test": {
+      "error": 9,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.105
+     }
+    },
+    "org.trellee:nosqlunit-examples": {
+     "original_test": {
+      "error": 6,
+      "failing": 0,
+      "passing": 5,
+      "execution_time": 833.831
+     },
+     "debloat_test": {
+      "error": 6,
+      "failing": 0,
+      "passing": 3,
+      "execution_time": 860.6279999999999
+     }
+    },
+    "com.evertrue:monotone": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 4,
+      "execution_time": 0.218
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 4,
+      "execution_time": 0.163
+     }
+    }
+   },
+   "original_test": {
+    "error": 404,
+    "failing": 0,
+    "passing": 32,
+    "execution_time": 0.5810000000000001
+   },
+   "debloat_test": {
+    "error": 404,
+    "failing": 0,
+    "passing": 32,
+    "execution_time": 0.8160000000000002
+   }
   },
   "2.0.0": {
-   "clients": {}
+   "clients": {
+    "co.sdm:spring-data-redis": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.003
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.003
+     }
+    },
+    "me.brandonc.security:totp-authentication-demo": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.122
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.065
+     }
+    },
+    "dist-cache:distcache": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.0
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.0
+     }
+    },
+    "cn.edu.ncut:doubanWebSpider": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.002
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.003
+     }
+    },
+    "com.ming:zhihuWebSpider": {
+     "original_test": {
+      "error": 4,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 480.053
+     },
+     "debloat_test": {
+      "error": 4,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 480.063
+     }
+    }
+   },
+   "original_test": {
+    "error": 193,
+    "failing": 0,
+    "passing": 18,
+    "execution_time": 0.5160000000000001
+   },
+   "debloat_test": {
+    "error": 193,
+    "failing": 0,
+    "passing": 18,
+    "execution_time": 0.9530000000000003
+   }
   }
  },
  "com.belerweb:pinyin4j": {
@@ -167,7 +1524,342 @@
    "clients": {}
   },
   "2.3": {
-   "clients": {}
+   "clients": {
+    "org.drupal.project.computing:computing-core": {
+     "original_test": {
+      "error": 17,
+      "failing": 1,
+      "passing": 5,
+      "execution_time": 4.104
+     },
+     "debloat_test": {
+      "error": 17,
+      "failing": 1,
+      "passing": 5,
+      "execution_time": 1.9819999999999998
+     }
+    },
+    "com.pablissimo.sonar:sonar-typescript-plugin": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 113,
+      "execution_time": 8.236
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 113,
+      "execution_time": 10.124
+     }
+    },
+    "es.ubu.tfg:touristbot": {
+     "original_test": {
+      "error": 80,
+      "failing": 0,
+      "passing": 9,
+      "execution_time": 9.747
+     },
+     "debloat_test": {
+      "error": 80,
+      "failing": 0,
+      "passing": 9,
+      "execution_time": 11.065
+     }
+    },
+    "timeextractor:timeextractor": {
+     "original_test": {
+      "error": 1,
+      "failing": 0,
+      "passing": 109,
+      "execution_time": 2.187
+     },
+     "debloat_test": {
+      "error": 1,
+      "failing": 0,
+      "passing": 109,
+      "execution_time": 6.124
+     }
+    },
+    ":": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 72,
+      "execution_time": 0.14500000000000002
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 72,
+      "execution_time": 0.135
+     }
+    },
+    "org.complykit:license-check-maven-plugin": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.013
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.008
+     }
+    },
+    "com.livefyre:livefyre": {
+     "original_test": {
+      "error": 24,
+      "failing": 0,
+      "passing": 21,
+      "execution_time": 0.588
+     },
+     "debloat_test": {
+      "error": 24,
+      "failing": 0,
+      "passing": 21,
+      "execution_time": 0.286
+     }
+    },
+    "app:webstore": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 72,
+      "execution_time": 0.33999999999999997
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 72,
+      "execution_time": 0.842
+     }
+    },
+    "edu.ksu.canvas:canvas-api": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 145,
+      "execution_time": 11.354
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 145,
+      "execution_time": 10.065999999999997
+     }
+    },
+    "es.revib.server:rest": {
+     "original_test": {
+      "error": 1,
+      "failing": 3,
+      "passing": 44,
+      "execution_time": 152.529
+     },
+     "debloat_test": {
+      "error": 1,
+      "failing": 3,
+      "passing": 44,
+      "execution_time": 57.745000000000005
+     }
+    },
+    "info.blockchain:api": {
+     "original_test": {
+      "error": 0,
+      "failing": 4,
+      "passing": 2,
+      "execution_time": 3.5260000000000002
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 4,
+      "passing": 2,
+      "execution_time": 7.076
+     }
+    },
+    "com.imgeek:myzone": {
+     "original_test": {
+      "error": 0,
+      "failing": 4,
+      "passing": 97,
+      "execution_time": 213.523
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 4,
+      "passing": 97,
+      "execution_time": 214.36100000000002
+     }
+    },
+    "com.nexusy:ip-location": {
+     "original_test": {
+      "error": 3,
+      "failing": 0,
+      "passing": 2,
+      "execution_time": 66.583
+     },
+     "debloat_test": {
+      "error": 4,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 127.52199999999999
+     }
+    },
+    "webstore.exercise:webstore": {
+     "original_test": {
+      "error": 66,
+      "failing": 0,
+      "passing": 162,
+      "execution_time": 19.009
+     },
+     "debloat_test": {
+      "error": 66,
+      "failing": 0,
+      "passing": 162,
+      "execution_time": 22.207999999999995
+     }
+    },
+    "com.gmail.inverseconduit:javabot": {
+     "original_test": {
+      "error": 4,
+      "failing": 0,
+      "passing": 33,
+      "execution_time": 5.4639999999999995
+     },
+     "debloat_test": {
+      "error": 4,
+      "failing": 0,
+      "passing": 33,
+      "execution_time": 3.544
+     }
+    },
+    "io.indico:io.indico": {
+     "original_test": {
+      "error": 172,
+      "failing": 0,
+      "passing": 8,
+      "execution_time": 1.8079999999999996
+     },
+     "debloat_test": {
+      "error": 172,
+      "failing": 0,
+      "passing": 8,
+      "execution_time": 1.2419999999999995
+     }
+    },
+    "com.github.knightliao.apollo:apollo": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 11,
+      "execution_time": 0.21400000000000002
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 11,
+      "execution_time": 0.182
+     }
+    },
+    "com.gitblit.iciql:iciql": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 105,
+      "execution_time": 48.667
+     },
+     "debloat_test": {
+      "error": 184,
+      "failing": 0,
+      "passing": 3,
+      "execution_time": 17.394
+     }
+    },
+    "com.financialforce:objectmodelutil": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.001
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.003
+     }
+    },
+    "org.apache.stanbol:client": {
+     "original_test": {
+      "error": 4,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 2.173
+     },
+     "debloat_test": {
+      "error": 4,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 1.093
+     }
+    },
+    "quickml:quickml": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 106,
+      "execution_time": 303.714
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 106,
+      "execution_time": 141.246
+     }
+    },
+    "com.aahmedse.props2json:props2json": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.104
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.088
+     }
+    },
+    "com.webwalker.bms:BMS": {
+     "original_test": {
+      "error": 1,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.007
+     },
+     "debloat_test": {
+      "error": 1,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.025
+     }
+    }
+   },
+   "original_test": {
+    "error": 0,
+    "failing": 0,
+    "passing": 943,
+    "execution_time": 0.7150000000000001
+   },
+   "debloat_test": {
+    "error": 0,
+    "failing": 0,
+    "passing": 943,
+    "execution_time": 1.0650000000000004
+   }
   },
   "2.8.5": {
    "clients": {}
@@ -176,7 +1868,1070 @@
    "clients": {}
   },
   "2.3.1": {
-   "clients": {}
+   "clients": {
+    "com:mmall": {
+     "original_test": {
+      "error": 3,
+      "failing": 0,
+      "passing": 3,
+      "execution_time": 8.717
+     },
+     "debloat_test": {
+      "error": 3,
+      "failing": 0,
+      "passing": 3,
+      "execution_time": 6.223999999999999
+     }
+    },
+    "de.zh32:TeleportSigns": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 12,
+      "execution_time": 12.402
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 12,
+      "execution_time": 19.371000000000002
+     }
+    },
+    "com.sumologic:kinesis-sumologic-connector": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 11,
+      "execution_time": 1.307
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 11,
+      "execution_time": 1.319
+     }
+    },
+    "gov.nih.nlm.ncbi.seqr:seqr": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 4,
+      "execution_time": 350.122
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 4,
+      "execution_time": 214.341
+     }
+    },
+    "net.authorize:anet-java-sdk": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 47,
+      "execution_time": 3.1849999999999983
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 47,
+      "execution_time": 1.854999999999998
+     }
+    },
+    "com.windowsazure:Notification-Hubs-java-sdk": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 24,
+      "execution_time": 3.3020000000000005
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 24,
+      "execution_time": 1.69
+     }
+    },
+    "Mambu-APIs-Java:Mambu-APIs-Java": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 29,
+      "execution_time": 3.369
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 29,
+      "execution_time": 3.203
+     }
+    },
+    "no.difi.datahotel:datahotel": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 103,
+      "execution_time": 17.774
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 103,
+      "execution_time": 20.282
+     }
+    },
+    "ch.digitalfondue.jfiveparse:jfiveparse": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 10137,
+      "execution_time": 11.341999999999999
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 10137,
+      "execution_time": 4.761
+     }
+    },
+    "com.technophobia.substeps:substeps-core": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 111,
+      "execution_time": 2.61
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 111,
+      "execution_time": 1.7189999999999999
+     }
+    },
+    "com.fatboyindustrial.gson-jodatime-serialisers:gson-jodatime-serialisers": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 42,
+      "execution_time": 0.665
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 42,
+      "execution_time": 0.636
+     }
+    },
+    "org.elasticsearch.plugin.flavor:elasticsearch-flavor": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 2,
+      "execution_time": 140.079
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 2,
+      "execution_time": 317.106
+     }
+    },
+    "com.sample:hystrix-tutorial": {
+     "original_test": {
+      "error": 1,
+      "failing": 0,
+      "passing": 4,
+      "execution_time": 12.039000000000001
+     },
+     "debloat_test": {
+      "error": 1,
+      "failing": 0,
+      "passing": 4,
+      "execution_time": 8.003
+     }
+    },
+    "eu.transkribus:TranskribusCore": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 44,
+      "execution_time": 20.089000000000002
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 44,
+      "execution_time": 14.292999999999997
+     }
+    },
+    ":": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 3,
+      "execution_time": 2.751
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 3,
+      "execution_time": 3.633
+     }
+    },
+    "alexmog:cursevoicelib": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.055
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.073
+     }
+    },
+    "org.brunocvcunha.mdmlang:mdmlang": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 11,
+      "execution_time": 0.569
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 11,
+      "execution_time": 0.478
+     }
+    },
+    "com.mashape.galileo.agent:galileo-analytics": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 10,
+      "execution_time": 27.968999999999998
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 1,
+      "passing": 9,
+      "execution_time": 28.714000000000002
+     }
+    },
+    "com.vincit.go:gocd-slack-task": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 58,
+      "execution_time": 0.7549999999999999
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 58,
+      "execution_time": 1.281
+     }
+    },
+    "com.asana:asana": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 66,
+      "execution_time": 5.207000000000001
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 66,
+      "execution_time": 1.841
+     }
+    },
+    "com.github.oxaoo:chat": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 2,
+      "execution_time": 0.522
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 2,
+      "execution_time": 0.526
+     }
+    },
+    "com.google.cloud.bigquery.samples:bq-gettingstarted": {
+     "original_test": {
+      "error": 5,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.8320000000000001
+     },
+     "debloat_test": {
+      "error": 5,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.5940000000000001
+     }
+    },
+    "com.wx3:GalacDeck": {
+     "original_test": {
+      "error": 2,
+      "failing": 1,
+      "passing": 1,
+      "execution_time": 7.101999999999999
+     },
+     "debloat_test": {
+      "error": 2,
+      "failing": 1,
+      "passing": 1,
+      "execution_time": 12.111
+     }
+    },
+    "com.github.leifoolsen:jersey2-guicepersist-example": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 41,
+      "execution_time": 2.855
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 41,
+      "execution_time": 1.391
+     }
+    },
+    "com:ppmall": {
+     "original_test": {
+      "error": 1,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.027
+     },
+     "debloat_test": {
+      "error": 1,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.037
+     }
+    },
+    "me.pedrazas:dropangular": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 2,
+      "execution_time": 0.717
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 2,
+      "execution_time": 0.266
+     }
+    },
+    "io.rapidpro:flows": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 104,
+      "execution_time": 2.1959999999999997
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 104,
+      "execution_time": 3.1309999999999993
+     }
+    },
+    "com.github.webdriverextensions:webdriverextensions-maven-plugin": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 68,
+      "execution_time": 611.5729999999999
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 68,
+      "execution_time": 313.36899999999997
+     }
+    },
+    "me.moocar:logback-gelf": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 4,
+      "execution_time": 2.351
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 4,
+      "execution_time": 1.37
+     }
+    },
+    "cn.saymagic.weixin.server:wx_server": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.001
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.001
+     }
+    },
+    "groupId:HR-Shop": {
+     "original_test": {
+      "error": 6,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.015
+     },
+     "debloat_test": {
+      "error": 6,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.007
+     }
+    },
+    "io.parallec:parallec-core": {
+     "original_test": {
+      "error": 7,
+      "failing": 0,
+      "passing": 131,
+      "execution_time": 530.0709999999999
+     },
+     "debloat_test": {
+      "error": 1,
+      "failing": 0,
+      "passing": 135,
+      "execution_time": 153.337
+     }
+    },
+    "com.github.jean-merelis:coffeepot-bean-wr": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 50,
+      "execution_time": 1.3030000000000002
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 50,
+      "execution_time": 2.459
+     }
+    },
+    "ch.unifr.diuf.diva:LayoutAnalysisEvaluator": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 3,
+      "execution_time": 7.078
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 3,
+      "execution_time": 8.218
+     }
+    },
+    "com.github.mezereonxp:AnomalyDetectTool": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 31,
+      "execution_time": 2.6369999999999996
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 31,
+      "execution_time": 3.0429999999999993
+     }
+    },
+    "com.talanlabs:sonar-auth-gitlab-plugin": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 18,
+      "execution_time": 1.3739999999999999
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 18,
+      "execution_time": 1.541
+     }
+    },
+    "com.github.bogdanlivadariu:selenium-screenshot-watcher": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 33.454
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 15.954
+     }
+    },
+    "com.matt-richardson:gocd-websocket-notifier": {
+     "original_test": {
+      "error": 1,
+      "failing": 0,
+      "passing": 4,
+      "execution_time": 0.396
+     },
+     "debloat_test": {
+      "error": 1,
+      "failing": 0,
+      "passing": 4,
+      "execution_time": 0.216
+     }
+    },
+    "com.chaosmonkeys:jersey-service": {
+     "original_test": {
+      "error": 0,
+      "failing": 8,
+      "passing": 5,
+      "execution_time": 30.001000000000005
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 8,
+      "passing": 5,
+      "execution_time": 46.563
+     }
+    },
+    "in.ashwanthkumar:gocd-github-pr-material": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 88,
+      "execution_time": 1.114
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 88,
+      "execution_time": 9.264
+     }
+    },
+    "bluegreen:bluegreen-manager": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 353,
+      "execution_time": 5.586
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 353,
+      "execution_time": 6.028000000000001
+     }
+    },
+    "io.featureflow:featureflow-java-sdk": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 133,
+      "execution_time": 0.9129999999999999
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 133,
+      "execution_time": 1.257
+     }
+    },
+    "io.github.rcarlosdasilva:weixin": {
+     "original_test": {
+      "error": 6,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 3.795
+     },
+     "debloat_test": {
+      "error": 6,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.501
+     }
+    },
+    "com.github.sps.pushover.net:pushover-client": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 15,
+      "execution_time": 0.536
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 15,
+      "execution_time": 0.649
+     }
+    },
+    "org.leibnizcenter:xml-to-json": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 6,
+      "execution_time": 0.718
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 6,
+      "execution_time": 1.045
+     }
+    },
+    "com.itranswarp:jsonstream": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 105,
+      "execution_time": 0.43700000000000006
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 105,
+      "execution_time": 0.4960000000000001
+     }
+    },
+    "com.thoughtworks.go:script-executor": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.011
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.031
+     }
+    },
+    "com.paypal.mesos:docker-compose-executor": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.301
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.229
+     }
+    },
+    "com.github.terma:sql-on-json": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 17,
+      "execution_time": 36.305
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 17,
+      "execution_time": 2.966
+     }
+    },
+    "com.sf.bilibili:bilibili": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.0
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.0
+     }
+    },
+    "spark-in-practice:spark-in-practice": {
+     "original_test": {
+      "error": 13,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 11.414000000000001
+     },
+     "debloat_test": {
+      "error": 13,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 13.846
+     }
+    },
+    "in.ashwanthkumar:slack-java-webhook": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 18,
+      "execution_time": 0.10200000000000001
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 18,
+      "execution_time": 0.09
+     }
+    },
+    "com.fatboyindustrial.gson-javatime-serialisers:gson-javatime-serialisers": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 16,
+      "execution_time": 0.34900000000000003
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 16,
+      "execution_time": 0.18000000000000002
+     }
+    },
+    "com.google.martian:martian-client": {
+     "original_test": {
+      "error": 5,
+      "failing": 0,
+      "passing": 19,
+      "execution_time": 0.053000000000000005
+     },
+     "debloat_test": {
+      "error": 5,
+      "failing": 0,
+      "passing": 19,
+      "execution_time": 0.069
+     }
+    },
+    "org.sonarsource.auth.bitbucket:sonar-auth-bitbucket-plugin": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 37,
+      "execution_time": 2.5229999999999997
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 37,
+      "execution_time": 6.741
+     }
+    },
+    "org.es:elasticsearch-query-toolkit": {
+     "original_test": {
+      "error": 16,
+      "failing": 1,
+      "passing": 28,
+      "execution_time": 267.3230000000001
+     },
+     "debloat_test": {
+      "error": 16,
+      "failing": 1,
+      "passing": 28,
+      "execution_time": 275.929
+     }
+    },
+    "com.github.salesforce-marketingcloud:fuelsdk": {
+     "original_test": {
+      "error": 32,
+      "failing": 0,
+      "passing": 109,
+      "execution_time": 0.25700000000000006
+     },
+     "debloat_test": {
+      "error": 32,
+      "failing": 0,
+      "passing": 109,
+      "execution_time": 0.227
+     }
+    },
+    "com.springapp:spring-json-sms-gateway": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 2,
+      "execution_time": 194.405
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 2,
+      "execution_time": 1.039
+     }
+    },
+    "org.aksw:gerbil": {
+     "original_test": {
+      "error": 23,
+      "failing": 10,
+      "passing": 350,
+      "execution_time": 71.994
+     },
+     "debloat_test": {
+      "error": 23,
+      "failing": 10,
+      "passing": 369,
+      "execution_time": 510.02799999999996
+     }
+    },
+    "io.iron.ironworker:ironworker": {
+     "original_test": {
+      "error": 7,
+      "failing": 0,
+      "passing": 5,
+      "execution_time": 0.43
+     },
+     "debloat_test": {
+      "error": 7,
+      "failing": 0,
+      "passing": 5,
+      "execution_time": 0.218
+     }
+    },
+    "org.sonarqube.auth.google:sonar-auth-googleoauth-plugin": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 31,
+      "execution_time": 2.715
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 31,
+      "execution_time": 1.8009999999999997
+     }
+    },
+    "com.risevision:riseplayer": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 2,
+      "execution_time": 0.033
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 2,
+      "execution_time": 0.074
+     }
+    },
+    "com.alibaba.rocketmq:mq-monitor": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 2,
+      "execution_time": 0.006
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 2,
+      "execution_time": 0.007
+     }
+    },
+    "com.bitmovin.bitcodin.api:bitcodin-java": {
+     "original_test": {
+      "error": 1,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.019
+     },
+     "debloat_test": {
+      "error": 1,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.035
+     }
+    },
+    "se.rosenbaum.pop:poppoc": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 2.675
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 2.626
+     }
+    },
+    "eu.hadeco:java-crud-api": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 137,
+      "execution_time": 313.008
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 137,
+      "execution_time": 165.53400000000002
+     }
+    },
+    "com.fincatto:cotacao": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 6,
+      "execution_time": 10.963
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 6,
+      "execution_time": 9.787
+     }
+    },
+    "org.mbed.example.webapp:example-app": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 23,
+      "execution_time": 1.616
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 23,
+      "execution_time": 1.639
+     }
+    },
+    "org.sonarsource.auth.github:sonar-auth-github-plugin": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 54,
+      "execution_time": 6.202999999999999
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 54,
+      "execution_time": 9.343
+     }
+    },
+    "com.rmrodrigues.integration.hipchat:hipchat-notifier": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 5,
+      "execution_time": 0.041
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 5,
+      "execution_time": 0.047
+     }
+    },
+    "net.tradelib:tradelib": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 19,
+      "execution_time": 0.48500000000000004
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 19,
+      "execution_time": 0.898
+     }
+    },
+    "jpocket:jpocket": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.217
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.185
+     }
+    },
+    "org.rascalmpl:rascal": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0
+     }
+    },
+    "eu.rekawek.toxiproxy:toxiproxy-java": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 2,
+      "execution_time": 7.566
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 2,
+      "execution_time": 7.452
+     }
+    },
+    "org.dbpedia:KeywordSearch": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 2,
+      "execution_time": 0.008
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 2,
+      "execution_time": 0.014
+     }
+    }
+   },
+   "original_test": {
+    "error": 0,
+    "failing": 2,
+    "passing": 949,
+    "execution_time": 1.5039999999999996
+   },
+   "debloat_test": {
+    "error": 0,
+    "failing": 2,
+    "passing": 949,
+    "execution_time": 2.0569999999999995
+   }
   },
   "2.8.1": {
    "clients": {}
@@ -260,7 +3015,22 @@
    "clients": {}
   },
   "2.9.1": {
-   "clients": {},
+   "clients": {
+    "cn.edu.ncut:doubanWebSpider": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.002
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.003
+     }
+    }
+   },
    "original_test": {
     "error": 0,
     "failing": 0,
@@ -275,7 +3045,36 @@
    }
   },
   "2.9.2": {
-   "clients": {},
+   "clients": {
+    "sparkjava-restapi-crud:sparkjava-restapi-crud": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 9,
+      "execution_time": 0.448
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 9,
+      "execution_time": 0.669
+     }
+    },
+    "com.maxdemarzi:cypher_batch_writer": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 4,
+      "execution_time": 10.34
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 4,
+      "execution_time": 10.943
+     }
+    }
+   },
    "original_test": {
     "error": 0,
     "failing": 0,
@@ -305,7 +3104,22 @@
    }
   },
   "2.10": {
-   "clients": {},
+   "clients": {
+    "xyz.fz:docdoc": {
+     "original_test": {
+      "error": 0,
+      "failing": 1,
+      "passing": 1,
+      "execution_time": 2.553
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 1,
+      "passing": 1,
+      "execution_time": 1.735
+     }
+    }
+   },
    "original_test": {
     "error": 0,
     "failing": 0,
@@ -353,7 +3167,50 @@
    "clients": {}
   },
   "2.10.1": {
-   "clients": {},
+   "clients": {
+    "com.sumologic:kinesis-sumologic-connector": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 11,
+      "execution_time": 1.1840000000000002
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 11,
+      "execution_time": 1.968
+     }
+    },
+    "uk.gov.service.notify:notifications-java-client": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 42,
+      "execution_time": 0.515
+     },
+     "debloat_test": {
+      "error": 8,
+      "failing": 0,
+      "passing": 34,
+      "execution_time": 0.299
+     }
+    },
+    "com.binance.dex.api:binance-dex-api-client": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 16,
+      "execution_time": 1.634
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 16,
+      "execution_time": 2.169
+     }
+    }
+   },
    "original_test": {
     "error": 0,
     "failing": 0,
@@ -368,7 +3225,92 @@
    }
   },
   "2.9.9": {
-   "clients": {},
+   "clients": {
+    "com.bernardomg.example:swss-soap-example": {
+     "original_test": {
+      "error": 2,
+      "failing": 1,
+      "passing": 33,
+      "execution_time": 28.512999999999998
+     },
+     "debloat_test": {
+      "error": 2,
+      "failing": 1,
+      "passing": 33,
+      "execution_time": 22.892000000000003
+     }
+    },
+    "org.springframework.samples:spring-mvc-showcase": {
+     "original_test": {
+      "error": 1,
+      "failing": 0,
+      "passing": 80,
+      "execution_time": 100.69099999999997
+     },
+     "debloat_test": {
+      "error": 47,
+      "failing": 0,
+      "passing": 34,
+      "execution_time": 14.728
+     }
+    },
+    "com.github.housepower:clickhouse-native-jdbc": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 3,
+      "execution_time": 0.863
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 3,
+      "execution_time": 0.78
+     }
+    },
+    "org.sputnikdev:bluetooth-manager": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 115,
+      "execution_time": 10.043000000000001
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 115,
+      "execution_time": 73.77
+     }
+    },
+    "SmartCity-Accessibility:SmartCity-Accessibility": {
+     "original_test": {
+      "error": 38,
+      "failing": 1,
+      "passing": 65,
+      "execution_time": 11.741000000000001
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 4,
+      "execution_time": 3.651
+     }
+    },
+    "uk.co.uwcs.choob:choob": {
+     "original_test": {
+      "error": 2,
+      "failing": 0,
+      "passing": 6,
+      "execution_time": 11.701
+     },
+     "debloat_test": {
+      "error": 2,
+      "failing": 0,
+      "passing": 6,
+      "execution_time": 1.718
+     }
+    }
+   },
    "original_test": {
     "error": 0,
     "failing": 0,
@@ -386,7 +3328,22 @@
    "clients": {}
   },
   "2.9.3": {
-   "clients": {},
+   "clients": {
+    "com.github.hermannpencole:nifi-swagger-client": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 30,
+      "execution_time": 0.643
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 30,
+      "execution_time": 0.6020000000000001
+     }
+    }
+   },
    "original_test": {
     "error": 0,
     "failing": 0,
@@ -410,7 +3367,22 @@
    "clients": {}
   },
   "2.9.7": {
-   "clients": {},
+   "clients": {
+    "net.seninp:jmotif-gi": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 23,
+      "execution_time": 0.542
+     },
+     "debloat_test": {
+      "error": 10,
+      "failing": 0,
+      "passing": 13,
+      "execution_time": 0.159
+     }
+    }
+   },
    "original_test": {
     "error": 0,
     "failing": 0,
@@ -426,6 +3398,20 @@
   },
   "2.8.2": {
    "clients": {
+    "net.seninp:grammarviz2": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 6,
+      "execution_time": 3.184
+     },
+     "debloat_test": {
+      "error": 1,
+      "failing": 0,
+      "passing": 5,
+      "execution_time": 2.525
+     }
+    },
     "net.bican:jwordpress": {
      "original_test": {
       "error": 43,
@@ -438,6 +3424,20 @@
       "failing": 0,
       "passing": 0,
       "execution_time": 0.532
+     }
+    },
+    "parallelai:parallelai.spyglass": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 2,
+      "execution_time": 0.053000000000000005
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 2,
+      "execution_time": 0.035
      }
     }
    },
@@ -503,7 +3503,36 @@
    }
   },
   "2.9.4": {
-   "clients": {},
+   "clients": {
+    "com.github.bingoohuang:westjson": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 38,
+      "execution_time": 0.853
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 38,
+      "execution_time": 0.7909999999999999
+     }
+    },
+    "Utils:Utils.ddd": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.029
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.048
+     }
+    }
+   },
    "original_test": {
     "error": 0,
     "failing": 0,
@@ -553,6 +3582,20 @@
       "failing": 0,
       "passing": 108,
       "execution_time": 7.485
+     }
+    },
+    ":org.apache.sling.testing.clients": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 213,
+      "execution_time": 114.82
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 213,
+      "execution_time": 100.37799999999999
      }
     },
     "com.tupilabs:pbs-java-api": {
@@ -976,10 +4019,19 @@
   }
  },
  ":": {
+  "1": {
+   "clients": {}
+  },
   "1.1": {
    "clients": {}
   },
   "1.1.1": {
+   "clients": {}
+  },
+  "0.92.1": {
+   "clients": {}
+  },
+  "0.94.0": {
    "clients": {}
   }
  },
@@ -1076,10 +4128,162 @@
    "clients": {}
   },
   "3.6": {
-   "clients": {}
+   "clients": {
+    "net.gcdc:geonetworking": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 32,
+      "execution_time": 23.831999999999997
+     },
+     "debloat_test": {
+      "error": 1,
+      "failing": 1,
+      "passing": 30,
+      "execution_time": 41.454
+     }
+    },
+    "de.fraunhofer.iem:opcua-scanner": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 36,
+      "execution_time": 8.132
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 36,
+      "execution_time": 17.948
+     }
+    },
+    "com.github.kuljaninemir:spring-boot-ftp-client": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 22,
+      "execution_time": 6.157
+     },
+     "debloat_test": {
+      "error": 6,
+      "failing": 3,
+      "passing": 13,
+      "execution_time": 1.726
+     }
+    },
+    "edu.tamu.di:SAFCreator": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.012
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.008
+     }
+    }
+   },
+   "original_test": {
+    "error": 0,
+    "failing": 0,
+    "passing": 283,
+    "execution_time": 62.21699999999999
+   },
+   "debloat_test": {
+    "error": 0,
+    "failing": 0,
+    "passing": 283,
+    "execution_time": 65.29500000000002
+   }
   },
   "3.3": {
-   "clients": {}
+   "clients": {
+    "com.zhouxu:MyBatisDemo": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 20,
+      "execution_time": 1.8090000000000002
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 20,
+      "execution_time": 2.803
+     }
+    },
+    "love.sola.netsupport:WechatTicketSystem": {
+     "original_test": {
+      "error": 0,
+      "failing": 1,
+      "passing": 6,
+      "execution_time": 1.661
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 1,
+      "passing": 6,
+      "execution_time": 5.304
+     }
+    },
+    "de.julielab:JeSemE": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 17,
+      "execution_time": 0.252
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 17,
+      "execution_time": 2.3850000000000002
+     }
+    },
+    "org.fiware.cybercaptor:cybercaptor-server": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 10,
+      "execution_time": 0.757
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 10,
+      "execution_time": 0.683
+     }
+    },
+    "com.unbank:ubk_weixinbysogou": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.004
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.003
+     }
+    }
+   },
+   "original_test": {
+    "error": 0,
+    "failing": 0,
+    "passing": 192,
+    "execution_time": 59.309000000000005
+   },
+   "debloat_test": {
+    "error": 0,
+    "failing": 1,
+    "passing": 191,
+    "execution_time": 78.24700000000003
+   }
   },
   "3.0.1": {
    "clients": {}
@@ -1089,6 +4293,601 @@
   },
   "2.0": {
    "clients": {}
+  }
+ },
+ "com.googlecode.json-simple:json-simple": {
+  "1.1": {
+   "clients": {}
+  },
+  "1.1.1": {
+   "clients": {
+    "instagram-java-scraper:instagram-java-scraper": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 4,
+      "execution_time": 0.026000000000000002
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 4,
+      "execution_time": 0.012
+     }
+    },
+    "com.aerospike:aerospike-batch-processing": {
+     "original_test": {
+      "error": 1,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.091
+     },
+     "debloat_test": {
+      "error": 1,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.418
+     }
+    },
+    "org.parabot:client": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 5,
+      "execution_time": 1.516
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 5,
+      "execution_time": 1.758
+     }
+    },
+    "io.outreach:outreach-platform-sdk": {
+     "original_test": {
+      "error": 10,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 1.132
+     },
+     "debloat_test": {
+      "error": 10,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.589
+     }
+    },
+    "com.cdr.gen:cdr-gen": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 4,
+      "execution_time": 0.978
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 4,
+      "execution_time": 1.127
+     }
+    },
+    "net.bitnine:agensgraph-jdbc": {
+     "original_test": {
+      "error": 55,
+      "failing": 0,
+      "passing": 10,
+      "execution_time": 0.562
+     },
+     "debloat_test": {
+      "error": 55,
+      "failing": 0,
+      "passing": 10,
+      "execution_time": 0.952
+     }
+    },
+    "aws-sap:lambda-sap-oauth": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 4.482
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 2.004
+     }
+    },
+    "com.marginallyclever:Makelangelo": {
+     "original_test": {
+      "error": 0,
+      "failing": 2,
+      "passing": 5,
+      "execution_time": 16.595
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 2,
+      "passing": 5,
+      "execution_time": 2.308
+     }
+    },
+    "dibbhatt:kafka-spark-consumer": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 3,
+      "execution_time": 0.146
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 3,
+      "execution_time": 0.61
+     }
+    },
+    "com.ritesh.zstreamingquote:ZStreamingQuote": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.01
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.001
+     }
+    },
+    "com.angejia.dw:dw_webservice": {
+     "original_test": {
+      "error": 1,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.238
+     },
+     "debloat_test": {
+      "error": 1,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.669
+     }
+    },
+    "com.mudgee.generator:mud-generator": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.01
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.006
+     }
+    },
+    "pdf-metadata-edit:pdf-metadata-edit": {
+     "original_test": {
+      "error": 0,
+      "failing": 3,
+      "passing": 16,
+      "execution_time": 1.86
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 3,
+      "passing": 16,
+      "execution_time": 1.811
+     }
+    },
+    "com.tremolosecurity.kubernetes:javascript-operator": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.003
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.009
+     }
+    },
+    "com.monkeylearn:monkeylearn-java": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.003
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.006
+     }
+    },
+    "org.nuxeo.tools:gatling-report": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 9,
+      "execution_time": 0.5690000000000001
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 9,
+      "execution_time": 0.439
+     }
+    },
+    "com.klarna:java-checkout": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 94,
+      "execution_time": 5.347
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 94,
+      "execution_time": 8.163000000000002
+     }
+    },
+    "com.deviantart:kafka-connect-s3": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 7,
+      "execution_time": 2.686
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 7,
+      "execution_time": 3.435
+     }
+    },
+    "com.markwatson:bing": {
+     "original_test": {
+      "error": 3,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 64.08
+     },
+     "debloat_test": {
+      "error": 3,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 65.38
+     }
+    },
+    "com.github.jreddit:jreddit": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 44,
+      "execution_time": 11.342
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 44,
+      "execution_time": 2.419
+     }
+    },
+    "io.shiftleft.jackspoilt:jackspoilt": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.057
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.055
+     }
+    },
+    "org.certificate-transparency:ctlog": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 31,
+      "execution_time": 20.502000000000002
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 31,
+      "execution_time": 38.789
+     }
+    },
+    "org.aksw:AGDISTIS": {
+     "original_test": {
+      "error": 21,
+      "failing": 0,
+      "passing": 5,
+      "execution_time": 0.769
+     },
+     "debloat_test": {
+      "error": 21,
+      "failing": 0,
+      "passing": 5,
+      "execution_time": 1.107
+     }
+    },
+    "uk.co.uwcs.choob:choob": {
+     "original_test": {
+      "error": 2,
+      "failing": 0,
+      "passing": 6,
+      "execution_time": 51.208
+     },
+     "debloat_test": {
+      "error": 2,
+      "failing": 0,
+      "passing": 6,
+      "execution_time": 68.199
+     }
+    },
+    "org.kojish:livy-client": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.002
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.001
+     }
+    },
+    "fr.zcraft:zlib": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 81,
+      "execution_time": 1.867
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 81,
+      "execution_time": 1.355
+     }
+    },
+    "com.opentransport:RDFMapperNMBS": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.004
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.001
+     }
+    },
+    "org.mayconbordin:OAuth2Client": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 7,
+      "execution_time": 0.316
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 7,
+      "execution_time": 2.35
+     }
+    },
+    "com.github.fhuss:kafka-influxdb-metrics-reporter": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 8,
+      "execution_time": 9.343
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 8,
+      "execution_time": 12.504
+     }
+    },
+    "org.jitsi:libjitsi": {
+     "original_test": {
+      "error": 1,
+      "failing": 0,
+      "passing": 78,
+      "execution_time": 21.306
+     },
+     "debloat_test": {
+      "error": 1,
+      "failing": 0,
+      "passing": 78,
+      "execution_time": 9.148
+     }
+    },
+    "com.timatooth.mineload:mineload": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.011
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.005
+     }
+    },
+    "com.liqpay:liqpay-sdk": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 17,
+      "execution_time": 0.041
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 17,
+      "execution_time": 0.036000000000000004
+     }
+    },
+    "com.asherdale:FHIR-Compliant-Visualization-Tool-for-Patient-Reported-Outcomes": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.41
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.308
+     }
+    },
+    "com.github.cereda:duckity": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.004
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.003
+     }
+    },
+    "com.wizecommerce:hecuba-client": {
+     "original_test": {
+      "error": 1,
+      "failing": 0,
+      "passing": 36,
+      "execution_time": 847.336
+     },
+     "debloat_test": {
+      "error": 1,
+      "failing": 0,
+      "passing": 36,
+      "execution_time": 555.405
+     }
+    },
+    "com.github.gabrielle-anderson:aws-lambda-proxy-java": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 47,
+      "execution_time": 1.026
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 47,
+      "execution_time": 4.269
+     }
+    },
+    "ch.simas.jtoggl:jtoggl-api": {
+     "original_test": {
+      "error": 2,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.282
+     },
+     "debloat_test": {
+      "error": 2,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 1.195
+     }
+    },
+    "com:cv.parser": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 8,
+      "execution_time": 1.4589999999999999
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 8,
+      "execution_time": 1.742
+     }
+    },
+    "com.bandwidth.sdk:bandwidth-java-sdk": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 165,
+      "execution_time": 1.545
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 165,
+      "execution_time": 1.6490000000000002
+     }
+    },
+    "quickml:quickml": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 106,
+      "execution_time": 114.199
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 106,
+      "execution_time": 355.925
+     }
+    },
+    "org.jenkinsci.confluence.plugins:jenkins-plugin-info-plugin": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 21,
+      "execution_time": 2.357
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 21,
+      "execution_time": 1.17
+     }
+    }
+   },
+   "original_test": {
+    "error": 0,
+    "failing": 1,
+    "passing": 2,
+    "execution_time": 0.17099999999999999
+   },
+   "debloat_test": {
+    "error": 0,
+    "failing": 1,
+    "passing": 2,
+    "execution_time": 1.743
+   }
   }
  },
  "commons-logging:commons-logging": {
@@ -1162,7 +4961,48 @@
  },
  "org.mariadb.jdbc:mariadb-java-client": {
   "2.3.0": {
-   "clients": {}
+   "clients": {
+    "com.wbg:studentUnionManagementSystem": {
+     "original_test": {
+      "error": 1,
+      "failing": 0,
+      "passing": 10,
+      "execution_time": 0.062
+     },
+     "debloat_test": {
+      "error": 1,
+      "failing": 0,
+      "passing": 10,
+      "execution_time": 0.106
+     }
+    },
+    "net.contargo:iris": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 668,
+      "execution_time": 14.289999999999992
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 668,
+      "execution_time": 13.210999999999993
+     }
+    }
+   },
+   "original_test": {
+    "error": 62,
+    "failing": 0,
+    "passing": 90,
+    "execution_time": 1859.996
+   },
+   "debloat_test": {
+    "error": 62,
+    "failing": 0,
+    "passing": 90,
+    "execution_time": 1860.5759999999998
+   }
   }
  },
  "com.ryantenney.metrics:metrics-spring": {
@@ -1824,6 +5664,20 @@
       "passing": 4,
       "execution_time": 0.905
      }
+    },
+    "edu.harvard.iq:dataverse": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1121,
+      "execution_time": 284.0349999999999
+     },
+     "debloat_test": {
+      "error": 23,
+      "failing": 0,
+      "passing": 1098,
+      "execution_time": 165.89799999999985
+     }
     }
    },
    "original_test": {
@@ -2091,6 +5945,34 @@
       "passing": 27,
       "execution_time": 133.064
      }
+    },
+    "com.googlecode.ez-vcard:ez-vcard": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 964,
+      "execution_time": 6.798999999999999
+     },
+     "debloat_test": {
+      "error": 86,
+      "failing": 0,
+      "passing": 878,
+      "execution_time": 13.706999999999994
+     }
+    },
+    "ru.mystamps:mystamps": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0
+     }
     }
    },
    "original_test": {
@@ -2193,6 +6075,20 @@
       "failing": 0,
       "passing": 0,
       "execution_time": 0.011
+     }
+    },
+    "com.spring4all:officialblog": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 2,
+      "execution_time": 7.735
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 2,
+      "execution_time": 7.415
      }
     },
     "me.yufan.gossip:gossip": {
@@ -2563,7 +6459,118 @@
    }
   },
   "4.9": {
-   "clients": {}
+   "clients": {
+    "com.sumologic:kinesis-sumologic-connector": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 11,
+      "execution_time": 1.213
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 11,
+      "execution_time": 2.3840000000000003
+     }
+    },
+    "com.github.eeichinger.jcurl:jcurl": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 7,
+      "execution_time": 6.837
+     },
+     "debloat_test": {
+      "error": 7,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 1.636
+     }
+    },
+    "com.github.AccelerationNet.access2csv:access2csv": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 7,
+      "execution_time": 1.414
+     },
+     "debloat_test": {
+      "error": 1,
+      "failing": 2,
+      "passing": 4,
+      "execution_time": 0.746
+     }
+    },
+    "edu.brown.cs.burlap:burlap": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 20,
+      "execution_time": 35.659
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 20,
+      "execution_time": 13.015
+     }
+    },
+    "com.jwplayer:southpaw": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 140,
+      "execution_time": 865.1020000000001
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 165,
+      "execution_time": 1275.114
+     }
+    },
+    "in.ashwanthkumar:gocd-janitor": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 12,
+      "execution_time": 0.632
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 12,
+      "execution_time": 0.39
+     }
+    },
+    "org.javimmutable:javimmutable-collections": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 321,
+      "execution_time": 861.432
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 321,
+      "execution_time": 842.273
+     }
+    }
+   },
+   "original_test": {
+    "error": 0,
+    "failing": 0,
+    "passing": 757,
+    "execution_time": 0.5290000000000002
+   },
+   "debloat_test": {
+    "error": 119,
+    "failing": 0,
+    "passing": 0,
+    "execution_time": 1.1649999999999994
+   }
   },
   "4.3": {
    "clients": {
@@ -2610,6 +6617,66 @@
    }
   },
   "4.8": {
+   "clients": {
+    "me.august:Lumen": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 38,
+      "execution_time": 0.133
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 38,
+      "execution_time": 0.164
+     }
+    },
+    "ch.daplab.yarn:yarn-starter": {
+     "original_test": {
+      "error": 0,
+      "failing": 1,
+      "passing": 7,
+      "execution_time": 184.19000000000003
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 1,
+      "passing": 7,
+      "execution_time": 193.692
+     }
+    },
+    "com.gmail.cs475x:AnyBar4j": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 2,
+      "execution_time": 0.025
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 2,
+      "execution_time": 0.03
+     }
+    }
+   },
+   "original_test": {
+    "error": 0,
+    "failing": 0,
+    "passing": 745,
+    "execution_time": 1.0549999999999997
+   },
+   "debloat_test": {
+    "error": 116,
+    "failing": 0,
+    "passing": 0,
+    "execution_time": 1.3079999999999994
+   }
+  }
+ },
+ "javax.inject:javax.inject": {
+  "1": {
    "clients": {}
   }
  },
@@ -2762,6 +6829,20 @@
       "failing": 8,
       "passing": 380,
       "execution_time": 6.893
+     }
+    },
+    ":rsb": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 105,
+      "execution_time": 3.7290000000000005
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 105,
+      "execution_time": 2.2669999999999995
      }
     }
    },
@@ -2944,7 +7025,62 @@
    "clients": {}
   },
   "1.10": {
-   "clients": {}
+   "clients": {
+    "io.github.alekseysotnikov:CmdTool": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 9,
+      "execution_time": 0.134
+     },
+     "debloat_test": {
+      "error": 9,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.096
+     }
+    },
+    "com.ruesga.phoenix:phoenix-hibernate-dialect": {
+     "original_test": {
+      "error": 2,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 37.486999999999995
+     },
+     "debloat_test": {
+      "error": 2,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 43.172000000000004
+     }
+    },
+    "ir.sahab:docker-compose-wrapper": {
+     "original_test": {
+      "error": 5,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.373
+     },
+     "debloat_test": {
+      "error": 5,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.208
+     }
+    }
+   },
+   "original_test": {
+    "error": 0,
+    "failing": 2,
+    "passing": 88,
+    "execution_time": 16.362000000000002
+   },
+   "debloat_test": {
+    "error": 0,
+    "failing": 2,
+    "passing": 88,
+    "execution_time": 15.276000000000003
+   }
   }
  },
  "com.alibaba:fastjson": {
@@ -2955,13 +7091,164 @@
    "clients": {}
   },
   "1.2.13": {
-   "clients": {}
+   "clients": {},
+   "original_test": {
+    "error": 0,
+    "failing": 0,
+    "passing": 3414,
+    "execution_time": 15.557999999999923
+   },
+   "debloat_test": {
+    "error": 0,
+    "failing": 0,
+    "passing": 3414,
+    "execution_time": 40.16200000000008
+   }
   },
   "1.2.62": {
    "clients": {}
   },
   "1.2.7": {
-   "clients": {}
+   "clients": {
+    "com.koali:SSHDemo": {
+     "original_test": {
+      "error": 2,
+      "failing": 0,
+      "passing": 3,
+      "execution_time": 0.009
+     },
+     "debloat_test": {
+      "error": 2,
+      "failing": 0,
+      "passing": 3,
+      "execution_time": 0.006
+     }
+    },
+    "cn.wolfcode:wms": {
+     "original_test": {
+      "error": 5,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.05
+     },
+     "debloat_test": {
+      "error": 5,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.022
+     }
+    },
+    "Kafka-Insight:Kafka-Insight": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 3,
+      "execution_time": 0.022
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 3,
+      "execution_time": 0.031
+     }
+    },
+    "top.danny.log:desensitized": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 9,
+      "execution_time": 0.205
+     },
+     "debloat_test": {
+      "error": 1,
+      "failing": 0,
+      "passing": 8,
+      "execution_time": 0.12
+     }
+    },
+    "groupId:HR-Shop": {
+     "original_test": {
+      "error": 6,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.018000000000000002
+     },
+     "debloat_test": {
+      "error": 6,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.011
+     }
+    },
+    "cn.edu.ncut:spark-rec-v2": {
+     "original_test": {
+      "error": 19,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 27.561
+     },
+     "debloat_test": {
+      "error": 19,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 52.807
+     }
+    },
+    "cn.edu.ncut:doubanWebSpider": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.002
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.003
+     }
+    },
+    "com.luotuo:open": {
+     "original_test": {
+      "error": 1,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.014
+     },
+     "debloat_test": {
+      "error": 1,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.018
+     }
+    },
+    "com.ming:zhihuWebSpider": {
+     "original_test": {
+      "error": 4,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 480.079
+     },
+     "debloat_test": {
+      "error": 4,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 480.334
+     }
+    }
+   },
+   "original_test": {
+    "error": 0,
+    "failing": 28,
+    "passing": 2476,
+    "execution_time": 16.269999999999975
+   },
+   "debloat_test": {
+    "error": 0,
+    "failing": 28,
+    "passing": 2476,
+    "execution_time": 17.279999999999983
+   }
   },
   "1.2.24": {
    "clients": {}
@@ -2969,11 +7256,70 @@
   "1.2.31": {
    "clients": {}
   },
+  "1.2.12": {
+   "clients": {
+    "com.fc:hahu": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.026
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.032
+     }
+    }
+   },
+   "original_test": {
+    "error": 0,
+    "failing": 0,
+    "passing": 3409,
+    "execution_time": 25.713000000000132
+   },
+   "debloat_test": {
+    "error": 0,
+    "failing": 0,
+    "passing": 3409,
+    "execution_time": 22.772000000000045
+   }
+  },
   "1.2.32": {
    "clients": {}
   },
   "1.2.23": {
-   "clients": {},
+   "clients": {
+    "org.waditu:tushare": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 4,
+      "execution_time": 22.8
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 4,
+      "execution_time": 4.989000000000001
+     }
+    },
+    "com.liepin:macaw": {
+     "original_test": {
+      "error": 0,
+      "failing": 1,
+      "passing": 16,
+      "execution_time": 1.758
+     },
+     "debloat_test": {
+      "error": 12,
+      "failing": 0,
+      "passing": 5,
+      "execution_time": 0.4
+     }
+    }
+   },
    "original_test": {
     "error": 0,
     "failing": 0,
@@ -3008,6 +7354,9 @@
   "1.2.40": {
    "clients": {}
   },
+  "1.2.60": {
+   "clients": {}
+  },
   "1.1.36": {
    "clients": {}
   },
@@ -3023,14 +7372,119 @@
   "1.2.47": {
    "clients": {}
   },
+  "1.2.56": {
+   "clients": {}
+  },
+  "1.2.33": {
+   "clients": {}
+  },
   "1.2.49": {
    "clients": {}
   },
-  "1.2.17": {
+  "1.2.37": {
    "clients": {}
   },
+  "1.2.17": {
+   "clients": {
+    "cn.daimaniu.blog:cainiaobiji": {
+     "original_test": {
+      "error": 2,
+      "failing": 0,
+      "passing": 10,
+      "execution_time": 2.4939999999999998
+     },
+     "debloat_test": {
+      "error": 4,
+      "failing": 0,
+      "passing": 8,
+      "execution_time": 2.047
+     }
+    },
+    "com.duan:blog-system": {
+     "original_test": {
+      "error": 6,
+      "failing": 0,
+      "passing": 3,
+      "execution_time": 555.848
+     },
+     "debloat_test": {
+      "error": 6,
+      "failing": 0,
+      "passing": 3,
+      "execution_time": 483.657
+     }
+    },
+    "com.example:joker-applet": {
+     "original_test": {
+      "error": 1,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.055
+     },
+     "debloat_test": {
+      "error": 1,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.015
+     }
+    }
+   },
+   "original_test": {
+    "error": 0,
+    "failing": 0,
+    "passing": 3488,
+    "execution_time": 15.445999999999943
+   },
+   "debloat_test": {
+    "error": 0,
+    "failing": 0,
+    "passing": 3488,
+    "execution_time": 27.948000000000086
+   }
+  },
   "1.2.15": {
-   "clients": {}
+   "clients": {
+    "com.restaurant:xqres": {
+     "original_test": {
+      "error": 6,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 188.95
+     },
+     "debloat_test": {
+      "error": 6,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 189.93
+     }
+    },
+    "com.weapes.ntpaprseng:NTPaprSEng": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 15,
+      "execution_time": 2.628999999999999
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 15,
+      "execution_time": 2.424
+     }
+    }
+   },
+   "original_test": {
+    "error": 0,
+    "failing": 0,
+    "passing": 3450,
+    "execution_time": 15.458999999999953
+   },
+   "debloat_test": {
+    "error": 0,
+    "failing": 0,
+    "passing": 3450,
+    "execution_time": 23.03100000000006
+   }
   },
   "1.1.26": {
    "clients": {}
@@ -3072,16 +7526,109 @@
    "clients": {}
   },
   "1.2.20": {
-   "clients": {}
+   "clients": {},
+   "original_test": {
+    "error": 0,
+    "failing": 0,
+    "passing": 3520,
+    "execution_time": 17.28099999999999
+   },
+   "debloat_test": {
+    "error": 0,
+    "failing": 0,
+    "passing": 3520,
+    "execution_time": 51.075999999999986
+   }
   },
   "1.2.35": {
    "clients": {}
   },
   "1.2.9": {
-   "clients": {}
+   "clients": {},
+   "original_test": {
+    "error": 0,
+    "failing": 1,
+    "passing": 2725,
+    "execution_time": 13.55299999999999
+   },
+   "debloat_test": {
+    "error": 0,
+    "failing": 1,
+    "passing": 2725,
+    "execution_time": 21.745000000000005
+   }
   },
   "1.2.8": {
-   "clients": {}
+   "clients": {
+    "pretty_ssm:pretty_ssm": {
+     "original_test": {
+      "error": 1,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.032
+     },
+     "debloat_test": {
+      "error": 1,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.01
+     }
+    },
+    "com.yingjun.ssm:beauty_ssm_cluster": {
+     "original_test": {
+      "error": 8,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.051000000000000004
+     },
+     "debloat_test": {
+      "error": 3,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.012
+     }
+    },
+    "com.blueocn:apigateway": {
+     "original_test": {
+      "error": 6,
+      "failing": 1,
+      "passing": 3,
+      "execution_time": 0.379
+     },
+     "debloat_test": {
+      "error": 6,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.174
+     }
+    },
+    "com.yingjun.ssm:beauty_ssm": {
+     "original_test": {
+      "error": 9,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.027
+     },
+     "debloat_test": {
+      "error": 3,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.029
+     }
+    }
+   },
+   "original_test": {
+    "error": 0,
+    "failing": 28,
+    "passing": 2502,
+    "execution_time": 6.38399999999999
+   },
+   "debloat_test": {
+    "error": 0,
+    "failing": 28,
+    "passing": 2502,
+    "execution_time": 8.551999999999982
+   }
   },
   "1.2.51": {
    "clients": {}
@@ -3101,10 +7648,148 @@
    "clients": {}
   },
   "3.21.0.1": {
-   "clients": {}
+   "clients": {
+    "com.sk89q:commandhelper": {
+     "original_test": {
+      "error": 290,
+      "failing": 2,
+      "passing": 164,
+      "execution_time": 3.6149999999999984
+     },
+     "debloat_test": {
+      "error": 290,
+      "failing": 2,
+      "passing": 164,
+      "execution_time": 2.1859999999999986
+     }
+    },
+    "com.jaeksoft:opensearchserver": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 12,
+      "execution_time": 148.979
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 12,
+      "execution_time": 31.764
+     }
+    },
+    "be.bendem:sql-streams": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 24,
+      "execution_time": 4.536
+     },
+     "debloat_test": {
+      "error": 24,
+      "failing": 0,
+      "passing": 12,
+      "execution_time": 4.93
+     }
+    },
+    "io.github.biezhi:anima": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 97,
+      "execution_time": 6.78
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 97,
+      "execution_time": 6.8059999999999965
+     }
+    }
+   },
+   "original_test": {
+    "error": 1,
+    "failing": 1,
+    "passing": 287,
+    "execution_time": 115.297
+   },
+   "debloat_test": {
+    "error": 0,
+    "failing": 1,
+    "passing": 288,
+    "execution_time": 42.016999999999996
+   }
   },
   "3.27.2.1": {
-   "clients": {}
+   "clients": {
+    "replay-dh:replay-dh-client": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 74,
+      "execution_time": 117.47800000000001
+     },
+     "debloat_test": {
+      "error": 5,
+      "failing": 0,
+      "passing": 69,
+      "execution_time": 115.01000000000002
+     }
+    },
+    "com.datadefender:DataDefender": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 47,
+      "execution_time": 11.123000000000001
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 47,
+      "execution_time": 3.472999999999999
+     }
+    },
+    "com.googlecode.cqengine:cqengine": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 508,
+      "execution_time": 8.5
+     },
+     "debloat_test": {
+      "error": 3352,
+      "failing": 0,
+      "passing": 4820,
+      "execution_time": 18.156000000000002
+     }
+    },
+    "org.jdbdt:jdbdt": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0
+     },
+     "debloat_test": {
+      "error": 57,
+      "failing": 0,
+      "passing": 841,
+      "execution_time": 540.675
+     }
+    }
+   },
+   "original_test": {
+    "error": 0,
+    "failing": 1,
+    "passing": 295,
+    "execution_time": 15.777
+   },
+   "debloat_test": {
+    "error": 0,
+    "failing": 1,
+    "passing": 295,
+    "execution_time": 10.050999999999998
+   }
   },
   "3.8.7": {
    "clients": {
@@ -3179,10 +7864,64 @@
    }
   },
   "3.28.0": {
-   "clients": {}
+   "clients": {
+    "com.fangxuele.tool:WePush": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.262
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.099
+     }
+    }
+   },
+   "original_test": {
+    "error": 0,
+    "failing": 1,
+    "passing": 295,
+    "execution_time": 9.758
+   },
+   "debloat_test": {
+    "error": 0,
+    "failing": 1,
+    "passing": 295,
+    "execution_time": 9.850000000000001
+   }
   },
   "3.25.2": {
-   "clients": {}
+   "clients": {
+    "co.matrixdevelopment:lavabukkit": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 942,
+      "execution_time": 3.1949999999999994
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 942,
+      "execution_time": 4.286
+     }
+    }
+   },
+   "original_test": {
+    "error": 0,
+    "failing": 1,
+    "passing": 294,
+    "execution_time": 70.14200000000002
+   },
+   "debloat_test": {
+    "error": 0,
+    "failing": 1,
+    "passing": 294,
+    "execution_time": 31.623000000000005
+   }
   },
   "3.8.11.2": {
    "clients": {
@@ -3327,13 +8066,192 @@
    }
   },
   "3.23.1": {
-   "clients": {}
+   "clients": {
+    "cn.icuter:jsql": {
+     "original_test": {
+      "error": 4,
+      "failing": 0,
+      "passing": 81,
+      "execution_time": 23.234
+     },
+     "debloat_test": {
+      "error": 4,
+      "failing": 0,
+      "passing": 81,
+      "execution_time": 26.965999999999998
+     }
+    },
+    "com.up:student": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.003
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.003
+     }
+    },
+    "ru.yandex.clickhouse:clickhouse-jdbc-bridge": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 2,
+      "execution_time": 3.176
+     },
+     "debloat_test": {
+      "error": 1,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 1.76
+     }
+    }
+   },
+   "original_test": {
+    "error": 0,
+    "failing": 1,
+    "passing": 291,
+    "execution_time": 40.301
+   },
+   "debloat_test": {
+    "error": 0,
+    "failing": 1,
+    "passing": 291,
+    "execution_time": 42.44899999999999
+   }
   },
   "3.15.1": {
-   "clients": {}
+   "clients": {
+    "org.example:example-java8": {
+     "original_test": {
+      "error": 0,
+      "failing": 13,
+      "passing": 1,
+      "execution_time": 1.226
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 13,
+      "passing": 1,
+      "execution_time": 2.215
+     }
+    },
+    "tehnotrack-mail:messenger": {
+     "original_test": {
+      "error": 1,
+      "failing": 2,
+      "passing": 0,
+      "execution_time": 0.079
+     },
+     "debloat_test": {
+      "error": 1,
+      "failing": 2,
+      "passing": 0,
+      "execution_time": 0.062
+     }
+    }
+   },
+   "original_test": {
+    "error": 0,
+    "failing": 1,
+    "passing": 274,
+    "execution_time": 42.45400000000001
+   },
+   "debloat_test": {
+    "error": 0,
+    "failing": 1,
+    "passing": 274,
+    "execution_time": 48.487
+   }
   },
   "3.16.1": {
-   "clients": {}
+   "clients": {
+    "io.downgoon:autorest4db": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.011
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.021
+     }
+    },
+    "uk.co.uwcs.choob:choob": {
+     "original_test": {
+      "error": 2,
+      "failing": 0,
+      "passing": 6,
+      "execution_time": 87.815
+     },
+     "debloat_test": {
+      "error": 6,
+      "failing": 0,
+      "passing": 4,
+      "execution_time": 4.704000000000001
+     }
+    },
+    "net.sharksystem:sharkfw-core": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 37,
+      "execution_time": 88.502
+     },
+     "debloat_test": {
+      "error": 11,
+      "failing": 0,
+      "passing": 26,
+      "execution_time": 56.51299999999999
+     }
+    },
+    "com.gitblit.iciql:iciql": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 105,
+      "execution_time": 3.603
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 105,
+      "execution_time": 4.084
+     }
+    },
+    "de.jwiesel:sfdcCommander": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 6,
+      "execution_time": 5.441
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 6,
+      "execution_time": 7.261
+     }
+    }
+   },
+   "original_test": {
+    "error": 0,
+    "failing": 1,
+    "passing": 275,
+    "execution_time": 46.18800000000001
+   },
+   "debloat_test": {
+    "error": 0,
+    "failing": 1,
+    "passing": 275,
+    "execution_time": 43.96499999999999
+   }
   }
  },
  "com.esri.geometry:esri-geometry-api": {
@@ -3343,6 +8261,625 @@
  },
  "com.drewnoakes:metadata-extractor": {
   "2.9.1": {
+   "clients": {}
+  }
+ },
+ "org.javassist:javassist": {
+  "3.15.0-GA": {
+   "clients": {}
+  },
+  "3.18.1-GA": {
+   "clients": {
+    ":": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 303,
+      "execution_time": 22.329
+     },
+     "debloat_test": {
+      "error": 161,
+      "failing": 0,
+      "passing": 176,
+      "execution_time": 5.126
+     }
+    },
+    "com.github.marcelothebuilder:webpedidos": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 17,
+      "execution_time": 5.0059999999999985
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 17,
+      "execution_time": 9.542000000000002
+     }
+    },
+    "com.webpagebytes.plugins:wpb-general-plugins": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 13,
+      "execution_time": 5.493
+     },
+     "debloat_test": {
+      "error": 2,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.024
+     }
+    },
+    "org.jpasecurity:jpasecurity": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 303,
+      "execution_time": 342.7309999999999
+     },
+     "debloat_test": {
+      "error": 161,
+      "failing": 0,
+      "passing": 176,
+      "execution_time": 126.185
+     }
+    },
+    "com.pythian.opentsdb:asyncbigtable": {
+     "original_test": {
+      "error": 1,
+      "failing": 0,
+      "passing": 3,
+      "execution_time": 1.827
+     },
+     "debloat_test": {
+      "error": 1,
+      "failing": 0,
+      "passing": 3,
+      "execution_time": 1.35
+     }
+    },
+    "net.opentsdb:opentsdb-rpc-kafka": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 91,
+      "execution_time": 14.914
+     },
+     "debloat_test": {
+      "error": 4,
+      "failing": 0,
+      "passing": 6,
+      "execution_time": 1.845
+     }
+    }
+   },
+   "original_test": {
+    "error": 0,
+    "failing": 1,
+    "passing": 358,
+    "execution_time": 19.876
+   },
+   "debloat_test": {
+    "error": 0,
+    "failing": 1,
+    "passing": 358,
+    "execution_time": 21.118
+   }
+  },
+  "3.25.0-GA": {
+   "clients": {}
+  },
+  "3.17.1-GA": {
+   "clients": {
+    "de.andrena.tools.macker:macker": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 6,
+      "execution_time": 0.306
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 6,
+      "execution_time": 0.247
+     }
+    },
+    "org.googlecode:tmock": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 11,
+      "execution_time": 0.555
+     },
+     "debloat_test": {
+      "error": 1,
+      "failing": 0,
+      "passing": 10,
+      "execution_time": 0.38499999999999995
+     }
+    }
+   },
+   "original_test": {
+    "error": 0,
+    "failing": 1,
+    "passing": 348,
+    "execution_time": 23.013
+   },
+   "debloat_test": {
+    "error": 0,
+    "failing": 0,
+    "passing": 349,
+    "execution_time": 39.482
+   }
+  },
+  "3.18.2-GA": {
+   "clients": {
+    "ca.mcgill.sable:soot": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 299,
+      "execution_time": 212.53000000000006
+     },
+     "debloat_test": {
+      "error": 16,
+      "failing": 0,
+      "passing": 217,
+      "execution_time": 303.01200000000006
+     }
+    },
+    "com.edugility:jpa-maven-plugin": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 9,
+      "execution_time": 2.8369999999999997
+     },
+     "debloat_test": {
+      "error": 1,
+      "failing": 0,
+      "passing": 8,
+      "execution_time": 1.603
+     }
+    },
+    "com.jfastnet:jfastnet": {
+     "original_test": {
+      "error": 0,
+      "failing": 1,
+      "passing": 19,
+      "execution_time": 39.406
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 20,
+      "execution_time": 63.919999999999995
+     }
+    },
+    "org.eddy:kiby": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 2,
+      "execution_time": 0.175
+     },
+     "debloat_test": {
+      "error": 1,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.46499999999999997
+     }
+    }
+   },
+   "original_test": {
+    "error": 0,
+    "failing": 0,
+    "passing": 363,
+    "execution_time": 27.441
+   },
+   "debloat_test": {
+    "error": 0,
+    "failing": 0,
+    "passing": 363,
+    "execution_time": 26.633
+   }
+  },
+  "3.19.0-GA": {
+   "clients": {
+    "com.petalmd:armor": {
+     "original_test": {
+      "error": 1,
+      "failing": 0,
+      "passing": 16,
+      "execution_time": 886.999
+     },
+     "debloat_test": {
+      "error": 1,
+      "failing": 0,
+      "passing": 16,
+      "execution_time": 835.148
+     }
+    },
+    "ysoserial:ysoserial": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 36,
+      "execution_time": 26.417
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 36,
+      "execution_time": 27.866
+     }
+    },
+    "ysoserial:ysoserial-my": {
+     "original_test": {
+      "error": 2,
+      "failing": 14,
+      "passing": 19,
+      "execution_time": 100.66600000000001
+     },
+     "debloat_test": {
+      "error": 2,
+      "failing": 14,
+      "passing": 19,
+      "execution_time": 134.425
+     }
+    },
+    "de.marcel:java-code-tracer": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 16,
+      "execution_time": 0.266
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 16,
+      "execution_time": 0.34199999999999997
+     }
+    },
+    "org.eenterphace.mbechler:marshalsec": {
+     "original_test": {
+      "error": 17,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 15.3
+     },
+     "debloat_test": {
+      "error": 17,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 13.351
+     }
+    }
+   },
+   "original_test": {
+    "error": 0,
+    "failing": 1,
+    "passing": 371,
+    "execution_time": 21.605
+   },
+   "debloat_test": {
+    "error": 1,
+    "failing": 1,
+    "passing": 370,
+    "execution_time": 351.654
+   }
+  },
+  "3.21.0-GA": {
+   "clients": {
+    "org.sahagin:sahagin": {
+     "original_test": {
+      "error": 0,
+      "failing": 3,
+      "passing": 32,
+      "execution_time": 73.168
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 5,
+      "passing": 30,
+      "execution_time": 86.176
+     }
+    },
+    "com.uber:jvm-profiler": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 64,
+      "execution_time": 3.2669999999999995
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 64,
+      "execution_time": 8.088
+     }
+    },
+    "com.dkarv:jdcallgraph": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 62,
+      "execution_time": 6.69
+     },
+     "debloat_test": {
+      "error": 4,
+      "failing": 1,
+      "passing": 58,
+      "execution_time": 3.917
+     }
+    },
+    "com.github.t1:logging-interceptor": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 143,
+      "execution_time": 3.4099999999999997
+     },
+     "debloat_test": {
+      "error": 23,
+      "failing": 0,
+      "passing": 120,
+      "execution_time": 3.732
+     }
+    }
+   },
+   "original_test": {
+    "error": 0,
+    "failing": 0,
+    "passing": 391,
+    "execution_time": 16.521
+   },
+   "debloat_test": {
+    "error": 1,
+    "failing": 1,
+    "passing": 389,
+    "execution_time": 20.514
+   }
+  },
+  "3.16.1-GA": {
+   "clients": {
+    "org.apache.commons:commons-ognl": {
+     "original_test": {
+      "error": 15,
+      "failing": 1,
+      "passing": 728,
+      "execution_time": 2.736
+     },
+     "debloat_test": {
+      "error": 540,
+      "failing": 4,
+      "passing": 200,
+      "execution_time": 1.5429999999999993
+     }
+    },
+    "au.com.mutopia:aurin-acs": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 6,
+      "execution_time": 5.564
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 6,
+      "execution_time": 8.661
+     }
+    }
+   },
+   "original_test": {
+    "error": 0,
+    "failing": 1,
+    "passing": 294,
+    "execution_time": 44.78
+   },
+   "debloat_test": {
+    "error": 0,
+    "failing": 1,
+    "passing": 294,
+    "execution_time": 3.84
+   }
+  },
+  "3.20.0-GA": {
+   "clients": {
+    "net.iot-solutions.graphdb:jcypher": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 80,
+      "execution_time": 329.43800000000005
+     },
+     "debloat_test": {
+      "error": 18,
+      "failing": 2,
+      "passing": 129,
+      "execution_time": 162.96199999999996
+     }
+    },
+    "kis.di:TinyDI": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.008
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.01
+     }
+    },
+    "com.caved_in:commons": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.275
+     },
+     "debloat_test": {
+      "error": 1,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.364
+     }
+    },
+    "net.lightoze.gwt-i18n-server:gwt-i18n-server": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 20,
+      "execution_time": 33.584
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 20,
+      "execution_time": 29.18
+     }
+    },
+    "nl.omgwtfbbq:delver": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 7,
+      "execution_time": 0.606
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 7,
+      "execution_time": 1.266
+     }
+    },
+    "com.yanhuan:yhssm": {
+     "original_test": {
+      "error": 13,
+      "failing": 0,
+      "passing": 70,
+      "execution_time": 133.459
+     },
+     "debloat_test": {
+      "error": 13,
+      "failing": 0,
+      "passing": 70,
+      "execution_time": 5.936999999999999
+     }
+    },
+    "com.liuyanzhao:SpringMVC": {
+     "original_test": {
+      "error": 2,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.007
+     },
+     "debloat_test": {
+      "error": 2,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.026
+     }
+    },
+    "com.github.ganskef:shortcircuit-proxy": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 38,
+      "execution_time": 25.975
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 38,
+      "execution_time": 8.077
+     }
+    },
+    "io.downgoon:autorest4db": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.05
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.009
+     }
+    },
+    "org.rex-soft:rexdb": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 35,
+      "execution_time": 12.190999999999999
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 35,
+      "execution_time": 12.319
+     }
+    },
+    "cn.sonshou:wsinvoker": {
+     "original_test": {
+      "error": 2,
+      "failing": 0,
+      "passing": 3,
+      "execution_time": 158.802
+     },
+     "debloat_test": {
+      "error": 2,
+      "failing": 0,
+      "passing": 3,
+      "execution_time": 66.495
+     }
+    },
+    "com.appdynamics.extensions:linux-monitoring-extension": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 9,
+      "execution_time": 12.584
+     },
+     "debloat_test": {
+      "error": 1,
+      "failing": 0,
+      "passing": 6,
+      "execution_time": 5.207
+     }
+    }
+   },
+   "original_test": {
+    "error": 0,
+    "failing": 0,
+    "passing": 376,
+    "execution_time": 24.496
+   },
+   "debloat_test": {
+    "error": 0,
+    "failing": 1,
+    "passing": 375,
+    "execution_time": 164.24
+   }
+  },
+  "3.26.0-GA": {
+   "clients": {}
+  },
+  "3.22.0-CR1": {
+   "clients": {}
+  },
+  "3.22.0-GA": {
    "clients": {}
   }
  },
@@ -3685,12 +9222,80 @@
    }
   },
   "2.0.0": {
-   "clients": {}
+   "clients": {},
+   "original_test": {
+    "error": 0,
+    "failing": 0,
+    "passing": 57,
+    "execution_time": 0.9670000000000001
+   },
+   "debloat_test": {
+    "error": 0,
+    "failing": 0,
+    "passing": 57,
+    "execution_time": 2.166
+   }
   }
  },
  "org.zeromq:jeromq": {
   "0.4.3": {
    "clients": {
+    "XRTB:XRTB": {
+     "original_test": {
+      "error": 30,
+      "failing": 21,
+      "passing": 6,
+      "execution_time": 29.125999999999998
+     },
+     "debloat_test": {
+      "error": 32,
+      "failing": 19,
+      "passing": 6,
+      "execution_time": 27.016999999999996
+     }
+    },
+    "net.pendulum:pendulum": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 215,
+      "execution_time": 1650.3309999999997
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 215,
+      "execution_time": 1432.8889999999997
+     }
+    },
+    "RTB4FREE:Bidder": {
+     "original_test": {
+      "error": 8,
+      "failing": 4,
+      "passing": 52,
+      "execution_time": 133.46699999999998
+     },
+     "debloat_test": {
+      "error": 30,
+      "failing": 0,
+      "passing": 9,
+      "execution_time": 14.6
+     }
+    },
+    "com.iota:iri": {
+     "original_test": {
+      "error": 0,
+      "failing": 2,
+      "passing": 349,
+      "execution_time": 1697.8529999999998
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 351,
+      "execution_time": 1734.9660000000003
+     }
+    },
     "com.github.myzhan:locust4j": {
      "original_test": {
       "error": 0,
@@ -3735,6 +9340,20 @@
       "execution_time": 4.89
      }
     },
+    "com.github.dano:vertx-zeromq": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 12,
+      "execution_time": 25.21
+     },
+     "debloat_test": {
+      "error": 18,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 363.41
+     }
+    },
     "com.kz:pipeCutter": {
      "original_test": {
       "error": 0,
@@ -3766,14 +9385,185 @@
  },
  "org.jfree:jfreechart": {
   "1.0.19": {
-   "clients": {}
+   "clients": {
+    "com.github.albfernandez:itext2": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 285,
+      "execution_time": 16.284999999999993
+     },
+     "debloat_test": {
+      "error": 1,
+      "failing": 0,
+      "passing": 284,
+      "execution_time": 3.6689999999999894
+     }
+    },
+    "mkl.testarea.itext5:testarea-itext5": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 18,
+      "execution_time": 10.030000000000001
+     },
+     "debloat_test": {
+      "error": 1,
+      "failing": 0,
+      "passing": 17,
+      "execution_time": 3.113
+     }
+    },
+    "com.kz:pipeCutter": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.005
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.002
+     }
+    },
+    "StockMarketSimulation:StockMarketSimulation": {
+     "original_test": {
+      "error": 0,
+      "failing": 1,
+      "passing": 5,
+      "execution_time": 0.12000000000000001
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 1,
+      "passing": 5,
+      "execution_time": 0.102
+     }
+    },
+    "de.sfb876:fact-tools": {
+     "original_test": {
+      "error": 6,
+      "failing": 2,
+      "passing": 178,
+      "execution_time": 165.52
+     },
+     "debloat_test": {
+      "error": 6,
+      "failing": 2,
+      "passing": 168,
+      "execution_time": 135.17900000000003
+     }
+    },
+    "LCSB-Binning:LCSB-Binning": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 9,
+      "execution_time": 8.238
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 9,
+      "execution_time": 11.847000000000001
+     }
+    },
+    "ee.ioc.cs:cocovila": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 140,
+      "execution_time": 0.363
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 140,
+      "execution_time": 0.408
+     }
+    },
+    "net.seninp:jmotif-sax": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 88,
+      "execution_time": 10.094999999999999
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 88,
+      "execution_time": 8.542000000000002
+     }
+    },
+    "net.sourceforge.htmlunit:htmlunit-android": {
+     "original_test": {
+      "error": 79886,
+      "failing": 16127,
+      "passing": 7501,
+      "execution_time": 479.2299999999991
+     },
+     "debloat_test": {
+      "error": 79890,
+      "failing": 16127,
+      "passing": 7501,
+      "execution_time": 487.11299999999954
+     }
+    }
+   },
+   "original_test": {
+    "error": 0,
+    "failing": 1,
+    "passing": 2255,
+    "execution_time": 17.008999999999993
+   },
+   "debloat_test": {
+    "error": 0,
+    "failing": 1,
+    "passing": 2255,
+    "execution_time": 10.944000000000004
+   }
   },
   "1.5.0": {
-   "clients": {}
+   "clients": {},
+   "original_test": {
+    "error": 0,
+    "failing": 1,
+    "passing": 2174,
+    "execution_time": 3.266999999999986
+   },
+   "debloat_test": {
+    "error": 0,
+    "failing": 1,
+    "passing": 2174,
+    "execution_time": 5.288999999999989
+   }
   }
  },
  "cc.mallet:mallet": {
   "2.0.8": {
+   "clients": {}
+  }
+ },
+ "com.google.inject:guice-parent": {
+  "4.2.2": {
+   "clients": {}
+  },
+  "4.0-beta5": {
+   "clients": {}
+  },
+  "4.2.1": {
+   "clients": {}
+  },
+  "4.0": {
+   "clients": {}
+  },
+  "3.0": {
+   "clients": {}
+  },
+  "2.0": {
    "clients": {}
   }
  },
@@ -3782,7 +9572,22 @@
    "clients": {}
   },
   "0.3.0": {
-   "clients": {},
+   "clients": {
+    ":google-compute-engine": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 49,
+      "execution_time": 754.1560000000001
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 49,
+      "execution_time": 1196.403
+     }
+    }
+   },
    "original_test": {
     "error": 0,
     "failing": 0,
@@ -3802,6 +9607,17 @@
    "clients": {}
   },
   "1.2.4": {
+   "clients": {}
+  }
+ },
+ "org.apache.commons:commons-math4": {
+  "2.1": {
+   "clients": {}
+  },
+  "2.2": {
+   "clients": {}
+  },
+  "2.0": {
    "clients": {}
   }
  },
@@ -4033,6 +9849,20 @@
       "execution_time": 0.002
      }
     },
+    "com.github.drxaos:jvmvm": {
+     "original_test": {
+      "error": 14,
+      "failing": 0,
+      "passing": 12,
+      "execution_time": 35.163000000000004
+     },
+     "debloat_test": {
+      "error": 14,
+      "failing": 0,
+      "passing": 12,
+      "execution_time": 142.171
+     }
+    },
     "com.puppetlabs.puppetdb:com.puppetlabs.puppetdb.javaclient": {
      "original_test": {
       "error": 0,
@@ -4073,6 +9903,20 @@
       "failing": 0,
       "passing": 9,
       "execution_time": 0.005
+     }
+    },
+    ":": {
+     "original_test": {
+      "error": 14,
+      "failing": 0,
+      "passing": 12,
+      "execution_time": 3.71
+     },
+     "debloat_test": {
+      "error": 14,
+      "failing": 0,
+      "passing": 12,
+      "execution_time": 3.4579999999999997
      }
     },
     "OTRS-Client:OTRS-Client": {
@@ -4312,6 +10156,20 @@
       "passing": 7,
       "execution_time": 18.398
      }
+    },
+    "com.googlecode.android-vcard:android-vcard": {
+     "original_test": {
+      "error": 0,
+      "failing": 3,
+      "passing": 7,
+      "execution_time": 0.246
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 3,
+      "passing": 7,
+      "execution_time": 0.211
+     }
     }
    },
    "original_test": {
@@ -4481,6 +10339,20 @@
       "failing": 0,
       "passing": 0,
       "execution_time": 0.009
+     }
+    },
+    ":": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 61,
+      "execution_time": 6.393999999999999
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 61,
+      "execution_time": 5.569000000000001
      }
     },
     "com.github.scouter-project:scouter-plugin-server-alert-slack": {
@@ -4945,6 +10817,20 @@
       "execution_time": 0.002
      }
     },
+    "net.helpscout:helpscout-api": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 33,
+      "execution_time": 10.961
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 33,
+      "execution_time": 4.7
+     }
+    },
     "com.tce.spring.oauth2:couchbase-token-store-spring-oauth2": {
      "original_test": {
       "error": 0,
@@ -5097,6 +10983,20 @@
       "failing": 0,
       "passing": 9,
       "execution_time": 0.013999999999999999
+     }
+    },
+    "org.craftercms:crafter-core": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 61,
+      "execution_time": 6.261
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 61,
+      "execution_time": 5.489999999999999
      }
     },
     "mx.openpay:openpay-api-client": {
@@ -5636,6 +11536,20 @@
       "failing": 0,
       "passing": 22,
       "execution_time": 0.778
+     }
+    },
+    ":lesschat": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 5,
+      "execution_time": 2.031
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 5,
+      "execution_time": 2.589
      }
     },
     "net.instantcom.mm7:instantcom-mm7": {
@@ -7043,6 +12957,20 @@
       "execution_time": 191.82199999999997
      }
     },
+    "me.michaeldick:SonosNPROneServer": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 28,
+      "execution_time": 8.825
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 28,
+      "execution_time": 10.799
+     }
+    },
     "com.immomo.rhizobia:rhizobia_J": {
      "original_test": {
       "error": 0,
@@ -7211,6 +13139,20 @@
       "execution_time": 0.0
      }
     },
+    ":update-center2": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 13,
+      "execution_time": 32.452
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 13,
+      "execution_time": 23.884999999999998
+     }
+    },
     "de.jeha.s3srv:s3srv": {
      "original_test": {
       "error": 0,
@@ -7251,6 +13193,20 @@
       "failing": 0,
       "passing": 22,
       "execution_time": 0.8119999999999999
+     }
+    },
+    ":windows-azure-storage": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 44,
+      "execution_time": 24.554000000000002
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 44,
+      "execution_time": 22.557000000000002
      }
     },
     "nl.quintor:quindy": {
@@ -7391,6 +13347,20 @@
       "failing": 2,
       "passing": 16,
       "execution_time": 207.02300000000002
+     }
+    },
+    "com.oceanprotocol:secret-store-client": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 6,
+      "execution_time": 0.262
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 6,
+      "execution_time": 0.062
      }
     },
     "net.cryptonomica:cryptonomica": {
@@ -9300,6 +15270,20 @@
       "execution_time": 0.002
      }
     },
+    "flume-ng-customizations:flume-ng-customizations": {
+     "original_test": {
+      "error": 0,
+      "failing": 12,
+      "passing": 56,
+      "execution_time": 8.653000000000002
+     },
+     "debloat_test": {
+      "error": 2,
+      "failing": 13,
+      "passing": 53,
+      "execution_time": 14.9
+     }
+    },
     "jhazm:jhazm": {
      "original_test": {
       "error": 12,
@@ -9359,6 +15343,20 @@
       "failing": 0,
       "passing": 6,
       "execution_time": 0.501
+     }
+    },
+    ":search-guard-tlstool": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 9,
+      "execution_time": 14.995000000000001
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 9,
+      "execution_time": 12.496
      }
     },
     "de.gwdg.metadataqa:metadata-qa-marc": {
@@ -9487,6 +15485,20 @@
       "execution_time": 1.88
      }
     },
+    "be.ugent.rml:rmlmapper": {
+     "original_test": {
+      "error": 46,
+      "failing": 7,
+      "passing": 339,
+      "execution_time": 645.7069999999999
+     },
+     "debloat_test": {
+      "error": 46,
+      "failing": 7,
+      "passing": 339,
+      "execution_time": 507.1119999999999
+     }
+    },
     "io.azrina.nlp.summarizer:textteaser-java": {
      "original_test": {
       "error": 0,
@@ -9527,6 +15539,20 @@
       "failing": 4,
       "passing": 13,
       "execution_time": 0.461
+     }
+    },
+    ":": {
+     "original_test": {
+      "error": 46,
+      "failing": 7,
+      "passing": 339,
+      "execution_time": 301.34099999999995
+     },
+     "debloat_test": {
+      "error": 46,
+      "failing": 7,
+      "passing": 339,
+      "execution_time": 181.37199999999996
      }
     },
     "de.mpc.pia:pia": {
@@ -10031,6 +16057,20 @@
       "failing": 0,
       "passing": 9,
       "execution_time": 2.636
+     }
+    },
+    ":oneops-inventory": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 11,
+      "execution_time": 0.133
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 11,
+      "execution_time": 0.106
      }
     },
     "com.kgal:PackageBuilder": {
@@ -10709,6 +16749,20 @@
       "execution_time": 20.793
      }
     },
+    "org.diffkit:diffkit": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 153,
+      "execution_time": 19.33999999999999
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 153,
+      "execution_time": 6.049999999999999
+     }
+    },
     "logstash-forwarder-java:logstash-forwarder-java": {
      "original_test": {
       "error": 0,
@@ -10847,6 +16901,20 @@
       "failing": 0,
       "passing": 2,
       "execution_time": 0.111
+     }
+    },
+    ":": {
+     "original_test": {
+      "error": 0,
+      "failing": 2,
+      "passing": 47,
+      "execution_time": 18.244
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 2,
+      "passing": 47,
+      "execution_time": 17.912
      }
     },
     "net.redborder.utils:synthetic-producer": {
@@ -11015,6 +17083,20 @@
       "failing": 0,
       "passing": 23,
       "execution_time": 0.393
+     }
+    },
+    "fr.inria.gforge.spoon.labs:gumtree-spoon-ast-diff": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 135,
+      "execution_time": 81.67099999999999
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 135,
+      "execution_time": 77.453
      }
     },
     "dibbhatt:kafka-spark-consumer": {
@@ -11409,6 +17491,20 @@
       "execution_time": 0.004
      }
     },
+    "crushpaper:crushpaper": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 303,
+      "execution_time": 4.653999999999999
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 303,
+      "execution_time": 3.1700000000000004
+     }
+    },
     "nl.topicus.mssql2monetdb:mssql2monetdb": {
      "original_test": {
       "error": 0,
@@ -11437,6 +17533,20 @@
       "execution_time": 0.341
      }
     },
+    ":assertj-assertions-generator": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 131,
+      "execution_time": 28.179
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 131,
+      "execution_time": 22.673000000000002
+     }
+    },
     "de.onyxbits:dummydroid": {
      "original_test": {
       "error": 0,
@@ -11449,6 +17559,20 @@
       "failing": 0,
       "passing": 1,
       "execution_time": 0.011
+     }
+    },
+    "org.owasp:proxy": {
+     "original_test": {
+      "error": 0,
+      "failing": 2,
+      "passing": 47,
+      "execution_time": 18.649
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 2,
+      "passing": 47,
+      "execution_time": 23.123000000000005
      }
     },
     "com.flaptor.indextank:indextank-engine": {
@@ -11477,6 +17601,20 @@
       "failing": 0,
       "passing": 80,
       "execution_time": 45.205000000000005
+     }
+    },
+    ":jdkget": {
+     "original_test": {
+      "error": 0,
+      "failing": 1,
+      "passing": 6,
+      "execution_time": 0.252
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 1,
+      "passing": 8,
+      "execution_time": 0.783
      }
     },
     "org.apache.horn:horn": {
@@ -11829,6 +17967,20 @@
       "execution_time": 0.232
      }
     },
+    "com.datadefender:DataDefender": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 47,
+      "execution_time": 9.543999999999999
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 47,
+      "execution_time": 4.444999999999999
+     }
+    },
     "hlt.isti.cnr.it:jatecs-gpl": {
      "original_test": {
       "error": 0,
@@ -11953,6 +18105,20 @@
       "failing": 1,
       "passing": 0,
       "execution_time": 5.621
+     }
+    },
+    "org.mocksy:mocksy-server": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 36,
+      "execution_time": 1.9569999999999999
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 36,
+      "execution_time": 3.379
      }
     },
     "com.soulgalore:crawler": {
@@ -12345,6 +18511,34 @@
       "passing": 3,
       "execution_time": 0.265
      }
+    },
+    "io.swagger:swagger-java-client": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 10,
+      "execution_time": 0.16400000000000003
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 10,
+      "execution_time": 0.15400000000000003
+     }
+    },
+    "com.aspose:aspose-words-cloud": {
+     "original_test": {
+      "error": 181,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.5080000000000001
+     },
+     "debloat_test": {
+      "error": 181,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.24000000000000013
+     }
     }
    },
    "original_test": {
@@ -12441,6 +18635,20 @@
  "org.hashids:hashids": {
   "1.0.1": {
    "clients": {
+    "com:mmall": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.006
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 0.02
+     }
+    },
     "com:ppmall": {
      "original_test": {
       "error": 1,
@@ -12853,6 +19061,20 @@
       "execution_time": 28.348000000000003
      }
     },
+    "de.mpg.mpi-inf.ambiversenlu:ambiversenlu": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 63,
+      "execution_time": 841.269
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 63,
+      "execution_time": 508.43700000000007
+     }
+    },
     "org.imsglobal.caliper:caliper-java": {
      "original_test": {
       "error": 33,
@@ -12972,6 +19194,48 @@
   },
   "2.4.3": {
    "clients": {
+    "com.github.water:cas-server-lab": {
+     "original_test": {
+      "error": 4,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 8.035
+     },
+     "debloat_test": {
+      "error": 4,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 8.04
+     }
+    },
+    "com.flipkart.storm-mysql:storm-mysql": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 20,
+      "execution_time": 36.046
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 20,
+      "execution_time": 16.266
+     }
+    },
+    "net.snowflake:snowflake-jdbc": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 176,
+      "execution_time": 6.006
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 176,
+      "execution_time": 4.5749999999999975
+     }
+    },
     "org.audit4j:audit4j-db": {
      "original_test": {
       "error": 3,
@@ -13001,7 +19265,22 @@
    }
   },
   "2.6.1": {
-   "clients": {},
+   "clients": {
+    "com.chriniko.example:akka-spring-example": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 4,
+      "execution_time": 0.567
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 4,
+      "execution_time": 0.811
+     }
+    }
+   },
    "original_test": {
     "error": 2,
     "failing": 0,
@@ -13042,6 +19321,34 @@
       "passing": 21,
       "execution_time": 17.823
      }
+    },
+    "com.github.fabriciofx:rocket": {
+     "original_test": {
+      "error": 3,
+      "failing": 24,
+      "passing": 80,
+      "execution_time": 1.6759999999999993
+     },
+     "debloat_test": {
+      "error": 5,
+      "failing": 24,
+      "passing": 79,
+      "execution_time": 0.824
+     }
+    },
+    "com.weapes.ntpaprseng:NTPaprSEng": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 15,
+      "execution_time": 3.5169999999999995
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 15,
+      "execution_time": 3.4339999999999997
+     }
     }
    },
    "original_test": {
@@ -13060,7 +19367,90 @@
  },
  "com.esotericsoftware:kryo-parent": {
   "2.24.0": {
-   "clients": {}
+   "clients": {
+    "springJredisCache:springJredisCache": {
+     "original_test": {
+      "error": 3,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 4.412000000000001
+     },
+     "debloat_test": {
+      "error": 3,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 4.269
+     }
+    },
+    "com.github.egrim:java-bloomier-filter": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 13,
+      "execution_time": 1.685
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 13,
+      "execution_time": 3.01
+     }
+    },
+    "codeset:hazelcast-store": {
+     "original_test": {
+      "error": 5,
+      "failing": 0,
+      "passing": 3,
+      "execution_time": 38.916
+     },
+     "debloat_test": {
+      "error": 5,
+      "failing": 0,
+      "passing": 3,
+      "execution_time": 35.372
+     }
+    },
+    "com.esotericsoftware:kryonet": {
+     "original_test": {
+      "error": 0,
+      "failing": 3,
+      "passing": 13,
+      "execution_time": 210.422
+     },
+     "debloat_test": {
+      "error": 15,
+      "failing": 0,
+      "passing": 1,
+      "execution_time": 123.82200000000002
+     }
+    },
+    "com.bullhorn:sdk-rest": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 49,
+      "execution_time": 318.575
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 306,
+      "execution_time": 357.39399999999995
+     }
+    }
+   },
+   "original_test": {
+    "error": 0,
+    "failing": 0,
+    "passing": 124,
+    "execution_time": 9.871000000000002
+   },
+   "debloat_test": {
+    "error": 0,
+    "failing": 0,
+    "passing": 124,
+    "execution_time": 7.869
+   }
   }
  },
  "org.reflections:reflections": {
@@ -13220,7 +19610,22 @@
  },
  "com.thetransactioncompany:cors-filter": {
   "2.5": {
-   "clients": {},
+   "clients": {
+    "com.myron.demo:demo-quartz": {
+     "original_test": {
+      "error": 3,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.019000000000000003
+     },
+     "debloat_test": {
+      "error": 3,
+      "failing": 0,
+      "passing": 0,
+      "execution_time": 0.004
+     }
+    }
+   },
    "original_test": {
     "error": 0,
     "failing": 0,
@@ -13363,6 +19768,14 @@
    "clients": {}
   }
  },
+ "org.apache.hbase:hbase": {
+  "0.92.1": {
+   "clients": {}
+  },
+  "0.94.0": {
+   "clients": {}
+  }
+ },
  "jline:jline": {
   "2.14.5": {
    "clients": {}
@@ -13377,6 +19790,32 @@
    "clients": {}
   },
   "2.12": {
+   "clients": {}
+  }
+ },
+ "log4j:log4j": {
+  "1.2.13": {
+   "clients": {}
+  },
+  "1.2.12": {
+   "clients": {}
+  },
+  "1.2.14": {
+   "clients": {}
+  },
+  "1.2.4": {
+   "clients": {}
+  },
+  "1.2.17": {
+   "clients": {}
+  },
+  "1.2.15": {
+   "clients": {}
+  },
+  "1.2.16": {
+   "clients": {}
+  },
+  "1.2.9": {
    "clients": {}
   }
  },
@@ -13551,6 +19990,20 @@
  "com.github.jai-imageio:jai-imageio-core": {
   "1.3.1": {
    "clients": {
+    ":": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1121,
+      "execution_time": 15.648999999999988
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 1121,
+      "execution_time": 15.459999999999992
+     }
+    },
     "com.google.iosdevicecontrol:ios-device-control": {
      "original_test": {
       "error": 0,
@@ -13607,6 +20060,20 @@
       "failing": 2,
       "passing": 192,
       "execution_time": 83.36399999999999
+     }
+    },
+    "com.datadefender:DataDefender": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 47,
+      "execution_time": 9.710000000000004
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 47,
+      "execution_time": 7.985999999999999
      }
     },
     "net.sourceforge.lept4j:lept4j": {
@@ -13686,6 +20153,34 @@
       "execution_time": 18.552000000000003
      }
     },
+    "be.ugent.rml:rmlmapper": {
+     "original_test": {
+      "error": 46,
+      "failing": 7,
+      "passing": 177,
+      "execution_time": 185.14300000000003
+     },
+     "debloat_test": {
+      "error": 46,
+      "failing": 7,
+      "passing": 273,
+      "execution_time": 208.80800000000002
+     }
+    },
+    ":": {
+     "original_test": {
+      "error": 46,
+      "failing": 7,
+      "passing": 339,
+      "execution_time": 193.36800000000002
+     },
+     "debloat_test": {
+      "error": 46,
+      "failing": 7,
+      "passing": 339,
+      "execution_time": 192.04099999999997
+     }
+    },
     "com.codeforces:commons": {
      "original_test": {
       "error": 0,
@@ -13714,6 +20209,20 @@
       "execution_time": 13.569999999999995
      }
     },
+    "com.mozilla.secops:secops-beam": {
+     "original_test": {
+      "error": 27,
+      "failing": 1,
+      "passing": 236,
+      "execution_time": 590.8899999999999
+     },
+     "debloat_test": {
+      "error": 1,
+      "failing": 0,
+      "passing": 66,
+      "execution_time": 37.035
+     }
+    },
     "com.ibm.stocator:stocator": {
      "original_test": {
       "error": 0,
@@ -13726,6 +20235,34 @@
       "failing": 0,
       "passing": 89,
       "execution_time": 8.422999999999998
+     }
+    },
+    ":rsb": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 105,
+      "execution_time": 2.136999999999999
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 105,
+      "execution_time": 3.07
+     }
+    },
+    "com.datadefender:DataDefender": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 47,
+      "execution_time": 1.493
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 47,
+      "execution_time": 3.936999999999999
      }
     },
     "org.semux:semux": {
@@ -14028,6 +20565,34 @@
   },
   "1.4.1": {
    "clients": {
+    ":": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 395,
+      "execution_time": 5.294
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 395,
+      "execution_time": 6.915
+     }
+    },
+    "com.versionone:VersionOne.SDK.Java.APIClient": {
+     "original_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 395,
+      "execution_time": 8.186
+     },
+     "debloat_test": {
+      "error": 0,
+      "failing": 0,
+      "passing": 395,
+      "execution_time": 16.387
+     }
+    },
     "com.andylibrian.jsastrawi:jsastrawi": {
      "original_test": {
       "error": 0,
