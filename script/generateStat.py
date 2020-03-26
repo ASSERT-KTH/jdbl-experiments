@@ -86,6 +86,7 @@ lib_with_clients = set()
 count_debloated_clients = 0
 total_time = 0
 results = {}
+considered_cases = {}
 
 with open(PATH_file, 'r') as fd:
     data = json.load(fd)
@@ -174,6 +175,15 @@ with open(PATH_file, 'r') as fd:
                 if not os.path.exists(os.path.join(original_client_path, 'test-results')):
                     build_errors['client'] += 1
                     continue
+                if lib_id not in considered_cases:
+                    considered_cases[lib_id] = {
+                        'repo_name': lib['repo_name'],
+                        'clients': {}
+                    }
+                if version not in considered_cases[lib_id]['clients']:
+                    considered_cases[lib_id]['clients'][version] = []
+                considered_cases[lib_id]['clients'][version].append(c)
+                
                 client_results['original_test'] = readTestResults(original_client_path)
 
                 debloat_client_path = os.path.join(client_path, 'debloat')
@@ -237,3 +247,5 @@ with open(os.path.join(PATH_results, '..', '..', 'raw_results.csv'), 'w') as fd:
     fd.write(csv)
 with open(os.path.join(PATH_results, '..', '..', 'raw_results.json'), 'w') as fd:
     json.dump(results, fd, indent=1)
+with open(os.path.join(PATH_results, '..', 'considered_cases.json'), 'w') as fd:
+    json.dump(considered_cases, fd, indent=1)
