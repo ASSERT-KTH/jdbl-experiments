@@ -178,6 +178,8 @@ with open(PATH_file, 'r') as fd:
                 if lib_id not in considered_cases:
                     considered_cases[lib_id] = {
                         'repo_name': lib['repo_name'],
+                        'groupId': lib['groupId'],
+                        'artifactId': lib['artifactId'],
                         'clients': {}
                     }
                 if version not in considered_cases[lib_id]['clients']:
