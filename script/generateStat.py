@@ -16,7 +16,7 @@ build_errors = {
     'client_debloat': 0,
     'none': 0
 }
-def parseCoverage(path):
+def parseCoverage(path, exclude=[]):
     coverage_results_path = os.path.join(path, "jacoco.csv")
     if not os.path.exists(coverage_results_path):
         return None
@@ -41,12 +41,12 @@ def parseCoverage(path):
             cl = '%s.%s' % (r['PACKAGE'], r['CLASS'])
             if cl not in o['classes']:
                 o['classes'].append(cl)
-            o['nbLines'] += r['LINE_MISSED'] + r['LINE_COVERED']
-            o['nbCoveredLines'] += r['LINE_COVERED']
+            if cl not in exclude:
+                o['nbLines'] += r['LINE_MISSED'] + r['LINE_COVERED']
+                o['nbCoveredLines'] += r['LINE_COVERED']
             if r['LINE_COVERED'] > 0:
                 o['coveredClasses'][cl] = r['LINE_COVERED'] / (r['LINE_COVERED'] + r['LINE_MISSED']) 
     o['coverage'] = o['nbCoveredLines'] / o['nbLines']
-    print(o)
     return o
 
 def readTestResults(path):
@@ -180,8 +180,11 @@ with open(PATH_file, 'r') as fd:
                 if not os.path.exists(os.path.join(debloat_client_path, 'test-results')):
                     build_errors['client_debloat'] += 1
                     continue
-
-                client_results['coverage_debloat'] = parseCoverage(debloat_client_path)
+                
+                exclude = []
+                if results[lib_id][version]['coverage'] is not None and 'classes' in results[lib_id][version]['coverage']:
+                    exclude = results[lib_id][version]['coverage']['classes']
+                client_results['coverage_debloat'] = parseCoverage(debloat_client_path, exclude)
                 client_results['test_cover_lib'] = False
                 if client_results['coverage_debloat'] is not None and results[lib_id][version]['coverage'] is not None:
                     for cl in client_results['coverage_debloat']['coveredClasses']:
