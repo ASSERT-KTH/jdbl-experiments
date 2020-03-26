@@ -29,6 +29,8 @@ def parseCoverage(path, exclude=[]):
     }
     with open(coverage_results_path, 'r') as fd:
         lines = fd.readlines()
+        if len(lines) == 0:
+            return None
         header = lines[0].split(',')
         for l in lines[1:]:
             r = {}
