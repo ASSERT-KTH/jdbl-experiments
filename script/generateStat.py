@@ -68,7 +68,7 @@ with open(PATH_file, 'r') as fd:
                 results[lib_id] = {}
             results[lib_id][version] = {
                 'compiled': os.path.exists(original_path),
-                'debloat': os.path.exists(original_path),
+                'debloat': os.path.exists(debloat_path),
                 'clients': {}
             }
             results[lib_id][version]['original_test'] = readTestResults(original_path)
