@@ -18,6 +18,8 @@ if 'GITHUB_OAUTH' in os.environ and len(os.environ['GITHUB_OAUTH']) > 0:
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--all', dest='all', action='store_true', help="Run the experiment on all the libs and clients")
+parser.add_argument('-p', "--process", help="Number of process", type=int, default=4)
+
 args = parser.parse_args()
 
 PATH_file = os.path.join(os.path.dirname(__file__), 'considered_cases.json')
@@ -120,7 +122,7 @@ class RunnerWorker(Thread):
         self.callback = callback
         self.daemon = True
         self.tasks = tasks
-        self.pool = ThreadPool(6)
+        self.pool = ThreadPool(args.process)
 
     def run(self):
         for task in self.tasks:
