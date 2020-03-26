@@ -16,6 +16,39 @@ build_errors = {
     'client_debloat': 0,
     'none': 0
 }
+def parseCoverage(path):
+    coverage_results_path = os.path.join(path, "jacoco.csv")
+    if not os.path.exists(coverage_results_path):
+        return None
+    o = {
+        'classes': [],
+        'coveredClasses': {},
+        'nbLines': 0,
+        'nbCoveredLines': 0,
+        'coverage': 0
+    }
+    with open(coverage_results_path, 'r') as fd:
+        lines = fd.readlines()
+        header = lines[0].split(',')
+        for l in lines[1:]:
+            r = {}
+            values = l.split(',')
+            for i in range(0, len(header)):
+                v = values[i]
+                if v.isdigit():
+                    v = int(v)
+                r[header[i]] = v
+            cl = '%s.%s' % (r['PACKAGE'], r['CLASS'])
+            if cl not in o['classes']:
+                o['classes'].append(cl)
+            o['nbLines'] += r['LINE_MISSED'] + r['LINE_COVERED']
+            o['nbCoveredLines'] += r['LINE_COVERED']
+            if r['LINE_COVERED'] > 0:
+                o['coveredClasses'][cl] = r['LINE_COVERED'] / (r['LINE_COVERED'] + r['LINE_MISSED']) 
+    o['coverage'] = o['nbCoveredLines'] / o['nbLines']
+    print(o)
+    return o
+
 def readTestResults(path):
     output = {
         'error': 0,
@@ -64,14 +97,15 @@ with open(PATH_file, 'r') as fd:
                 continue
             version_path = os.path.join(lib_path, version)
             original_path = os.path.join(version_path, 'original')
-            debloat_path = os.path.join(version_path, 'debloat')
-
+            debloat_path = os.path.join(version_path, 'debloat')     
+            
             if lib_id not in results:
                 results[lib_id] = {}
             results[lib_id][version] = {
                 'compiled': os.path.exists(original_path),
                 'debloat': os.path.exists(debloat_path),
-                'clients': {}
+                'clients': {},
+                'coverage': parseCoverage(debloat_path)
             }
             results[lib_id][version]['original_test'] = readTestResults(original_path)
             results[lib_id][version]['debloat_test'] = readTestResults(debloat_path)
@@ -146,6 +180,15 @@ with open(PATH_file, 'r') as fd:
                 if not os.path.exists(os.path.join(debloat_client_path, 'test-results')):
                     build_errors['client_debloat'] += 1
                     continue
+
+                client_results['coverage_debloat'] = parseCoverage(debloat_client_path)
+                client_results['test_cover_lib'] = False
+                if client_results['coverage_debloat'] is not None and results[lib_id][version]['coverage'] is not None:
+                    for cl in client_results['coverage_debloat']['coveredClasses']:
+                        if cl in results[lib_id][version]['coverage']['classes']:
+                            client_results['test_cover_lib'] = True
+                            break
+                    pass
 
                 client_results['debloat_test'] = readTestResults(debloat_client_path)
                 results[lib_id][version]['clients'][client] = client_results
