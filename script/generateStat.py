@@ -123,6 +123,7 @@ with open(PATH_file, 'r') as fd:
                 client = "%s:%s" % (c['groupId'], c['artifactId'])
                 client_path = os.path.join(version_path, "clients", client)
                 client_results = {}
+                results[lib_id][version]['clients'][client] = client_results
                 original_client_path = os.path.join(client_path, 'original')
                 filename = "%s_%s.json" % (os.path.basename(lib['repo_name']), os.path.basename(c['repo_name']))
                 path_execution_log = os.path.join(PATH_results, 'executions', filename)
