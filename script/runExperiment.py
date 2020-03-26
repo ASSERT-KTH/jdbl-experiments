@@ -103,7 +103,7 @@ class Task():
         client_name = os.path.basename(self.client['repo_name'])
         # print("Run %s %s" % (self.library['repo_name'], self.client['repo_name']))
         log_file = os.path.join(OUTPUT, 'executions', '%s_%s.log' % (self.library['repo_name'].replace('/', '_'), self.client['repo_name'].replace('/', '_')))
-        cmd = 'docker run -e GITHUB_OAUTH="%s" -v %s:/results --rm jdbl -d https://github.com/%s.git -c https://github.com/%s.git -v %s' % (token, OUTPUT, self.library['repo_name'], self.client['repo_name'], self.version)
+        cmd = 'docker run -e GITHUB_OAUTH="%s" --memory=5g -v %s:/results --rm jdbl -d https://github.com/%s.git -c https://github.com/%s.git -v %s' % (token, OUTPUT, self.library['repo_name'], self.client['repo_name'], self.version)
         with open(log_file, 'w') as fd:
             try:
                 p = subprocess.call(cmd, shell=True, timeout=timeout, stdout=fd, stderr=fd)
