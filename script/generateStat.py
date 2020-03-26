@@ -60,6 +60,8 @@ with open(PATH_file, 'r') as fd:
         lib = data[lib_id]
         lib_path = os.path.join(PATH_results, lib_id)
         for version in lib['clients']:
+            if len(lib['clients'][version]) < 4:
+                continue
             version_path = os.path.join(lib_path, version)
             original_path = os.path.join(version_path, 'original')
             debloat_path = os.path.join(version_path, 'debloat')
