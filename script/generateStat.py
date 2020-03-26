@@ -160,7 +160,7 @@ with open(PATH_file, 'r') as fd:
                 client_results = {}
                 results[lib_id][version]['clients'][client] = client_results
                 original_client_path = os.path.join(client_path, 'original')
-                filename = "%s_%s.json" % (lib['repo_name'], c['repo_name'])
+                filename = "%s_%s.json" % (lib['repo_name'].replace('/', '_'), c['repo_name'].replace('/', '_'))
                 path_execution_log = os.path.join(PATH_results, 'executions', filename)
                 if os.path.exists(path_execution_log):
                     with open(path_execution_log) as fd:
