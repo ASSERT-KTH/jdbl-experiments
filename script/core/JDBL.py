@@ -240,7 +240,7 @@ class JDBL:
             path_result = os.path.join(OUTPUT_dir, 'results', 'executions')
             if not os.path.exists(path_result):
                 os.makedirs(path_result)
-            with open(os.path.join(path_result, "%s_%s.json" % (self.library.name, self.client.name)), 'w') as fd:
+            with open(os.path.join(path_result, "%s_%s.json" % (self.library.repo, self.client.repo)), 'w') as fd:
                 json.dump(results, fd)
             # shutil.rmtree(self.working_directory)
             
