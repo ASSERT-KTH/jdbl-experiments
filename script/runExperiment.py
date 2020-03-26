@@ -10,13 +10,20 @@ from datetime import timedelta
 import signal
 import sys
 import random
-
+import argparse
 
 token = None
 if 'GITHUB_OAUTH' in os.environ and len(os.environ['GITHUB_OAUTH']) > 0:
     token = os.environ['GITHUB_OAUTH']
 
-PATH_file = os.path.join(os.path.dirname(__file__), '..', 'dependants', 'single_module_java_projects_with_5_stars.json')
+parser = argparse.ArgumentParser()
+parser.add_argument('--all', dest='all', action='store_true', help="Run the experiment on all the libs and clients")
+args = parser.parse_args()
+
+PATH_file = os.path.join(os.path.dirname(__file__), 'considered_cases.json')
+if args.all:
+    PATH_file = os.path.join(os.path.dirname(__file__), '..', 'dependants', 'single_module_java_projects_with_5_stars.json')
+
 OUTPUT = os.path.abspath(os.path.join(os.path.dirname(__file__), "results"))
 
 timeout = 60 * 60 # 1h
