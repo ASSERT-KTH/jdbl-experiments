@@ -180,8 +180,6 @@ with open(PATH_file) as fd:
         versions = lib['clients']
         for version in versions:
             clients = versions[version]
-            if len(clients) < 4:
-                continue
             for client in clients:
                 client_name = os.path.basename(client['repo_name'])
                 if 'groupId' not in lib or 'groupId' not in client:
