@@ -228,6 +228,10 @@ with open(PATH_file, 'r') as fd:
                 out.append(str(results[lib_id][version]['nbDebloatClass']))
                 # nb debloated methods
                 out.append(str(results[lib_id][version]['nbDebloatMethod']))
+                if results[lib_id][version]['coverage'] is not None:
+                    out.append(str(results[lib_id][version]['coverage']['coverage']))
+                else:
+                    out.append('')
 
                 out.append(c['groupId'])
                 out.append(c['artifactId'])
@@ -238,8 +242,14 @@ with open(PATH_file, 'r') as fd:
                 out.append(str(client_results['debloat_test']['error']))
                 out.append(str(client_results['debloat_test']['failing']))
                 out.append(str(client_results['debloat_test']['passing']))
+                if client_results['coverage_debloat'] is not None:
+                    out.append(str(client_results['coverage_debloat']['coverage']))
+                else:
+                    out.append('')
+                out.append(str(client_results['test_cover_lib']))
+
                 
-                line = "\t".join(out)
+                line = ",".join(out)
                 print(line)
                 csv += (line) + '\n'
 
@@ -248,6 +258,8 @@ print("Lib with clients", len(lib_with_clients))
 print("# successful debloated clients", count_debloated_clients)
 print("Total execution time", datetime.timedelta(seconds=total_time))
 with open(os.path.join(PATH_results, '..', '..', 'raw_results.csv'), 'w') as fd:
+    header = ['"Lib groupId"', '"Lib artifactId"', '"Lib version"', '"size original jar"', '"size debloat jar"', '"# class original"', '"# method original"', '"# debloated classes"', '"# debloated methods"', '"Lib coverage"', '"Client groupId"', '"Client artifactId"', '"Client original test error"', '"Client original test failing"', '"Client original test passing"', '"Client debloat test error"', '"Client debloat test failing"', '"Client debloat test passing"', '"Client coverage"', '"Cover lib"q']
+    csv = ",".join(header) + '\n' + csv
     fd.write(csv)
 with open(os.path.join(PATH_results, '..', '..', 'raw_results.json'), 'w') as fd:
     json.dump(results, fd, indent=1)
