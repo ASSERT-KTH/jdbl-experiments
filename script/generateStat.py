@@ -48,7 +48,10 @@ def parseCoverage(path, exclude=[]):
                 o['nbCoveredLines'] += r['LINE_COVERED']
             if r['LINE_COVERED'] > 0:
                 o['coveredClasses'][cl] = r['LINE_COVERED'] / (r['LINE_COVERED'] + r['LINE_MISSED']) 
-    o['coverage'] = o['nbCoveredLines'] / o['nbLines']
+    if o['nbLines'] > 0:
+        o['coverage'] = o['nbCoveredLines'] / o['nbLines']
+    else: 
+        o['coverage'] = 0
     return o
 
 def readTestResults(path):
