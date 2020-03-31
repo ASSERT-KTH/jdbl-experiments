@@ -44,10 +44,7 @@ class Project:
                 if len(v) > len(temp_version):
                     temp_version += '.0'
                 if v == temp_version:
-                    if self.checkout_commit(r.commit.sha):
-                        self.pom = PomExtractor(self.path)
-                        return True
-                    return False
+                    return self.checkout_commit(r.commit.sha)
             except ValueError:
                 continue
             except Exception:
@@ -57,8 +54,9 @@ class Project:
 
     def checkout_commit(self, commit):
         try:
-            cmd = 'cd %s; git fetch -q origin %s; git checkout -q %s' %(self.path, commit, commit)
+            cmd = 'cd %s; git fetch origin %s; git checkout %s' %(self.path, commit, commit)
             subprocess.check_call(cmd, shell=True)
+            self.pom = PomExtractor(self.path)
             return True
         except:
             return False
@@ -86,7 +84,7 @@ class Project:
         clean_cmd = 'mvn clean -B;'
         if clean is False:
             clean_cmd = ''
-        cmd = 'cd %s;%s mvn test --fail-never -ntp -Dmaven.test.failure.ignore=true -B;' % (self.path, clean_cmd)
+        cmd = 'cd %s;%s mvn test --fail-never -ntp -Dmaven.test.failure.ignore=true -B -Dmaven.javadoc.skip=true;' % (self.path, clean_cmd)
         try:
             subprocess.check_call(cmd, shell=True)
             return True
@@ -94,7 +92,7 @@ class Project:
             return False
 
     def package(self):
-        cmd = 'cd %s; mvn clean -B; mvn package --fail-never -ntp -Dmaven.test.error.ignore=true -Dmaven.test.failure.ignore=true -B;' % (self.path)
+        cmd = 'cd %s; mvn clean -B; mvn package --fail-never -ntp -Dmaven.test.error.ignore=true -Dmaven.test.failure.ignore=true -B -Dmaven.javadoc.skip=true' % (self.path)
         try:
             subprocess.check_call(cmd, shell=True)
             return True
@@ -160,7 +158,7 @@ class Project:
     def inject_debloat_library(self, group_id, artifact_id, version):
         path_jar = os.path.join("/", "results", "%s:%s" % (group_id, artifact_id), version, "debloat", "debloat.jar")
 
-        cmd = "cd %s; mvn install:install-file -Dfile=%s -DgroupId=%s -DartifactId=%s -Dversion=%s -Dpackaging=jar -B;" % (self.path, path_jar, group_id, artifact_id, version)
+        cmd = "cd %s; mvn install:install-file -Dfile=%s -DgroupId=%s -DartifactId=%s -Dversion=%s -Dpackaging=jar -B -Dmaven.javadoc.skip=true;" % (self.path, path_jar, group_id, artifact_id, version)
         try:
             subprocess.check_call(cmd, shell=True)
             return True

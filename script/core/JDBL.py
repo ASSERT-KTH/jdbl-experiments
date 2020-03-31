@@ -10,8 +10,9 @@ from core.Debloat import Debloat
 OUTPUT_dir = '/' 
 
 class JDBL:
-    def __init__(self, library, client, version=None, working_directory=None):
+    def __init__(self, library, client, version=None, working_directory=None, commit=None):
         self.library = library
+        self.lib_commit = commit
         self.client = client
         self.version = version
         self.working_directory = working_directory
@@ -59,7 +60,7 @@ class JDBL:
             dep_artifact = self.library.pom.get_artifact()
             dep_group = self.library.pom.get_group()
 
-            if self.version is None:
+            if self.version is None and self.lib_library is None:
                 print("3. Extract library version")
                 
                 current_status = {
@@ -88,9 +89,13 @@ class JDBL:
                 "success": False
             }
             results['steps'].append(current_status)
-
-            current_status['success'] = self.library.checkout_version(self.version)
-            current_status['commit'] = self.library.get_commit()
+            if self.lib_commit is not None:
+                print("COMMIT", self.lib_commit)
+                current_status['success'] = self.library.checkout_commit(self.lib_commit)
+                current_status['commit'] = self.lib_commit
+            else:
+                current_status['success'] = self.library.checkout_version(self.version)
+                current_status['commit'] = self.library.get_commit()
             
             previous_time = time.time()
             current_status['end'] = previous_time

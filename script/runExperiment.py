@@ -92,10 +92,11 @@ def render():
     print(output)
 
 class Task():
-    def __init__(self, library, client, version):
+    def __init__(self, library, client, version, commit):
         self.library = library
         self.client = client
         self.version = version
+        self.lib_commit = commit
         self.status = ""
         self.start = None
 
@@ -105,7 +106,7 @@ class Task():
         client_name = os.path.basename(self.client['repo_name'])
         # print("Run %s %s" % (self.library['repo_name'], self.client['repo_name']))
         log_file = os.path.join(OUTPUT, 'executions', '%s_%s.log' % (self.library['repo_name'].replace('/', '_'), self.client['repo_name'].replace('/', '_')))
-        cmd = 'docker run -e GITHUB_OAUTH="%s" --memory=5g -v %s:/results --rm jdbl -d https://github.com/%s.git -c https://github.com/%s.git -v %s' % (token, OUTPUT, self.library['repo_name'], self.client['repo_name'], self.version)
+        cmd = 'docker run -e GITHUB_OAUTH="%s" --memory=5g -v %s:/results --rm jdbl -d https://github.com/%s.git --lib-commit %s -c https://github.com/%s.git -v %s' % (token, OUTPUT, self.library['repo_name'], self.lib_commit, self.client['repo_name'], self.version)
         with open(log_file, 'w') as fd:
             try:
                 p = subprocess.call(cmd, shell=True, timeout=timeout, stdout=fd, stderr=fd)
@@ -181,6 +182,8 @@ with open(PATH_file) as fd:
         lib_name = os.path.basename(lib['repo_name'])
         versions = lib['clients']
         for version in versions:
+            if version not in lib['releases']:
+                continue
             clients = versions[version]
             for client in clients:
                 client_name = os.path.basename(client['repo_name'])
@@ -188,7 +191,7 @@ with open(PATH_file) as fd:
                     continue
                 path_client_debloat = os.path.join('results', lib['groupId'] + ':' + lib['artifactId'], version, 'clients', client['groupId'] + ':' + client['artifactId'], 'debloat', 'test-results')
                 if not os.path.exists(path_client_debloat):
-                    tasks.append(Task(lib, client, version))
+                    tasks.append(Task(lib, client, version, lib['releases'][version]))
 
 
 finished = []
