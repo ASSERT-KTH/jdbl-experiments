@@ -17,6 +17,7 @@ class Project:
         self.name = os.path.basename(url).replace(".git", '')
         self.repo = url.replace("https://github.com/", '').replace(".git", '')
         self.path = None
+        self.original_path = None
         self.pom = None
         self.releases = []
     
@@ -25,6 +26,7 @@ class Project:
             cmd = "cd %s; ls .;git clone -q --depth=1 %s;ls .;" % (path, self.url)
             subprocess.check_call(cmd, shell=True)
             self.path = os.path.join(path, self.name)
+            self.original_path = os.path.join(path, self.name)
             self.pom = PomExtractor(self.path)
             self.path = os.path.dirname(self.pom.poms[0]['path'])
             return True
@@ -56,7 +58,8 @@ class Project:
         try:
             cmd = 'cd %s; git fetch origin %s; git checkout %s' %(self.path, commit, commit)
             subprocess.check_call(cmd, shell=True)
-            self.pom = PomExtractor(self.path)
+            self.pom = PomExtractor(self.original_path)
+            self.path = os.path.dirname(self.pom.poms[0]['path'])
             return True
         except:
             return False

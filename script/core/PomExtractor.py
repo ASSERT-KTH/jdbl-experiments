@@ -142,6 +142,8 @@ class PomExtractor:
         else:
             build_section = build[0]
             plugins_section =  build_section.find('plugins')
+            if plugins_section is None:
+                plugins_section = SubElement(build_section, 'plugins')  
 
         new_plugin = SubElement(plugins_section, 'plugin')
         if group_id is not None:
