@@ -116,6 +116,12 @@ with open(PATH_file, 'r') as fd:
             results[lib_id][version]['original_test'] = readTestResults(original_path)
             results[lib_id][version]['debloat_test'] = readTestResults(debloat_path)
 
+            if not os.path.exists(os.path.join(original_path, 'test-results')):
+                build_errors['lib'] += 1
+            
+            if not os.path.exists(os.path.join(debloat_path, 'test-results')):
+                build_errors['debloat'] += 1
+
             results[lib_id][version]['nbClass'] = 0
             results[lib_id][version]['nbMethod'] = 0
             results[lib_id][version]['nbDebloatClass'] = 0
