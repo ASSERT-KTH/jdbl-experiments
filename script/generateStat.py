@@ -108,6 +108,7 @@ with open(PATH_file, 'r') as fd:
             if lib_id not in results:
                 results[lib_id] = {}
             results[lib_id][version] = {
+                'repo_name': lib['repo_name'],
                 'compiled': os.path.exists(original_path),
                 'debloat': os.path.exists(debloat_path),
                 'clients': {},
@@ -163,12 +164,23 @@ with open(PATH_file, 'r') as fd:
                     # Total debloat time: 33.458 s
                     results[lib_id][version]['debloatTime'] = float(fd.read().strip().replace("Total debloat time: ", '').replace(" s", ''))
 
+            if os.path.exists(os.path.join(original_path, 'original.jar')):
+                results[lib_id][version]['original_jar_size'] = os.stat(os.path.join(original_path, 'original.jar')).st_size
+            else:
+                results[lib_id][version]['original_jar_size'] = 0
+            if os.path.exists(os.path.join(debloat_path, 'debloat.jar')):
+                results[lib_id][version]['debloat_jar_size'] = os.stat(os.path.join(debloat_path, 'debloat.jar')).st_size
+            else:
+                results[lib_id][version]['debloat_jar_size'] = 0
+
             for c in lib['clients'][version]:
                 if 'artifactId' not in c or 'groupId' not in c:
                     continue
                 client = "%s:%s" % (c['groupId'], c['artifactId'])
                 client_path = os.path.join(version_path, "clients", client)
-                client_results = {}
+                client_results = {
+                    'repo_name': c['repo_name']
+                }
                 results[lib_id][version]['clients'][client] = client_results
                 original_client_path = os.path.join(client_path, 'original')
                 filename = "%s_%s.json" % (lib['repo_name'].replace('/', '_'), c['repo_name'].replace('/', '_'))
@@ -218,6 +230,7 @@ with open(PATH_file, 'r') as fd:
 
                 client_results['debloat_test'] = readTestResults(debloat_client_path)
                 results[lib_id][version]['clients'][client] = client_results
+                
                 build_errors['none'] += 1
                 lib_with_clients.add(lib_id)
                 if client_results['original_test']['passing'] == client_results['debloat_test']['passing']:
@@ -226,8 +239,9 @@ with open(PATH_file, 'r') as fd:
                 out.append(lib['groupId'])
                 out.append(lib['artifactId'])
                 out.append(version)
-                out.append(str(os.stat(os.path.join(original_path, 'original.jar')).st_size))
-                out.append(str(os.stat(os.path.join(debloat_path, 'debloat.jar')).st_size))
+
+                out.append(str(results[lib_id][version]['original_jar_size']))
+                out.append(str(results[lib_id][version]['debloat_jar_size']))
 
                 # nb classes
                 out.append(str(results[lib_id][version]['nbClass']))
