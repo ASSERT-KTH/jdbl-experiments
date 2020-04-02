@@ -1,0 +1,200 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en" ng-app="jdbl-website" ng-controller="mainController">
+  <head>
+    <meta charset="UTF-8" />
+    <title>JDBL Results</title>
+
+    <!-- CSS -->
+    <link
+      rel="stylesheet"
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+    />
+
+    <link rel="stylesheet" href="style/style.css" />
+
+    <!-- JS -->
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular-animate.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular-touch.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular-route.js"></script>
+    <script src="//angular-ui.github.io/bootstrap/ui-bootstrap-tpls-2.5.0.min.js"></script>
+    <script src="//cdn.jsdelivr.net/npm/angu-fixed-header-table@1.2.1/angu-fixed-header-table.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.2.3/jquery.js"></script>
+    <script src="//overset.github.io/javascript-natural-sort/naturalSort.js"></script>
+
+    <script src="js/app.js"></script>
+  </head>
+  <body keypress-events>
+    <div id="wrapper">
+      <div id="page-wrapper" class="container-fluid row">
+        <div class="list-group list-group-flush col-sm scrollable">
+          <a
+            class="list-group-item list-group-item-action flex-column align-items-start"
+            ng-class="{active: lib == currentLibName}"
+            ng-repeat="(lib, versions) in bugs"
+            ng-click="openLib(lib)"
+          >
+            {{ lib }}
+          </a>
+        </div>
+        <div class="list-group list-group-flush col-sm scrollable">
+          <a
+            class="list-group-item list-group-item-action flex-column align-items-start"
+            ng-class="{active: versionName == currentVersionName}"
+            ng-repeat="(versionName, version) in currentVersions"
+            ng-click="openVersion(versionName)"
+          >
+            {{ versionName }} Compiled:
+            <span class="state" ng-class="{'passing': version.compiled}"></span>
+            Debloat:
+            <span class="state" ng-class="{'passing': version.compiled}"></span>
+            <span ng-if="version.original_test"
+              ><br />
+              Original tests:
+              <span class="state passing"></span>
+              {{version.original_test.passing}}
+              <span class="state"></span> {{version.original_test.error +
+              version.original_test.failing}}
+            </span>
+            <span ng-if="version.debloat_test">
+              <br />
+              Debloat tests:
+              <span class="state passing"></span>
+              {{version.debloat_test.passing}}
+              <span class="state"></span> {{version.debloat_test.error +
+              version.debloat_test.failing}}
+            </span>
+          </a>
+        </div>
+        <div class="list-group list-group-flush col-sm scrollable">
+          <a
+            class="list-group-item list-group-item-action flex-column align-items-start"
+            ng-class="{active: clientName == currentClientName}"
+            ng-repeat="(clientName, client) in currentClients"
+            ng-click="openClient(clientName, client)"
+          >
+            {{ clientName }}
+            <span ng-if="client.original_test">
+              <br />
+              Original tests:
+              <span class="state passing"></span>
+              {{client.original_test.passing}}
+              <span class="state"></span> {{client.original_test.error +
+              client.original_test.failing}}
+            </span>
+            <span ng-if="client.debloat_test">
+              <br />Debloat tests:
+              <span class="state passing"></span>
+              {{client.debloat_test.passing}}
+              <span class="state"></span> {{client.debloat_test.error +
+              client.debloat_test.failing}}
+            </span>
+          </a>
+        </div>
+        <div class="col-6 scrollable px-2">
+          <h3>
+            {{currentLibName}}:{{currentVersionName}} & {{currentClientName}}
+          </h3>
+          <h5>Library</h5>
+          <table class="table">
+            <tbody>
+              <tr>
+                <th scope="row"># Class</th>
+                <td>{{ currentVersion.nbClass }}</td>
+                <td>{{ currentVersion.nbClass - currentVersion.nbDebloatClass }}</td>
+                <td>{{ currentVersion.nbDebloatClass }} ({{
+                  currentVersion.nbDebloatClass / currentVersion.nbClass |
+                  percentage:2 }})</td>
+              </tr>
+              <tr>
+                <th scope="row"># Method</th>
+                <td>{{ currentVersion.nbMethod }}</td>
+                <td>{{ currentVersion.nbMethod - currentVersion.nbDebloatMethod }}</td>
+                <td>{{ currentVersion.nbDebloatMethod }} ({{
+                  currentVersion.nbDebloatMethod / currentVersion.nbMethod |
+                  percentage:2 }})</td>
+              </tr>
+              <tr>
+                <th scope="row"># Covered Line</th>
+                <td>{{ currentVersion.nbLines || 0 }}</td>
+              </tr>
+              <tr>
+                <th scope="row"># Line</th>
+                <td>{{ currentVersion.nbLines || 0 }}</td>
+              </tr>
+              <tr>
+                <th scope="row">Jar size</th>
+                <td>{{ currentVersion.original_jar_size }}</td>
+                <td>{{ currentVersion.debloat_jar_size }}</td>
+                <td>{{ currentVersion.original_jar_size - currentVersion.debloat_jar_size }} ({{
+                  (currentVersion.original_jar_size - currentVersion.debloat_jar_size) / currentVersion.original_jar_size |
+                  percentage:2 }})</td>
+              </tr>
+            </tbody>
+          </table>
+          <h5>Client Tests</h5>
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col"></th>
+                <th scope="col">Original</th>
+                <th scope="col">Debloat</th>
+                <th scope="col"></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <th scope="row">Passing</th>
+                <td>{{ currentClient.original_test.passing }}</td>
+                <td>
+                  {{ currentClient.debloat_test.passing }} ({{
+                  (currentClient.original_test.passing -
+                  currentClient.debloat_test.passing) /
+                  currentClient.original_test.passing | percentage:2 }})
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Failing</th>
+                <td>{{ currentClient.original_test.failing }}</td>
+                <td>
+                  {{ currentClient.debloat_test.failing }} ({{
+                  (currentClient.original_test.failing -
+                  currentClient.debloat_test.failing) /
+                  currentClient.original_test.failing | percentage:2 }})
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Error</th>
+                <td>{{ currentClient.original_test.error }}</td>
+                <td>
+                  {{ currentClient.debloat_test.error }} ({{
+                  (currentClient.original_test.error -
+                  currentClient.debloat_test.error) /
+                  currentClient.original_test.error | percentage:2 }})
+                </td>
+              </tr>
+              <tr>
+                <th scope="row">Execution time</th>
+                <td>{{ currentClient.original_test.execution_time }} sec</td>
+                <td>{{ currentClient.debloat_test.execution_time }} sec</td>
+              </tr>
+            </tbody>
+          </table>
+          Client test execute Lib:
+          <span
+            class="state"
+            ng-class="{'passing': currentClient.test_cover_lib}"
+          ></span>
+          <h5>Logs</h5>
+          <pre>
+            {{currentLog}}
+          </pre>
+        </div>
+      </div>
+      <!-- /#page-wrapper -->
+    </div>
+  </body>
+</html>

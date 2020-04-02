@@ -1,0 +1,78 @@
+body,
+html {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+html,
+body,
+#wrapper,
+#page-wrapper,.container-fluid {
+  position: relative;
+  height: 100%;
+  width: 100%;
+}
+.container-fluid {
+  margin: 0;
+  padding: 0;
+}
+h2 {
+  margin-top: 5px;
+}
+a {
+  color: #5a6b7d;
+}
+
+.scrollable {
+  position: relative;
+  max-height: 100%;
+  overflow: hidden;
+  overflow-y: scroll;
+  overflow-wrap: break-word;
+  margin: 0;
+  padding: 0;
+}
+
+.list-group-item {
+    cursor: pointer;
+    padding: 4px 7px;
+}
+.list-group-item.active {
+    color: #fff;
+    background-color: #dddddd;
+    border-color: #dddddd;
+}
+.state {
+    content: " ";
+    display: inline-block;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: red;
+}
+.state.passing {
+    background: green;
+}
+
+.modal-dialog {
+  width: 80%;
+}
+.modal-content {
+  border-radius: 0;
+  border: 0;
+}
+
+.table {
+  margin-bottom: 0px;
+}
+table {
+  border: 0;
+}
+
+table tr {
+  cursor: pointer;
+}
+
+table tr:hover {
+  background: #ddd !important;
+}
