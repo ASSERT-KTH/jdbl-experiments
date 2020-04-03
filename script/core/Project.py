@@ -150,7 +150,6 @@ class Project:
         
 
         cmd = "mkdir -p %s/target/classes/; cd %s/target/classes/; jar xf %s; ls .;" % (self.path, self.path, path_jar)
-        print(cmd)
         try:
             subprocess.check_call(cmd, shell=True)
             return True

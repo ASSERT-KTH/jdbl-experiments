@@ -26,7 +26,7 @@ class JDBL:
             "steps": []
         }
         try:        
-            print("1. Clone library...")
+            print("1. Clone library...", flush=True)
             current_status = {
                 "name": 'clone Library',
                 "start": previous_time,
@@ -38,10 +38,10 @@ class JDBL:
             current_status['end'] = previous_time
 
             if not current_status['success']:
-                print("[Exit] Unable to clone the library")
+                print("[Exit] Unable to clone the library", flush=True)
                 return
 
-            print("2. Clone client...")
+            print("2. Clone client...", flush=True)
             current_status = {
                 "name": 'clone client',
                 "start": previous_time,
@@ -54,14 +54,14 @@ class JDBL:
             previous_time = time.time()
             current_status['end'] = previous_time
             if not current_status['success']:
-                print("[Exit] Unable to clone the library")
+                print("[Exit] Unable to clone the library", flush=True)
                 return
 
             dep_artifact = self.library.pom.get_artifact()
             dep_group = self.library.pom.get_group()
 
             if self.version is None and self.lib_library is None:
-                print("3. Extract library version")
+                print("3. Extract library version", flush=True)
                 
                 current_status = {
                     "name": 'extract library version',
@@ -77,11 +77,11 @@ class JDBL:
                 previous_time = time.time()
                 current_status['end'] = previous_time
                 if not current_status['success']:
-                    print("[exit] The library version has not been found")
+                    print("[exit] The library version has not been found", flush=True)
                     return
 
             
-            print("4. Checkout library version")
+            print("4. Checkout library version", flush=True)
 
             current_status = {
                 "name": 'checkout library version',
@@ -90,7 +90,7 @@ class JDBL:
             }
             results['steps'].append(current_status)
             if self.lib_commit is not None:
-                print("COMMIT", self.lib_commit)
+                print("COMMIT %s" % self.lib_commit, flush=True)
                 current_status['success'] = self.library.checkout_commit(self.lib_commit)
                 current_status['commit'] = self.lib_commit
             else:
@@ -100,7 +100,7 @@ class JDBL:
             previous_time = time.time()
             current_status['end'] = previous_time
             if not current_status['success']:
-                print("[exit] Unable to checkout commit %s" % (self.version))
+                print("[exit] Unable to checkout commit %s" % (self.version), flush=True)
                 return
             
             result_path = os.path.join(OUTPUT_dir, "results", "%s:%s" % (dep_group, dep_artifact), self.version)
@@ -109,7 +109,7 @@ class JDBL:
             
             lib_original_path = os.path.join(result_path, "original")
             if not os.path.exists(os.path.join(lib_original_path, "original.jar")):
-                print("5. Create unmodified jar")
+                print("5. Create unmodified jar", flush=True)
                 current_status = {
                     "name": 'compile original version of the library',
                     "start": previous_time,
@@ -131,15 +131,15 @@ class JDBL:
                 previous_time = time.time()
                 current_status['end'] = previous_time
                 if not current_status['success']:
-                    print("[exit] Unable to compile the library" )
+                    print("[exit] Unable to compile the library", flush=True)
                     return
             else:
                 self.library.inject_assembly_plugin()
-                print("Library %s:%s with version %s already compiled" % (dep_group, dep_artifact, self.version))
+                print("Library %s:%s with version %s already compiled" % (dep_group, dep_artifact, self.version), flush=True)
 
             lib_debloat_path = os.path.join(result_path, "debloat")
             if not os.path.exists(os.path.join(lib_debloat_path, "debloat.jar")):
-                print("6. Create jdbl jar")
+                print("6. Create jdbl jar", flush=True)
 
                 current_status = {
                     "name": 'create debloated jar',
@@ -161,22 +161,22 @@ class JDBL:
                 previous_time = time.time()
                 current_status['end'] = previous_time
                 if not current_status['success']:
-                    print("[exit] Unable to create the debloated jar")
+                    print("[exit] Unable to create the debloated jar", flush=True)
                     return
             else:
-                print("Library %s:%s with version %s already debloated" % (dep_group, dep_artifact, self.version))
+                print("Library %s:%s with version %s already debloated" % (dep_group, dep_artifact, self.version), flush=True)
 
-            print("7. Execute test library debloat")
+            print("7. Execute test library debloat", flush=True)
             # TODO        
 
             client_results_path = os.path.join(result_path, "clients", "%s:%s" % (self.client.pom.get_group(), self.client.pom.get_artifact()))
             if not os.path.exists(client_results_path):
                 os.makedirs(client_results_path)
             elif os.path.exists(os.path.join(client_results_path, "/test-results")):
-                print("[Exit] client result already present %s" % client_results_path)
+                print("[Exit] client result already present %s" % client_results_path, flush=True)
                 return
 
-            print("8. Execute client tests")
+            print("8. Execute client tests", flush=True)
 
             current_status = {
                 "name": 'execute client tests',
@@ -197,10 +197,10 @@ class JDBL:
             current_status['success'] = current_status['success'] and self.client.copy_test_results(original_client_results_path + "/test-results")
 
             if not current_status['success']:
-                print("[exit] Unable to execute client tests")
+                print("[exit] Unable to execute client tests", flush=True)
                 return
 
-            print("9. Inject debloated library in client")
+            print("9. Inject debloated library in client", flush=True)
 
             current_status = {
                 "name": 'inject debloated library in client',
@@ -216,10 +216,10 @@ class JDBL:
             current_status['end'] = previous_time
 
             if not current_status['success']:
-                print("[exit] Unable to inject debloated library in client")
+                print("[exit] Unable to inject debloated library in client", flush=True)
                 return
 
-            print("10. Execute client tests with debloated library")
+            print("10. Execute client tests with debloated library", flush=True)
 
             current_status = {
                 "name": 'execute client tests with debloated library',
