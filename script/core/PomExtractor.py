@@ -17,13 +17,30 @@ def stripNs(el):
   for child in el:
     stripNs(child)
 
-def indent(elem, level=0):
-    if len(elem):
-        if elem.tail:
-            elem.tail = elem.tail.strip()
-        for subelem in elem:
-            indent(subelem, level+1)
-    return elem 
+
+def indent(elem, level=0, more_sibs=False):
+    i = "\n"
+    if level:
+        i += (level-1) * '  '
+    num_kids = len(elem)
+    if num_kids:
+        if not elem.text or not elem.text.strip():
+            elem.text = i + "  "
+            if level:
+                elem.text += '  '
+        count = 0
+        for kid in elem:
+            indent(kid, level+1, count < num_kids - 1)
+            count += 1
+        if not elem.tail or not elem.tail.strip():
+            elem.tail = i
+            if more_sibs:
+                elem.tail += '  '
+    else:
+        if level and (not elem.tail or not elem.tail.strip()):
+            elem.tail = i
+            if more_sibs:
+                elem.tail += '  '
 
 class PomExtractor:
     def __init__(self, path):
@@ -41,11 +58,9 @@ class PomExtractor:
     def write_pom(self):
         for pom in self.poms:
             indent(pom["root"])
-            rough_string = tostring(pom["root"], encoding="UTF-8").decode().replace("ns0:", '').replace('\n','')
-            reparsed = minidom.parseString(rough_string)
-            pom_content = reparsed.toprettyxml(indent="\t")
+            rough_string = tostring(pom["root"], encoding="UTF-8").decode().replace("ns0:", '')
             with open(pom["path"], 'w') as fd:
-                fd.write(pom_content)
+                fd.write(rough_string)
 
     def get_artifact(self):
         r = self.poms[0]["root"].find('artifactId')
@@ -112,8 +127,7 @@ class PomExtractor:
                     return True
         return False
 
-    def add_plugin(self, group_id, artifact_id, version, config):
-        # check if plugin is already defined if yes, remove it
+    def remove_plugin(self, group_id, artifact_id):
         prop_parents = self.poms[0]["root"].findall('*//plugin/..')
         for parent in prop_parents:
             for declared_plugin in parent:
@@ -129,6 +143,10 @@ class PomExtractor:
                     continue
                 # the plugin is the same remove it
                 parent.remove(declared_plugin)
+
+    def add_plugin(self, group_id, artifact_id, version, config):
+        # check if plugin is already defined if yes, remove it
+        self.remove_plugin(group_id, artifact_id)
 
         build_section = None
         plugins_section = None

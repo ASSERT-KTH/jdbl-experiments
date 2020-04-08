@@ -9,6 +9,7 @@ class Debloat:
         self.project = project
     
     def inject_library(self):
+        self.project.pom.remove_plugin('org.apache.maven.plugins', 'maven-surefire-plugin')
         self.project.inject_jacoco_plugin()
         self.project.pom.add_plugin("se.kth.castor", "jdbl-maven-plugin", "1.0-SNAPSHOT", [{
             "name": "executions",
