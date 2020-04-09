@@ -289,11 +289,11 @@ print("Number of error", build_errors)
 print("Lib with clients", len(lib_with_clients))
 print("# successful debloated clients", count_debloated_clients)
 print("Total execution time", datetime.timedelta(seconds=total_time))
-with open(os.path.join(PATH_results, '..', '..', 'raw_results.csv'), 'w') as fd:
+with open(os.path.join(os.path.dirname(__file__), '..', 'raw_results.csv'), 'w') as fd:
     header = ['"Lib groupId"', '"Lib artifactId"', '"Lib version"', '"size original jar"', '"size debloat jar"', '"# class original"', '"# method original"', '"# debloated classes"', '"# debloated methods"', '"Lib coverage"', '"Client groupId"', '"Client artifactId"', '"Client original test error"', '"Client original test failing"', '"Client original test passing"', '"Client debloat test error"', '"Client debloat test failing"', '"Client debloat test passing"', '"Client coverage"', '"Cover lib"q']
     csv = ",".join(header) + '\n' + csv
     fd.write(csv)
-with open(os.path.join(PATH_results, '..', '..', 'raw_results.json'), 'w') as fd:
+with open(os.path.join(os.path.dirname(__file__), '..', 'raw_results.json'), 'w') as fd:
     json.dump(results, fd, indent=1)
-with open(os.path.join(PATH_results, '..', 'considered_cases.json'), 'w') as fd:
+with open(os.path.join(os.path.dirname(__file__), 'considered_cases.json'), 'w') as fd:
     json.dump(considered_cases, fd, indent=1)
