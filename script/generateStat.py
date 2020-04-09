@@ -3,11 +3,20 @@
 import os
 import json
 import datetime
+import argparse
+
 import xml.etree.ElementTree as xml
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--output", help="The output directory")
+
+args = parser.parse_args()
 
 PATH_file = os.path.join(os.path.dirname(__file__), '..', 'dependants', 'single_module_java_projects_with_5_stars.json')
 
 PATH_results = os.path.join(os.path.dirname(__file__), 'results')
+if args.output:
+    PATH_results = os.path.abspath(args.output)
 
 build_errors = {
     'lib': 0,
@@ -99,7 +108,7 @@ with open(PATH_file, 'r') as fd:
         lib = data[lib_id]
         lib_path = os.path.join(PATH_results, lib_id)
         for version in lib['clients']:
-            if len(lib['clients'][version]) < 4:
+            if version not in lib['releases']:
                 continue
             version_path = os.path.join(lib_path, version)
             original_path = os.path.join(version_path, 'original')
