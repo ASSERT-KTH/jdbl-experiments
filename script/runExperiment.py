@@ -19,6 +19,8 @@ if 'GITHUB_OAUTH' in os.environ and len(os.environ['GITHUB_OAUTH']) > 0:
 parser = argparse.ArgumentParser()
 parser.add_argument('--all', dest='all', action='store_true', help="Run the experiment on all the libs and clients")
 parser.add_argument('-p', "--process", help="Number of process", type=int, default=4)
+parser.add_argument("--output", help="The output directory")
+parser.add_argument("--timeout", help="The maximum execution time per execution", type=int, default=60 * 60)
 
 args = parser.parse_args()
 
@@ -27,8 +29,14 @@ if args.all:
     PATH_file = os.path.join(os.path.dirname(__file__), '..', 'dependants', 'single_module_java_projects_with_5_stars.json')
 
 OUTPUT = os.path.abspath(os.path.join(os.path.dirname(__file__), "results"))
+if args.output:
+    OUTPUT = os.path.abspath(args.output)
+if not os.path.exists(OUTPUT):
+    os.makedirs(OUTPUT)
+if not os.path.exists(os.path.join(OUTPUT, 'executions')):
+    os.makedirs(os.path.join(OUTPUT, 'executions'))
 
-timeout = 60 * 60 # 1h
+timeout = args.timeout
 
 def get_terminal_size():
     env = os.environ
