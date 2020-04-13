@@ -101,7 +101,8 @@ count_debloated_clients = 0
 total_time = 0
 results = {}
 considered_cases = {}
-
+invalid_libs = set()
+invalid_debloat = set()
 with open(PATH_file, 'r') as fd:
     data = json.load(fd)
     for lib_id in data:
@@ -118,19 +119,20 @@ with open(PATH_file, 'r') as fd:
                 results[lib_id] = {}
             results[lib_id][version] = {
                 'repo_name': lib['repo_name'],
-                'compiled': os.path.exists(original_path),
-                'debloat': os.path.exists(debloat_path),
+                'compiled': os.path.exists(os.path.join(original_path, 'original.jar')),
+                'debloat': os.path.exists(os.path.join(debloat_path, 'debloat.jar')),
                 'clients': {},
                 'coverage': parseCoverage(debloat_path)
             }
             results[lib_id][version]['original_test'] = readTestResults(original_path)
             results[lib_id][version]['debloat_test'] = readTestResults(debloat_path)
 
-            if not os.path.exists(os.path.join(original_path, 'test-results')):
+            if not os.path.exists(os.path.join(original_path, 'test-results')) and os.path.exists(original_path): 
                 build_errors['lib'] += 1
             
-            if not os.path.exists(os.path.join(debloat_path, 'test-results')):
+            if not os.path.exists(os.path.join(debloat_path, 'test-results')) and os.path.exists(debloat_path):
                 build_errors['debloat'] += 1
+                invalid_debloat.add("%s:%s" % (lib_id, version))
 
             results[lib_id][version]['nbClass'] = 0
             results[lib_id][version]['nbMethod'] = 0
@@ -205,7 +207,8 @@ with open(PATH_file, 'r') as fd:
                             continue
 
                 if not os.path.exists(os.path.join(original_client_path, 'test-results')):
-                    build_errors['client'] += 1
+                    if os.path.exists(original_client_path):
+                        build_errors['client'] += 1
                     continue
                 if lib_id not in considered_cases:
                     considered_cases[lib_id] = {
@@ -223,6 +226,7 @@ with open(PATH_file, 'r') as fd:
                 debloat_client_path = os.path.join(client_path, 'debloat')
                 if not os.path.exists(os.path.join(debloat_client_path, 'test-results')):
                     build_errors['client_debloat'] += 1
+                    invalid_libs.add("%s:%s" %(lib_id, version))
                     continue
                 
                 exclude = []
@@ -286,6 +290,8 @@ with open(PATH_file, 'r') as fd:
                 csv += (line) + '\n'
 
 print("Number of error", build_errors)
+print("Invalid debloated lib on client", invalid_libs)
+print("Invalid debloated", invalid_debloat)
 print("Lib with clients", len(lib_with_clients))
 print("# successful debloated clients", count_debloated_clients)
 print("Total execution time", datetime.timedelta(seconds=total_time))
