@@ -118,12 +118,13 @@
                   percentage:2 }})</td>
               </tr>
               <tr>
-                <th scope="row"># Covered Line</th>
-                <td>{{ currentVersion.nbLines || 0 }}</td>
+                <th scope="row">Coverage</th>
+                <td colspan="2">{{ currentVersion.coverage.nbLines || 0 }} / {{ currentVersion.coverage.nbCoveredLines || 0 }} ({{ currentVersion.coverage.coverage || 0 |
+                  percentage:2}}) </td>
               </tr>
               <tr>
                 <th scope="row"># Line</th>
-                <td>{{ currentVersion.nbLines || 0 }}</td>
+                <td>{{ currentVersion.coverage.nbLines || 0 }}</td>
               </tr>
               <tr>
                 <th scope="row">Jar size</th>
