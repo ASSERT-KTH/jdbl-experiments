@@ -123,10 +123,10 @@ class JDBL:
                 
                 current_status['success'] = self.library.copy_pom(lib_original_path + "/pom.xml")
 
-                current_status['success'] = current_status['success'] and  self.library.package()
+                current_status['success'] = self.library.package() and current_status['success']
 
-                current_status['success'] = current_status['success'] and self.library.copy_jar(lib_original_path + "/original.jar")
-                current_status['success'] = current_status['success'] and self.library.copy_test_results(lib_original_path + "/test-results")
+                current_status['success'] = self.library.copy_jar(lib_original_path + "/original.jar") and current_status['success'] 
+                current_status['success'] = self.library.copy_test_results(lib_original_path + "/test-results") and current_status['success']
                 
                 previous_time = time.time()
                 current_status['end'] = previous_time
@@ -152,11 +152,11 @@ class JDBL:
                 if not os.path.exists(lib_debloat_path):
                     os.mkdir(lib_debloat_path)
 
-                current_status['success'] = current_status['success'] and self.library.copy_pom(lib_debloat_path + "/pom.xml")
-                current_status['success'] = current_status['success'] and self.library.copy_jar(lib_debloat_path + "/debloat.jar")
-                current_status['success'] = current_status['success'] and self.library.copy_test_results(lib_debloat_path + "/test-results")
-                current_status['success'] = current_status['success'] and self.library.copy_jacoco(lib_debloat_path)
-                current_status['success'] = current_status['success'] and self.library.copy_report(lib_debloat_path)
+                current_status['success'] = self.library.copy_pom(lib_debloat_path + "/pom.xml") and current_status['success']
+                current_status['success'] = self.library.copy_jar(lib_debloat_path + "/debloat.jar") and current_status['success']
+                current_status['success'] = self.library.copy_test_results(lib_debloat_path + "/test-results") and current_status['success']
+                current_status['success'] = self.library.copy_jacoco(lib_debloat_path) and current_status['success']
+                current_status['success'] = self.library.copy_report(lib_debloat_path) and current_status['success']
 
                 previous_time = time.time()
                 current_status['end'] = previous_time
@@ -193,8 +193,8 @@ class JDBL:
             original_client_results_path = os.path.join(client_results_path, "original")
             if not os.path.exists(original_client_results_path):
                 os.mkdir(original_client_results_path)
-            current_status['success'] = current_status['success'] and self.client.copy_pom(original_client_results_path + "/pom.xml")
-            current_status['success'] = current_status['success'] and self.client.copy_test_results(original_client_results_path + "/test-results")
+            current_status['success'] = self.client.copy_pom(original_client_results_path + "/pom.xml") and current_status['success']
+            current_status['success'] = self.client.copy_test_results(original_client_results_path + "/test-results") and current_status['success']
 
             if not current_status['success']:
                 print("[exit] Unable to execute client tests", flush=True)
@@ -210,7 +210,7 @@ class JDBL:
             results['steps'].append(current_status)
             self.client.clean()
             current_status['success'] = self.client.inject_debloat_library(dep_group, dep_artifact, self.version)
-            current_status['success'] = self.client.unzip_debloat(dep_group, dep_artifact, self.version)            
+            current_status['success'] = self.client.unzip_debloat(dep_group, dep_artifact, self.version) and current_status['success']
 
             previous_time = time.time()
             current_status['end'] = previous_time
