@@ -1,5 +1,5 @@
 angular
-  .module("jdbl-website", ["ngRoute", "ui.bootstrap", "anguFixedHeaderTable"])
+  .module("jdbl-website", ["ngRoute", "anguFixedHeaderTable"])
   .directive("keypressEvents", [
     "$document",
     "$rootScope",
