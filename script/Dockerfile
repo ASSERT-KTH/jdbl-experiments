@@ -3,6 +3,7 @@ FROM maven:3-jdk-8
 RUN apt-get update
 RUN apt-get install -y python3 python3-pip git
 
+ARG LIB_VER=unknown
 RUN git clone https://github.com/castor-software/jdbl.git
 RUN cd jdbl; mvn install -Dmaven.test.skip;
 

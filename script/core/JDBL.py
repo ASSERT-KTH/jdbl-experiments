@@ -212,8 +212,8 @@ class JDBL:
             }
             results['steps'].append(current_status)
             self.client.clean()
-            current_status['success'] = self.client.inject_debloat_library(dep_group, dep_artifact, self.version)
-            current_status['success'] = self.client.unzip_debloat(dep_group, dep_artifact, self.version) and current_status['success']
+            current_status['success'] = self.client.inject_debloat_library(OUTPUT_dir, dep_group, dep_artifact, self.version)
+            current_status['success'] = self.client.unzip_debloat(OUTPUT_dir,dep_group, dep_artifact, self.version) and current_status['success']
 
             previous_time = time.time()
             current_status['end'] = previous_time
@@ -250,4 +250,5 @@ class JDBL:
                 os.makedirs(path_result)
             with open(os.path.join(path_result, "%s_%s.json" % (self.library.repo.replace('/', '_'), self.client.repo.replace('/', '_'))), 'w') as fd:
                 json.dump(results, fd)
-            shutil.rmtree(self.working_directory)
+            print(self.working_directory)
+            #shutil.rmtree(self.working_directory)
