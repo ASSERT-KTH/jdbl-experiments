@@ -21,6 +21,7 @@ if args.output:
 build_errors = {
     'lib': 0,
     'debloat': 0,
+    'failing_test_debloat': 0,
     'client': 0,
     'client_debloat': 0,
     'none': 0
@@ -44,6 +45,8 @@ def parseCoverage(path, exclude=[]):
         for l in lines[1:]:
             r = {}
             values = l.split(',')
+            if len(values) != len(header):
+                continue
             for i in range(0, len(header)):
                 v = values[i]
                 if v.isdigit():
@@ -115,29 +118,30 @@ with open(PATH_file, 'r') as fd:
             original_path = os.path.join(version_path, 'original')
             debloat_path = os.path.join(version_path, 'debloat')     
             
-            if lib_id not in results:
-                results[lib_id] = {}
-            results[lib_id][version] = {
+            current_lib = {
                 'repo_name': lib['repo_name'],
                 'compiled': os.path.exists(os.path.join(original_path, 'original.jar')),
                 'debloat': os.path.exists(os.path.join(debloat_path, 'debloat.jar')),
                 'clients': {},
                 'coverage': parseCoverage(debloat_path)
             }
-            results[lib_id][version]['original_test'] = readTestResults(original_path)
-            results[lib_id][version]['debloat_test'] = readTestResults(debloat_path)
+            current_lib['original_test'] = readTestResults(original_path)
+            current_lib['debloat_test'] = readTestResults(debloat_path)
 
-            if not os.path.exists(os.path.join(original_path, 'test-results')) and os.path.exists(original_path): 
+            if (current_lib['debloat_test'] is not None and current_lib['debloat_test']['error'] > current_lib['original_test']['error']) or (current_lib['debloat_test'] is not None and current_lib['debloat_test']['failing'] > current_lib['original_test']['failing']):
+                build_errors['failing_test_debloat'] += 1
+            
+            if not os.path.exists(os.path.join(original_path, 'original.jar')) and os.path.exists(original_path): 
                 build_errors['lib'] += 1
             
-            if not os.path.exists(os.path.join(debloat_path, 'test-results')) and os.path.exists(debloat_path):
+            if not os.path.exists(os.path.join(debloat_path, 'debloat.jar')) and os.path.exists(debloat_path):
                 build_errors['debloat'] += 1
                 invalid_debloat.add("%s:%s" % (lib_id, version))
 
-            results[lib_id][version]['nbClass'] = 0
-            results[lib_id][version]['nbMethod'] = 0
-            results[lib_id][version]['nbDebloatClass'] = 0
-            results[lib_id][version]['nbDebloatMethod'] = 0
+            current_lib['nbClass'] = 0
+            current_lib['nbMethod'] = 0
+            current_lib['nbDebloatClass'] = 0
+            current_lib['nbDebloatMethod'] = 0
 
             if os.path.exists(os.path.join(debloat_path, 'debloat-report.csv')):
                 with open(os.path.join(debloat_path, 'debloat-report.csv')) as fd:
@@ -145,14 +149,14 @@ with open(PATH_file, 'r') as fd:
                     for l in lines:
                         (type, name) = l.split(", ")
                         if "Method" in type:
-                            results[lib_id][version]['nbMethod'] += 1
+                            current_lib['nbMethod'] += 1
                             if "BloatedMethod" in type:
-                                results[lib_id][version]['nbDebloatMethod'] += 1
+                                current_lib['nbDebloatMethod'] += 1
                         elif "Class" in type:
-                            results[lib_id][version]['nbClass'] += 1
+                            current_lib['nbClass'] += 1
                             if "BloatedClass" in type:
-                                results[lib_id][version]['nbDebloatClass'] += 1 
-            results[lib_id][version]['dependencies'] = {}
+                                current_lib['nbDebloatClass'] += 1 
+            current_lib['dependencies'] = {}
             if os.path.exists(os.path.join(debloat_path, 'debloat-dependencies-report.csv')):
                 with open(os.path.join(debloat_path, 'debloat-dependencies-report.csv')) as fd:
                     lines = fd.readlines()
@@ -160,39 +164,41 @@ with open(PATH_file, 'r') as fd:
                     for l in lines:
                         if ", " not in l:
                             current_dep = l.strip()
-                            results[lib_id][version]['dependencies'][current_dep] = {
+                            current_lib['dependencies'][current_dep] = {
                                 'nbClass': 0,
                                 'nbDebloatClass': 0,
                             }
                         else:   
                             (type, name) = l.strip().split(", ")
-                            results[lib_id][version]['dependencies'][current_dep]['nbClass'] += 1
+                            current_lib['dependencies'][current_dep]['nbClass'] += 1
                             if "BloatedClass" in type:
-                                results[lib_id][version]['dependencies'][current_dep]['nbDebloatClass'] += 1 
-            results[lib_id][version]['debloatTime'] = -1
+                                current_lib['dependencies'][current_dep]['nbDebloatClass'] += 1 
+            current_lib['debloatTime'] = -1
             if os.path.exists(os.path.join(debloat_path, 'debloat-execution-time.log')):
                 with open(os.path.join(debloat_path, 'debloat-execution-time.log')) as fd:
                     # Total debloat time: 33.458 s
-                    results[lib_id][version]['debloatTime'] = float(fd.read().strip().replace("Total debloat time: ", '').replace(" s", ''))
+                    current_lib['debloatTime'] = float(fd.read().strip().replace("Total debloat time: ", '').replace(" s", ''))
 
             if os.path.exists(os.path.join(original_path, 'original.jar')):
-                results[lib_id][version]['original_jar_size'] = os.stat(os.path.join(original_path, 'original.jar')).st_size
+                current_lib['original_jar_size'] = os.stat(os.path.join(original_path, 'original.jar')).st_size
             else:
-                results[lib_id][version]['original_jar_size'] = 0
+                current_lib['original_jar_size'] = 0
             if os.path.exists(os.path.join(debloat_path, 'debloat.jar')):
-                results[lib_id][version]['debloat_jar_size'] = os.stat(os.path.join(debloat_path, 'debloat.jar')).st_size
+                current_lib['debloat_jar_size'] = os.stat(os.path.join(debloat_path, 'debloat.jar')).st_size
             else:
-                results[lib_id][version]['debloat_jar_size'] = 0
+                current_lib['debloat_jar_size'] = 0
 
             for c in lib['clients'][version]:
                 if 'artifactId' not in c or 'groupId' not in c:
                     continue
                 client = "%s:%s" % (c['groupId'], c['artifactId'])
                 client_path = os.path.join(version_path, "clients", client)
+                if not os.path.exists(client_path):
+                    continue
                 client_results = {
                     'repo_name': c['repo_name']
                 }
-                results[lib_id][version]['clients'][client] = client_results
+                current_lib['clients'][client] = client_results
                 original_client_path = os.path.join(client_path, 'original')
                 filename = "%s_%s.json" % (lib['repo_name'].replace('/', '_'), c['repo_name'].replace('/', '_'))
                 path_execution_log = os.path.join(PATH_results, 'executions', filename)
@@ -215,6 +221,7 @@ with open(PATH_file, 'r') as fd:
                         'repo_name': lib['repo_name'],
                         'groupId': lib['groupId'],
                         'artifactId': lib['artifactId'],
+                        'releases': lib['releases'],
                         'clients': {}
                     }
                 if version not in considered_cases[lib_id]['clients']:
@@ -230,19 +237,19 @@ with open(PATH_file, 'r') as fd:
                     continue
                 
                 exclude = []
-                if results[lib_id][version]['coverage'] is not None and 'classes' in results[lib_id][version]['coverage']:
-                    exclude = results[lib_id][version]['coverage']['classes']
+                if current_lib['coverage'] is not None and 'classes' in current_lib['coverage']:
+                    exclude = current_lib['coverage']['classes']
                 client_results['coverage_debloat'] = parseCoverage(debloat_client_path, exclude)
                 client_results['test_cover_lib'] = False
-                if client_results['coverage_debloat'] is not None and results[lib_id][version]['coverage'] is not None:
+                if client_results['coverage_debloat'] is not None and current_lib['coverage'] is not None:
                     for cl in client_results['coverage_debloat']['coveredClasses']:
-                        if cl in results[lib_id][version]['coverage']['classes']:
+                        if cl in current_lib['coverage']['classes']:
                             client_results['test_cover_lib'] = True
                             break
                     pass
 
                 client_results['debloat_test'] = readTestResults(debloat_client_path)
-                results[lib_id][version]['clients'][client] = client_results
+                current_lib['clients'][client] = client_results
                 
                 build_errors['none'] += 1
                 lib_with_clients.add(lib_id)
@@ -253,19 +260,19 @@ with open(PATH_file, 'r') as fd:
                 out.append(lib['artifactId'])
                 out.append(version)
 
-                out.append(str(results[lib_id][version]['original_jar_size']))
-                out.append(str(results[lib_id][version]['debloat_jar_size']))
+                out.append(str(current_lib['original_jar_size']))
+                out.append(str(current_lib['debloat_jar_size']))
 
                 # nb classes
-                out.append(str(results[lib_id][version]['nbClass']))
+                out.append(str(current_lib['nbClass']))
                 # nb methods
-                out.append(str(results[lib_id][version]['nbMethod']))
+                out.append(str(current_lib['nbMethod']))
                 # nb debloated classes
-                out.append(str(results[lib_id][version]['nbDebloatClass']))
+                out.append(str(current_lib['nbDebloatClass']))
                 # nb debloated methods
-                out.append(str(results[lib_id][version]['nbDebloatMethod']))
-                if results[lib_id][version]['coverage'] is not None:
-                    out.append(str(results[lib_id][version]['coverage']['coverage']))
+                out.append(str(current_lib['nbDebloatMethod']))
+                if current_lib['coverage'] is not None:
+                    out.append(str(current_lib['coverage']['coverage']))
                 else:
                     out.append('')
 
@@ -288,6 +295,10 @@ with open(PATH_file, 'r') as fd:
                 line = ",".join(out)
                 print(line)
                 csv += (line) + '\n'
+            if len(current_lib['clients']) > 0:
+                if lib_id not in results:
+                    results[lib_id] = {}
+                results[lib_id][version] = current_lib
 
 print("Number of error", build_errors)
 print("Invalid debloated lib on client", invalid_libs)
