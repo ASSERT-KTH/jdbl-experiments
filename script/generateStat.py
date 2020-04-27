@@ -147,7 +147,10 @@ with open(PATH_file, 'r') as fd:
                 with open(os.path.join(debloat_path, 'debloat-report.csv')) as fd:
                     lines = fd.readlines()
                     for l in lines:
-                        (type, name) = l.split(", ")
+                        if len(l.split(",")) < 2:
+                            print(l)
+                            continue
+                        type = l.split(",")[0]
                         if "Method" in type:
                             current_lib['nbMethod'] += 1
                             if "BloatedMethod" in type:
