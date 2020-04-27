@@ -10,7 +10,7 @@ from core.Debloat import Debloat
 OUTPUT_dir = '/' 
 
 class JDBL:
-    def __init__(self, library, client, version=None, working_directory=None, commit=None):
+    def __init__(self, library, client, version=None, working_directory=None, commit=None, output=None):
         self.library = library
         self.lib_commit = commit
         self.client = client
@@ -18,6 +18,9 @@ class JDBL:
         self.working_directory = working_directory
         if working_directory is None:
             self.working_directory = tempfile.mkdtemp()
+        if output is not None:
+            global OUTPUT_dir
+            OUTPUT_dir = output
 
     def run(self):
         previous_time = time.time()
@@ -103,7 +106,7 @@ class JDBL:
                 print("[exit] Unable to checkout commit %s" % (self.version), flush=True)
                 return
             
-            result_path = os.path.join(OUTPUT_dir, "results", "%s:%s" % (dep_group, dep_artifact), self.version)
+            result_path = os.path.join(OUTPUT_dir, "%s:%s" % (dep_group, dep_artifact), self.version)
             if not os.path.exists(result_path):
                 os.makedirs(result_path)
             
@@ -242,11 +245,9 @@ class JDBL:
 
         finally:
             results['end'] = time.time()
-            path_result = os.path.join(OUTPUT_dir, 'results', 'executions')
+            path_result = os.path.join(OUTPUT_dir, 'executions')
             if not os.path.exists(path_result):
                 os.makedirs(path_result)
             with open(os.path.join(path_result, "%s_%s.json" % (self.library.repo.replace('/', '_'), self.client.repo.replace('/', '_'))), 'w') as fd:
                 json.dump(results, fd)
-            # shutil.rmtree(self.working_directory)
-            
-            pass
+            shutil.rmtree(self.working_directory)

@@ -1,0 +1,59 @@
+{
+ "commons-net:commons-net": {
+  "repo_name": "apache/commons-net",
+  "groupId": "commons-net",
+  "artifactId": "commons-net",
+  "releases": {
+   "3.4": "74a2282b7e4c6905581f4f1b5a2ec412310cd5e7"
+  },
+  "clients": {
+   "3.4": [
+    {
+      "repo_name": "audit4j/audit4j-core",
+      "groupId": "org.audit4j",
+      "artifactId": "audit4j-core",
+      "version": "3.22.0-GA"
+    }
+   ]
+  }
+ },
+ "org.javatuples:javatuples": {
+    "artifactId": "javatuples",
+    "groupId": "org.javatuples",
+    "repo_name": "javatuples/javatuples",
+    "java_version": "1.5",
+    "version": "1.3-SNAPSHOT",
+    "clients": {
+      "1.2": [{
+        "repo_name": "Megaprog/vertx-crawler",
+        "groupId": "org.jmmo",
+        "artifactId": "vertx-crawler",
+        "version": "1.2"
+      }]
+    },
+    "releases": {
+      "1.2": "44661d124db5fb7c38378549817b4dc273650c15",
+      "1.1": "56815dee73f82341d248803e997ec3a22cdb4d4d"
+    }
+  },
+  "io.gsonfire:gson-fire": {
+    "artifactId": "gson-fire",
+    "groupId": "io.gsonfire",
+    "repo_name": "julman99/gson-fire",
+    "java_version": "1.6",
+    "version": "1.8.3",
+    "clients": {
+     "1.5.1": [
+      {
+       "repo_name": "lamarios/sherdog-parser",
+       "groupId": "com.ftpix",
+       "artifactId": "sherdog-parser",
+       "version": "1.5.1"
+      }
+     ]
+    },
+    "releases": {
+     "1.5.1": "8876247d07eabdd4f33e5d4c2446c5eaeb7aa59f"
+    }
+  }
+}

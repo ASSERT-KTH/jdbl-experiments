@@ -10,12 +10,13 @@ if __name__ == "__main__":
     parser.add_argument("--lib-commit", help="The commit of the lib to debloat")
     parser.add_argument('-c', "--client", required=True, help="The GitHub url of the client")
     parser.add_argument('-v', "--version", help="The version of the libray")
+    parser.add_argument('--output', help="The output folder")
 
     args = parser.parse_args()
 
     dep = Project(args.dependency)
     client = Project(args.client)
 
-    jdbl = JDBL(dep, client, version=args.version, commit=args.lib_commit)
+    jdbl = JDBL(dep, client, version=args.version, commit=args.lib_commit, output=args.output)
     jdbl.run()
     pass

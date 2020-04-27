@@ -19,6 +19,8 @@ if 'GITHUB_OAUTH' in os.environ and len(os.environ['GITHUB_OAUTH']) > 0:
 parser = argparse.ArgumentParser()
 parser.add_argument('--all', dest='all', action='store_true', help="Run the experiment on all the libs and clients")
 parser.add_argument('-p', "--process", help="Number of process", type=int, default=4)
+parser.add_argument("--local", action='store_true', help="Run JDBL locally.")
+parser.add_argument("--test", action='store_true', help="Run JDBL on a subset dataset.")
 parser.add_argument("--output", help="The output directory")
 parser.add_argument("--timeout", help="The maximum execution time per execution", type=int, default=60 * 60)
 
@@ -27,6 +29,8 @@ args = parser.parse_args()
 PATH_file = os.path.join(os.path.dirname(__file__), 'considered_cases.json')
 if args.all:
     PATH_file = os.path.join(os.path.dirname(__file__), '..', 'dependants', 'single_module_java_projects_with_5_stars.json')
+if args.test:
+    PATH_file = os.path.join(os.path.dirname(__file__), 'test_dataset.json')
 
 OUTPUT = os.path.abspath(os.path.join(os.path.dirname(__file__), "results"))
 if args.output:
@@ -114,7 +118,11 @@ class Task():
         client_name = os.path.basename(self.client['repo_name'])
         # print("Run %s %s" % (self.library['repo_name'], self.client['repo_name']))
         log_file = os.path.join(OUTPUT, 'executions', '%s_%s.log' % (self.library['repo_name'].replace('/', '_'), self.client['repo_name'].replace('/', '_')))
-        cmd = 'docker run -e GITHUB_OAUTH="%s" --memory=5g -v %s:/results --rm jdbl -d https://github.com/%s.git --lib-commit %s -c https://github.com/%s.git -v %s' % (token, OUTPUT, self.library['repo_name'], self.lib_commit, self.client['repo_name'], self.version)
+        cmd = None
+        if args.local:
+            cmd = 'GITHUB_OAUTH="%s" ./jdbl.py --output %s -d https://github.com/%s.git --lib-commit %s -c https://github.com/%s.git -v %s' % (token, OUTPUT, self.library['repo_name'], self.lib_commit, self.client['repo_name'], self.version)
+        else:
+            cmd = 'docker run -e GITHUB_OAUTH="%s" --memory=5g -v %s:/results --rm jdbl --output /restults -d https://github.com/%s.git --lib-commit %s -c https://github.com/%s.git -v %s' % (token, OUTPUT, self.library['repo_name'], self.lib_commit, self.client['repo_name'], self.version)
         with open(log_file, 'w') as fd:
             try:
                 p = subprocess.call(cmd, shell=True, timeout=timeout, stdout=fd, stderr=fd)
@@ -216,3 +224,4 @@ worker.start()
 while worker.is_alive():
     render()
     time.sleep(1)
+subprocess.call('./generateStat.py --output %s' % (OUTPUT), shell=True)
