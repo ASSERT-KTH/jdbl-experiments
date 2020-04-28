@@ -127,9 +127,9 @@ with open(PATH_file, 'r') as fd:
             }
             current_lib['original_test'] = readTestResults(original_path)
             current_lib['debloat_test'] = readTestResults(debloat_path)
-
-            if (current_lib['debloat_test'] is not None and current_lib['debloat_test']['error'] > current_lib['original_test']['error']) or (current_lib['debloat_test'] is not None and current_lib['debloat_test']['failing'] > current_lib['original_test']['failing']):
-                build_errors['failing_test_debloat'] += 1
+            if current_lib['debloat_test'] is not None and current_lib['original_test'] is not None:
+                if (current_lib['debloat_test']['error'] > current_lib['original_test']['error']) or (current_lib['debloat_test']['failing'] > current_lib['original_test']['failing']):
+                    build_errors['failing_test_debloat'] += 1
             
             if not os.path.exists(os.path.join(original_path, 'original.jar')) and os.path.exists(original_path): 
                 build_errors['lib'] += 1
