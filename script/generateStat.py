@@ -180,7 +180,9 @@ with open(PATH_file, 'r') as fd:
             if os.path.exists(os.path.join(debloat_path, 'debloat-execution-time.log')):
                 with open(os.path.join(debloat_path, 'debloat-execution-time.log')) as fd:
                     # Total debloat time: 33.458 s
-                    current_lib['debloatTime'] = float(fd.read().strip().replace("Total debloat time: ", '').replace(" s", ''))
+                    content = fd.read().strip()
+                    if len(content) > 0:
+                        current_lib['debloatTime'] = float(content.replace("Total debloat time: ", '').replace(" s", ''))
 
             if os.path.exists(os.path.join(original_path, 'original.jar')):
                 current_lib['original_jar_size'] = os.stat(os.path.join(original_path, 'original.jar')).st_size
