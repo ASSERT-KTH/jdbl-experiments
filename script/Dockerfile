@@ -14,6 +14,7 @@ RUN mkdir /results
 ENV M2_HOME=/root/.m2/
 ENV GITHUB_OAUTH=''
 
+COPY coverageAgent.jar /coverageAgent.jar
 COPY __init__.py /__init__.py
 COPY jdbl.py /jdbl.py
 COPY core /core

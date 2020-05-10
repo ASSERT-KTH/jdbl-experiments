@@ -151,10 +151,10 @@ class JDBL:
                 }
                 results['steps'].append(current_status)
 
+                shutil.copyfile(os.path.join(os.path.dirname(__file__), '..', 'coverageAgent.jar'), os.path.join(self.library.path, 'coverageAgent.jar' ))
                 current_status['success'] = Debloat(self.library).run()
                 if not os.path.exists(lib_debloat_path):
                     os.mkdir(lib_debloat_path)
-
                 current_status['success'] = self.library.copy_pom(lib_debloat_path + "/pom.xml") and current_status['success']
                 current_status['success'] = self.library.copy_jar(lib_debloat_path + "/debloat.jar") and current_status['success']
                 current_status['success'] = self.library.copy_test_results(lib_debloat_path + "/test-results") and current_status['success']
