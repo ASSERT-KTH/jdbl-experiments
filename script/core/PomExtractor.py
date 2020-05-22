@@ -127,6 +127,35 @@ class PomExtractor:
                     return True
         return False
 
+    def get_included_excluded_tests(self):
+        """<excludes>
+            <exclude>**/*FunctionalTest.java</exclude>
+            <exclude>**/POP3*Test.java</exclude>
+          </excludes>"""
+        excludes = []
+        includes = []
+        prop_parents = self.poms[0]["root"].findall('*//plugin/..')
+        group_id = 'org.apache.maven.plugins'
+        artifact_id = 'maven-surefire-plugin'
+        for parent in prop_parents:
+            for declared_plugin in parent:
+                gr = declared_plugin.find('groupId')
+                if gr is not None:
+                    gr = gr.text
+                if group_id != gr:
+                    continue
+                ar = declared_plugin.find('artifactId')
+                if ar is not None:
+                    ar = ar.text
+                if ar != artifact_id:
+                    continue
+                for exclude in declared_plugin.findall('*//exclude'):
+                    excludes.append(exclude.text)
+                for include in declared_plugin.findall('*//include'):
+                    includes.append(include.text)
+        return (includes, excludes)
+        pass
+
     def remove_plugin(self, group_id, artifact_id):
         prop_parents = self.poms[0]["root"].findall('*//plugin/..')
         for parent in prop_parents:

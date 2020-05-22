@@ -23,7 +23,7 @@ class Project:
     
     def clone(self, path):
         try:
-            cmd = "cd %s; ls .;git clone -q --depth=1 %s;ls .;" % (path, self.url)
+            cmd = "cd %s;git clone -q --depth=1 %s;" % (path, self.url)
             subprocess.check_call(cmd, shell=True)
             self.path = os.path.join(path, self.name)
             self.original_path = os.path.join(path, self.name)
@@ -56,7 +56,7 @@ class Project:
 
     def checkout_commit(self, commit):
         try:
-            cmd = 'cd %s; git fetch origin %s; git checkout %s' %(self.path, commit, commit)
+            cmd = 'cd %s; git fetch -q origin %s; git checkout -q %s' %(self.path, commit, commit)
             subprocess.check_call(cmd, shell=True)
             self.pom = PomExtractor(self.original_path)
             self.path = os.path.dirname(self.pom.poms[0]['path'])
@@ -83,19 +83,23 @@ class Project:
         except:
             return False
 
-    def test(self, clean=True):
+    def test(self, clean=True, stdout=None):
         clean_cmd = 'mvn clean -B;'
         if clean is False:
             clean_cmd = ''
-        cmd = 'cd %s;%s mvn test --fail-never -ntp -Dmaven.test.failure.ignore=true -B -Dmaven.javadoc.skip=true;' % (self.path, clean_cmd)
+        cmd = 'cd %s;%s mvn test --fail-never -ntp -Dmaven.test.failure.ignore=true -B -Dmaven.javadoc.skip=true' % (self.path, clean_cmd)
+        if stdout is not None:
+            cmd += ' > %s 2>&1' % (stdout)
         try:
             subprocess.check_call(cmd, shell=True)
             return True
         except:
             return False
 
-    def package(self):
+    def package(self, stdout=None):
         cmd = 'cd %s; mvn clean -B; mvn package --fail-never -ntp -Dmaven.test.error.ignore=true -Dmaven.test.failure.ignore=true -B -Dmaven.javadoc.skip=true' % (self.path)
+        if stdout is not None:
+            cmd += ' > %s 2>&1' % (stdout)
         try:
             subprocess.check_call(cmd, shell=True)
             return True
@@ -103,7 +107,7 @@ class Project:
             return False
     
     def copy_jar(self, dst):
-        cmd = 'cd %s/target;ls .; cp *jar-with-dependencies.jar %s; ls %s' % (self.path, dst, dst)
+        cmd = 'cd %s/target; cp *jar-with-dependencies.jar %s;' % (self.path, dst)
         try:
             subprocess.check_call(cmd, shell=True)
             return True
@@ -149,7 +153,7 @@ class Project:
         path_jar = os.path.join(root, "%s:%s" % (group_id, artifact_id), version, "debloat", "debloat.jar")
         
 
-        cmd = "mkdir -p %s/target/classes/; cd %s/target/classes/; jar xf %s; ls .;" % (self.path, self.path, path_jar)
+        cmd = "mkdir -p %s/target/classes/; cd %s/target/classes/; jar xf %s;" % (self.path, self.path, path_jar)
         try:
             subprocess.check_call(cmd, shell=True)
             return True
