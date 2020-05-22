@@ -1,6 +1,8 @@
 # ****************** Other ******************* #
 script/results/*
 *.pyc
+venv
+
 # Folder with the projects that we use as case studies
 projects/*
 
