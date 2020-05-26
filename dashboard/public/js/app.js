@@ -241,7 +241,7 @@ angular
       }
       let matchLibDebloatTest = false;
       if ($scope.filters.libDebloatTest != 'all') {
-        if (!lib.debloat_test) {
+        if (!lib.debloat_test || !lib.original_test) {
           matchLibDebloatTest = false;
         } else if (lib.debloat_test.error > lib.original_test.error || 
           lib.debloat_test.failing > lib.original_test.failing) {
@@ -270,7 +270,7 @@ angular
       }
       let matchClientDebloatTest = false;
       if ($scope.filters.clientDebloatTest != 'all') {
-        if (!client.debloat_test) {
+        if (!client.debloat_test || !client.original_test) {
           matchClientDebloatTest = false;
         } else if (client.debloat_test.error > client.original_test.error || 
           client.debloat_test.failing > client.original_test.failing) {
