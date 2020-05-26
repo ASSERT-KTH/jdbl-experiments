@@ -1,4 +1,5 @@
 # ****************** Other ******************* #
+node_modules
 script/results/*
 *.pyc
 venv
