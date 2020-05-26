@@ -141,12 +141,14 @@ angular
         let output = "";
         for (let line of input.split("\n")) {
           output += line
-            .replace(/([0-9\.]+)/g, "<span class='number'>$1</span>")
             .replace("[INFO]", "<span class='info'>[INFO]</span>")
             .replace(" INFO ", " <span class='info'>INFO</span> ")
             .replace("[ERROR]", "<span class='error'>[ERROR]</span>")
+            .replace(" ERROR ", " <span class='error'>[ERROR]</span> ")
             .replace("[WARNING]", "<span class='warning'>[WARNING]</span>")
+            .replace(" WARNING ", " <span class='warning'>[WARNING]</span> ")
             .replace("[DEBUG]", "<span class='debug'>[DEBUG]</span>")
+            .replace(" DEBUG ", " <span class='debug'>[DEBUG]</span> ")
             .replace("[exit]", "<span class='error'>[EXIT]</span>");
           output += "</br>";
         }
