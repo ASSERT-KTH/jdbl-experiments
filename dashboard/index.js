@@ -1,9 +1,11 @@
 const express = require("express");
+const compression = require('compression')
 const bodyParser = require("body-parser");
 const fs = require("fs");
 
 var app = express();
 app.use(bodyParser.json());
+app.use(compression())
 
 let pathResults = __dirname + "/../script/results";
 if (process.argv.length > 2) {
