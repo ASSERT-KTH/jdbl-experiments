@@ -342,7 +342,7 @@ angular
             $scope.currentFrameworkLog = "";
           }
         );
-      $http.get(base + "/origina/execution.log").then(
+      $http.get(base + "/original/execution.log").then(
         function (response) {
           $scope.currentLibBuildLog = response.data;
         },
