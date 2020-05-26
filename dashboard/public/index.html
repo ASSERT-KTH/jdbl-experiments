@@ -1,0 +1,414 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en" ng-app="jdbl-website" ng-controller="mainController">
+  <head>
+    <meta charset="UTF-8" />
+    <title>JDBL Results</title>
+
+    <!-- CSS -->
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
+
+    <link rel="stylesheet" href="style/style.css" />
+
+    <!-- JS -->
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular-animate.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular-touch.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.6.6/angular-route.js"></script>
+
+    <script
+      src="https://code.jquery.com/jquery-3.4.1.min.js"
+      crossorigin="anonymous"
+    ></script>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+      integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+      integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+      crossorigin="anonymous"
+    ></script>
+    <script src="//cdn.jsdelivr.net/npm/angu-fixed-header-table@1.2.1/angu-fixed-header-table.min.js"></script>
+    <script src="//overset.github.io/javascript-natural-sort/naturalSort.js"></script>
+
+    <script src="js/app.js"></script>
+  </head>
+  <body keypress-events>
+    <div id="wrapper">
+      <div id="filters" class="shadow">
+        <form submit="getHomes();return false;" class="row px-4 py-2">
+          <div class="input-group input-group-sm col">
+            <div class="input-group-prepend">
+              <div class="input-group-text">
+                <input
+                  type="checkbox"
+                  aria-label="Filter shared flat"
+                  ng-model="filters.libDebloat"
+                />
+              </div>
+            </div>
+
+            <input
+              type="text"
+              class="form-control"
+              disabled
+              value="Fail Lib Debloat"
+            />
+          </div>
+          <div class="input-group input-group-sm col">
+            <div class="input-group-prepend">
+              <div class="input-group-text">
+                <input
+                  type="checkbox"
+                  aria-label="Filter shared flat"
+                  ng-model="filters.libDebloatTest"
+                />
+              </div>
+            </div>
+
+            <input
+              type="text"
+              class="form-control"
+              disabled
+              value="Fail Lib Debloat Test"
+            />
+          </div>
+          <div class="input-group input-group-sm col">
+            <div class="input-group-prepend">
+              <div class="input-group-text">
+                <input
+                  type="checkbox"
+                  aria-label="Filter shared flat"
+                  ng-model="filters.clientDebloat"
+                />
+              </div>
+            </div>
+
+            <input
+              type="text"
+              class="form-control"
+              disabled
+              value="Fail Client Debloat"
+            />
+          </div>
+
+          <div class="input-group input-group-sm col">
+            <div class="input-group-prepend">
+              <div class="input-group-text">
+                <input
+                  type="checkbox"
+                  aria-label="Filter shared flat"
+                  ng-model="filters.clientDebloatTest"
+                />
+              </div>
+            </div>
+
+            <input
+              type="text"
+              class="form-control"
+              disabled
+              value="Failed Debloated Client Tests"
+            />
+          </div>
+        </form>
+      </div>
+      <div id="page-wrapper" class="container-fluid row">
+        <div class="list-group list-group-flush col-sm scrollable shadow">
+          <a
+            class="list-group-item list-group-item-action flex-column align-items-start"
+            ng-class="{active: lib == currentLibName}"
+            ng-repeat="(lib, versions) in bugs | filterObj:libFilter"
+            ng-click="openLib(lib)"
+          >
+            {{ lib }}
+          </a>
+        </div>
+        <div class="list-group list-group-flush col-sm scrollable">
+          <a
+            class="list-group-item list-group-item-action flex-column align-items-start"
+            ng-class="{active: versionName == currentVersionName}"
+            ng-repeat="(versionName, version) in currentVersions | filterObj:versionFilter"
+            ng-click="openVersion(versionName)"
+          >
+            {{ versionName }} Compiled:
+            <span class="state" ng-class="{'passing': version.compiled}"></span>
+            Debloat:
+            <span class="state" ng-class="{'passing': version.debloat}"></span>
+            <span ng-if="version.original_test"
+              ><br />
+              Original tests:
+              <span class="state passing"></span>
+              {{version.original_test.passing}}
+              <span class="state"></span> {{version.original_test.error +
+              version.original_test.failing}}
+            </span>
+            <span ng-if="version.debloat_test">
+              <br />
+              Debloat tests:
+              <span class="state passing"></span>
+              {{version.debloat_test.passing}}
+              <span class="state"></span> {{version.debloat_test.error +
+              version.debloat_test.failing}}
+            </span>
+          </a>
+        </div>
+        <div class="list-group list-group-flush col-sm scrollable shadow">
+          <a
+            class="list-group-item list-group-item-action flex-column align-items-start"
+            ng-class="{active: clientName == currentClientName}"
+            ng-repeat="(clientName, client) in currentClients| filterObj:clientFilter"
+            ng-click="openClient(clientName, client)"
+          >
+            {{ clientName }}
+            <span ng-if="client.original_test">
+              <br />
+              Original tests:
+              <span class="state passing"></span>
+              {{client.original_test.passing}}
+              <span class="state"></span> {{client.original_test.error +
+              client.original_test.failing}}
+            </span>
+            <span ng-if="client.debloat_test">
+              <br />Debloat tests:
+              <span class="state passing"></span>
+              {{client.debloat_test.passing}}
+              <span class="state"></span> {{client.debloat_test.error +
+              client.debloat_test.failing}}
+            </span>
+          </a>
+        </div>
+        <div class="col-6 scrollable px-2">
+          <h2>
+            {{currentLibName}}:{{currentVersionName}} & {{currentClientName}}
+          </h2>
+          <section class="shadow-sm p-3 mb-3 bg-white rounded">
+            <h5>Categories</h5>
+            <h6>Lib</h6>
+            <div class="categories">
+              <button
+                class="btn m-1"
+                ng-class="{'active': currentLibCategories.indexOf(category) > -1}"
+                ng-repeat="category in libCategories"
+                ng-click="addLibCategory(category)"
+              >
+                {{category}}
+              </button>
+              <form ng-submit="createLibCategory()">
+                <input
+                  type="text"
+                  placeholder="Add category"
+                  ng-model="newLibCategory"
+                />
+              </form>
+            </div>
+            <h6>Client</h6>
+            <div class="categories">
+              <button
+                class="btn m-1"
+                ng-class="{'active': currentClientCategories.indexOf(category) > -1}"
+                ng-repeat="category in clientCategories"
+                ng-click="addClientCategory(category)"
+              >
+                {{category}}
+              </button>
+              <form ng-submit="createClientCategory()">
+                <input
+                  type="text"
+                  placeholder="Add category"
+                  ng-model="newClientCategory"
+                />
+              </form>
+            </div>
+          </section>
+          <section class="shadow-sm p-3 mb-3 bg-white rounded">
+            <h5>Library</h5>
+            <table class="table my-4">
+              <thead>
+                <tr>
+                  <th scope="col"></th>
+                  <th scope="col">Original</th>
+                  <th scope="col">Debloat</th>
+                  <th scope="col">Diff</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row"># Class</th>
+                  <td>{{ currentVersion.nbClass | number}}</td>
+                  <td>
+                    {{ currentVersion.nbClass - currentVersion.nbDebloatClass |
+                    number}}
+                  </td>
+                  <td>
+                    {{ currentVersion.nbDebloatClass | number}} ({{
+                    currentVersion.nbDebloatClass / currentVersion.nbClass |
+                    percentage:2 }})
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row"># Method</th>
+                  <td>{{ currentVersion.nbMethod }}</td>
+                  <td>
+                    {{ currentVersion.nbMethod - currentVersion.nbDebloatMethod
+                    }}
+                  </td>
+                  <td>
+                    {{ currentVersion.nbDebloatMethod }} ({{
+                    currentVersion.nbDebloatMethod / currentVersion.nbMethod |
+                    percentage:2 }})
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row">Coverage</th>
+                  <td colspan="3">
+                    {{ currentVersion.coverage.nbCoveredLines || 0 | number}} /
+                    {{ currentVersion.coverage.nbLines || 0 | number}} ({{
+                    currentVersion.coverage.coverage || 0 | percentage:2}})
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row">Jar size</th>
+                  <td>{{ currentVersion.original_jar_size | number}}</td>
+                  <td>{{ currentVersion.debloat_jar_size | number}}</td>
+                  <td>
+                    {{ currentVersion.original_jar_size -
+                    currentVersion.debloat_jar_size | number}} ({{
+                    (currentVersion.original_jar_size -
+                    currentVersion.debloat_jar_size) /
+                    currentVersion.original_jar_size | percentage:2 }})
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+          <section class="shadow-sm p-3 mb-3 bg-white rounded">
+            <h5>Client Tests</h5>
+            <table class="table my-4">
+              <thead>
+                <tr>
+                  <th scope="col"></th>
+                  <th scope="col">Original</th>
+                  <th scope="col">Debloat</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <th scope="row">Passing</th>
+                  <td>{{ currentClient.original_test.passing | number}}</td>
+                  <td>
+                    {{ currentClient.debloat_test.passing | number}} ({{
+                    (currentClient.original_test.passing -
+                    currentClient.debloat_test.passing) /
+                    currentClient.original_test.passing | percentage:2 }})
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row">Failing</th>
+                  <td>{{ currentClient.original_test.failing | number}}</td>
+                  <td>
+                    {{ currentClient.debloat_test.failing | number}} ({{
+                    (currentClient.original_test.failing -
+                    currentClient.debloat_test.failing) /
+                    currentClient.original_test.failing | percentage:2 }})
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row">Error</th>
+                  <td>{{ currentClient.original_test.error | number}}</td>
+                  <td>
+                    {{ currentClient.debloat_test.error | number}} ({{
+                    (currentClient.original_test.error -
+                    currentClient.debloat_test.error) /
+                    currentClient.original_test.error | percentage:2 }})
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row">Execution time</th>
+                  <td>
+                    {{ currentClient.original_test.execution_time | number}} sec
+                  </td>
+                  <td>
+                    {{ currentClient.debloat_test.execution_time | number }} sec
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+          <section class="shadow-sm p-3 mb-3 bg-white rounded">
+            <h3>States</h3>
+            <div class="states row my-3">
+              <div class="col-4">
+                1.
+                <span
+                  class="state"
+                  ng-class="{'passing': currentVersion.compiled}"
+                ></span>
+                Lib Build
+              </div>
+              <div class="col-4">
+                2.
+                <span
+                  class="state"
+                  ng-class="{'passing': currentVersion.debloat}"
+                ></span>
+                Lib Debloat
+              </div>
+              <div class="col-4">
+                3.
+                <span
+                  class="state"
+                  ng-class="{'passing': (client.original_test.error + client.original_test.failing) == (client.debloat_test.error + client.debloat_test.failing)}"
+                ></span>
+                Lib Debloat Test
+              </div>
+              <div class="col-4">
+                4.
+                <span
+                  class="state"
+                  ng-class="{'passing': currentClient.compiled}"
+                ></span>
+                Client Build
+              </div>
+              <div class="col-4">
+                5.
+                <span
+                  class="state"
+                  ng-class="{'passing': currentClient.debloat}"
+                ></span>
+                Client Debloat
+              </div>
+              <div class="col-4">
+                6.
+                <span
+                  class="state"
+                  ng-class="{'passing': currentClient.test_cover_lib}"
+                ></span>
+                Client covers Lib:
+              </div>
+            </div>
+          </section>
+          <section class="shadow-sm p-3 mb-3 bg-white rounded">
+            <h5>1. Framework log</h5>
+            <div class="log" ng-bind-html="currentFrameworkLog | log"></div>
+            <h5>2. Lib Build log</h5>
+            <div class="log" ng-bind-html="currentLibBuildLog | log"></div>
+            <h5>3. Lib Debloat log</h5>
+            <div class="log" ng-bind-html="currentLibDebloatLog | log"></div>
+            <h5>4. Client Build log</h5>
+            <div class="log" ng-bind-html="currentClientBuildLog | log"></div>
+            <h5>5. Client Debloat log</h5>
+            <div class="log" ng-bind-html="currentClientDebloatLog | log"></div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
