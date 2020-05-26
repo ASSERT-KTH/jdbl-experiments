@@ -168,7 +168,12 @@ angular
     }
   })
   .controller("mainController", function ($scope, $http) {
-    $scope.filters = {};
+    $scope.filters = {
+      libDebloatTest: 'all',
+      libDebloat: 'all',
+      clientDebloatTest: 'all',
+      clientDebloat: 'all',
+    };
 
     // create the list of sushi rolls
     $scope.bugs = [];
@@ -231,11 +236,11 @@ angular
       if (nbClient == 0) {
         return false;
       }
-      if (!$scope.filters.libDebloatTest && !$scope.filters.libDebloat) {
+      if ($scope.filters.libDebloatTest == 'all' && $scope.filters.libDebloat == 'all') {
         return true;
       }
       let matchLibDebloatTest = false;
-      if ($scope.filters.libDebloatTest) {
+      if ($scope.filters.libDebloatTest != 'all') {
         if (!lib.debloat_test) {
           matchLibDebloatTest = false;
         } else if (lib.debloat_test.error > lib.original_test.error || 
@@ -244,26 +249,27 @@ angular
         } else {
           matchLibDebloatTest = false;
         }
-      }
-
-      let matchLibDebloat = false;
-      if ($scope.filters.libDebloat) {
-        if (!lib.debloat) {
-          matchLibDebloat = true;
-        } else {
-          matchLibDebloat = false;
+        if ($scope.filters.libDebloatTest == 'pass') {
+          matchLibDebloatTest = !matchLibDebloatTest;
         }
       }
 
+      let matchLibDebloat = false;
+      if ($scope.filters.libDebloat != 'all') {
+        matchLibDebloat = !lib.debloat;
+        if ($scope.filters.libDebloat == 'pass') {
+          matchLibDebloat = !matchLibDebloat;
+        }
+      }
       return matchLibDebloatTest || matchLibDebloat;
     }
 
     $scope.clientFilter = function (client) {
-      if (!$scope.filters.clientDebloatTest && !$scope.filters.clientDebloat) {
+      if ($scope.filters.clientDebloatTest == 'all' && $scope.filters.clientDebloat == 'all') {
         return true;
       }
       let matchClientDebloatTest = false;
-      if ($scope.filters.clientDebloatTest) {
+      if ($scope.filters.clientDebloatTest != 'all') {
         if (!client.debloat_test) {
           matchClientDebloatTest = false;
         } else if (client.debloat_test.error > client.original_test.error || 
@@ -272,14 +278,16 @@ angular
         } else {
           matchClientDebloatTest = false;
         }
+        if ($scope.filters.clientDebloatTest == 'pass') {
+          matchClientDebloatTest = !matchClientDebloatTest;
+        }
       }
 
       let matchClientDebloat = false;
-      if ($scope.filters.clientDebloat) {
-        if (!client.debloat_test) {
-          matchClientDebloat = true;
-        } else {
-          matchClientDebloat = false;
+      if ($scope.filters.clientDebloat != 'all') {
+        matchClientDebloat = !client.debloat_test;
+        if ($scope.filters.clientDebloat == 'pass') {
+          matchClientDebloat = !matchClientDebloat;
         }
       }
 

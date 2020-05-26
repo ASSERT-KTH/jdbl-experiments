@@ -47,76 +47,43 @@
         <form submit="getHomes();return false;" class="row px-4 py-2">
           <div class="input-group input-group-sm col">
             <div class="input-group-prepend">
-              <div class="input-group-text">
-                <input
-                  type="checkbox"
-                  aria-label="Filter shared flat"
-                  ng-model="filters.libDebloat"
-                />
-              </div>
+              <label class="input-group-text" for="libBuildFilter">Lib Debloat</label>
             </div>
-
-            <input
-              type="text"
-              class="form-control"
-              disabled
-              value="Fail Lib Debloat"
-            />
+            <select class="custom-select" id="libBuildFilter" ng-model="filters.libDebloat">
+              <option selected value="all">All</option>
+              <option value="fail">Fail</option>
+              <option value="pass">Pass</option>
+            </select>
           </div>
           <div class="input-group input-group-sm col">
             <div class="input-group-prepend">
-              <div class="input-group-text">
-                <input
-                  type="checkbox"
-                  aria-label="Filter shared flat"
-                  ng-model="filters.libDebloatTest"
-                />
-              </div>
+              <label class="input-group-text" for="libDebloatTestFilter">Debloated Lib Test</label>
             </div>
-
-            <input
-              type="text"
-              class="form-control"
-              disabled
-              value="Fail Lib Debloat Test"
-            />
+            <select class="custom-select" id="libDebloatTestFilter" ng-model="filters.libDebloatTest">
+              <option selected value="all">All</option>
+              <option value="fail">Fail</option>
+              <option value="pass">Pass</option>
+            </select>
           </div>
           <div class="input-group input-group-sm col">
             <div class="input-group-prepend">
-              <div class="input-group-text">
-                <input
-                  type="checkbox"
-                  aria-label="Filter shared flat"
-                  ng-model="filters.clientDebloat"
-                />
-              </div>
+              <label class="input-group-text" for="clientDebloatFilter">Client Debloat</label>
             </div>
-
-            <input
-              type="text"
-              class="form-control"
-              disabled
-              value="Fail Client Debloat"
-            />
+            <select class="custom-select" id="clientDebloatFilter" ng-model="filters.clientDebloat">
+              <option selected value="all">All</option>
+              <option value="fail">Fail</option>
+              <option value="pass">Pass</option>
+            </select>
           </div>
-
           <div class="input-group input-group-sm col">
             <div class="input-group-prepend">
-              <div class="input-group-text">
-                <input
-                  type="checkbox"
-                  aria-label="Filter shared flat"
-                  ng-model="filters.clientDebloatTest"
-                />
-              </div>
+              <label class="input-group-text" for="clientDebloatTestFilter">Debloated Client Test</label>
             </div>
-
-            <input
-              type="text"
-              class="form-control"
-              disabled
-              value="Failed Debloated Client Tests"
-            />
+            <select class="custom-select" id="clientDebloatTestFilter" ng-model="filters.clientDebloatTest">
+              <option selected value="all">All</option>
+              <option value="fail">Fail</option>
+              <option value="pass">Pass</option>
+            </select>
           </div>
         </form>
       </div>
