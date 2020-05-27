@@ -45,6 +45,15 @@ a {
   padding: 0;
 }
 
+.colHeader {
+  position: sticky;
+  text-align: center;
+  font-weight: bold;
+  background: #ffffff;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
+  top: 0;
+  z-index: 9999;
+}
 .list-group-item {
   cursor: pointer;
   padding: 4px 7px;
@@ -95,6 +104,10 @@ table tr:hover {
   background: #ddd !important;
 }
 
+.categoriesSection {
+  position: sticky;
+  top: 0;
+}
 .log {
   max-height: 350px;
   overflow-y: scroll;
@@ -119,7 +132,6 @@ table tr:hover {
 .log .debug {
   color: purple;
 }
-
 
 .categories .btn {
   background: #dddddd;

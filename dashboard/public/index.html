@@ -95,13 +95,13 @@
               <option value="pass">Pass</option>
             </select>
           </div>
-          <div class="col">
-            # lib: {{nbLibs}} # version: {{nbVersions}} # client: {{nbClients}}
-          </div>
         </form>
       </div>
       <div id="page-wrapper" class="container-fluid row">
         <div class="list-group list-group-flush col-sm scrollable shadow">
+          <div class="colHeader">
+            {{nbLibs}} Libraries
+          </div>
           <a
             class="list-group-item list-group-item-action flex-column align-items-start"
             ng-class="{active: lib == currentLibName}"
@@ -112,10 +112,13 @@
           </a>
         </div>
         <div class="list-group list-group-flush col-sm scrollable">
+          <div class="colHeader">
+            {{filteredVersions | length}} Versions (all {{nbVersions}})
+          </div>
           <a
             class="list-group-item list-group-item-action flex-column align-items-start"
             ng-class="{active: versionName == currentVersionName}"
-            ng-repeat="(versionName, version) in currentVersions | filterObj:versionFilter"
+            ng-repeat="(versionName, version) in currentVersions | filterObj:versionFilter as filteredVersions"
             ng-click="openVersion(versionName)"
           >
             {{ versionName }} Compiled:
@@ -141,10 +144,13 @@
           </a>
         </div>
         <div class="list-group list-group-flush col-sm scrollable shadow">
+          <div class="colHeader">
+            {{filteredClients | length}} Clients (all {{nbClients}})
+          </div>
           <a
             class="list-group-item list-group-item-action flex-column align-items-start"
             ng-class="{active: clientName == currentClientName}"
-            ng-repeat="(clientName, client) in currentClients| filterObj:clientFilter"
+            ng-repeat="(clientName, client) in currentClients| filterObj:clientFilter as filteredClients"
             ng-click="openClient(clientName, client)"
           >
             {{ clientName }}
@@ -169,43 +175,51 @@
           <h2>
             {{currentLibName}}:{{currentVersionName}} & {{currentClientName}}
           </h2>
-          <section class="shadow-sm p-3 mb-3 bg-white rounded">
-            <h5>Categories</h5>
-            <h6>Lib</h6>
-            <div class="categories">
-              <button
-                class="btn m-1"
-                ng-class="{'active': currentLibCategories.indexOf(category) > -1}"
-                ng-repeat="category in libCategories"
-                ng-click="addLibCategory(category)"
-              >
-                {{category}}
-              </button>
-              <form ng-submit="createLibCategory()">
-                <input
-                  type="text"
-                  placeholder="Add category"
-                  ng-model="newLibCategory"
-                />
-              </form>
-            </div>
-            <h6>Client</h6>
-            <div class="categories">
-              <button
-                class="btn m-1"
-                ng-class="{'active': currentClientCategories.indexOf(category) > -1}"
-                ng-repeat="category in clientCategories"
-                ng-click="addClientCategory(category)"
-              >
-                {{category}}
-              </button>
-              <form ng-submit="createClientCategory()">
-                <input
-                  type="text"
-                  placeholder="Add category"
-                  ng-model="newClientCategory"
-                />
-              </form>
+          <section class="shadow-sm p-3 mb-3 bg-white rounded categoriesSection">
+            <div class="row">
+              <div class="col">
+                <h6>Lib Categories</h6>
+                <div class="categories">
+                  <button
+                    class="btn m-1"
+                    ng-class="{'active': currentLibCategories.indexOf(category) > -1}"
+                    ng-repeat="category in libCategories"
+                    ng-click="addLibCategory(category)"
+                  >
+                    {{category}}
+                  </button>
+                  <form ng-submit="createLibCategory()">
+                    <div class="input-group input-group-sm">
+                      <input type="text" class="form-control" placeholder="Add category" aria-label="Add category"
+                      ng-model="newLibCategory">
+                      <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="button" ng-click="createLibCategory()">+</button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+              <div class="col">
+                <h6>Client Categories</h6>
+                <div class="categories">
+                  <button
+                    class="btn m-1"
+                    ng-class="{'active': currentClientCategories.indexOf(category) > -1}"
+                    ng-repeat="category in clientCategories"
+                    ng-click="addClientCategory(category)"
+                  >
+                    {{category}}
+                  </button>
+                  <form ng-submit="createClientCategory()">
+                    <div class="input-group input-group-sm">
+                      <input type="text" class="form-control" placeholder="Add category" aria-label="Add category" ng-model="newClientCategory">
+                      <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="button" ng-click="createClientCategory()">+</button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
             </div>
           </section>
           <section class="shadow-sm p-3 mb-3 bg-white rounded">

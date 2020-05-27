@@ -159,6 +159,14 @@ angular
       };
     },
   ])
+  .filter('length', function() {
+    return function(input) {
+      if (!input) {
+        return 0;
+      }
+      return Object.keys(input).length;
+    }
+  })
   .filter('filterObj', function() {
     return function(input, search) {
       if (!input) return input;
@@ -263,7 +271,7 @@ angular
     }
     $scope.$watch('filters', () => {
       count();
-      
+
       const libs = Object.values($scope.bugs).filter($scope.libFilter);
       
       for (let i in $scope.bugs) {
