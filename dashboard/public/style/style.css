@@ -107,6 +107,7 @@ table tr:hover {
 .categoriesSection {
   position: sticky;
   top: 0;
+  z-index: 99999;
 }
 .log {
   max-height: 350px;
