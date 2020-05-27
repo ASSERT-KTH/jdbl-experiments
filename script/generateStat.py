@@ -125,6 +125,8 @@ with open(PATH_file, 'r') as fd:
                 'clients': {},
                 'coverage': parseCoverage(debloat_path)
             }
+            if current_lib['compiled'] == False:
+                continue
             current_lib['original_test'] = readTestResults(original_path)
             current_lib['debloat_test'] = readTestResults(debloat_path)
             if current_lib['debloat_test'] is not None and current_lib['original_test'] is not None:
@@ -160,6 +162,7 @@ with open(PATH_file, 'r') as fd:
                             if "BloatedClass" in type:
                                 current_lib['nbDebloatClass'] += 1 
             current_lib['dependencies'] = {}
+
             if os.path.exists(os.path.join(debloat_path, 'debloat-dependencies-report.csv')):
                 with open(os.path.join(debloat_path, 'debloat-dependencies-report.csv')) as fd:
                     lines = fd.readlines()
@@ -198,13 +201,25 @@ with open(PATH_file, 'r') as fd:
                     continue
                 client = "%s:%s" % (c['groupId'], c['artifactId'])
                 client_path = os.path.join(version_path, "clients", client)
-                if not os.path.exists(client_path):
-                    continue
-                client_results = {
-                    'repo_name': c['repo_name']
-                }
-                current_lib['clients'][client] = client_results
                 original_client_path = os.path.join(client_path, 'original')
+                debloat_client_path = os.path.join(client_path, 'debloat')
+
+                client_results = {
+                    'repo_name': c['repo_name'],
+                    'compiled': os.path.exists(os.path.join(original_client_path, "test-results")),
+                    'debloat': os.path.exists(os.path.join(debloat_client_path, "test-results"))
+                }
+                if client_results['debloat']:
+                    lib_with_clients.add(lib_id)
+                    build_errors['none'] += 1
+                elif os.path.exists(original_client_path):
+                    if client_results['compiled']:
+                        build_errors['client_debloat'] += 1
+                        invalid_libs.add("%s:%s" %(lib_id, version))
+                    else:
+                        build_errors['client'] += 1
+                current_lib['clients'][c['repo_name']] = client_results
+                
                 filename = "%s_%s.json" % (lib['repo_name'].replace('/', '_'), c['repo_name'].replace('/', '_'))
                 path_execution_log = os.path.join(PATH_results, 'executions', filename)
                 if os.path.exists(path_execution_log):
@@ -215,12 +230,7 @@ with open(PATH_file, 'r') as fd:
                             total_time += execution_data['end'] - execution_data['start']
                         except:
                             print("%s is not a valid json" % path_execution_log)
-                            continue
 
-                if not os.path.exists(os.path.join(original_client_path, 'test-results')):
-                    if os.path.exists(original_client_path):
-                        build_errors['client'] += 1
-                    continue
                 if lib_id not in considered_cases:
                     considered_cases[lib_id] = {
                         'repo_name': lib['repo_name'],
@@ -235,12 +245,6 @@ with open(PATH_file, 'r') as fd:
                 
                 client_results['original_test'] = readTestResults(original_client_path)
 
-                debloat_client_path = os.path.join(client_path, 'debloat')
-                if not os.path.exists(os.path.join(debloat_client_path, 'test-results')):
-                    build_errors['client_debloat'] += 1
-                    invalid_libs.add("%s:%s" %(lib_id, version))
-                    continue
-                
                 exclude = []
                 if current_lib['coverage'] is not None and 'classes' in current_lib['coverage']:
                     exclude = current_lib['coverage']['classes']
@@ -256,9 +260,8 @@ with open(PATH_file, 'r') as fd:
                 client_results['debloat_test'] = readTestResults(debloat_client_path)
                 current_lib['clients'][client] = client_results
                 
-                build_errors['none'] += 1
-                lib_with_clients.add(lib_id)
-                if client_results['original_test']['passing'] == client_results['debloat_test']['passing']:
+                if client_results['original_test'] is not None and client_results['debloat_test'] is not None and client_results['original_test']['passing'] == client_results['debloat_test']['passing']:
+                    print(client_results)
                     count_debloated_clients += 1
                 out = []
                 out.append(lib['groupId'])
@@ -283,15 +286,25 @@ with open(PATH_file, 'r') as fd:
 
                 out.append(c['groupId'])
                 out.append(c['artifactId'])
-                out.append(str(client_results['original_test']['error']))
-                out.append(str(client_results['original_test']['failing']))
-                out.append(str(client_results['original_test']['passing']))
-
-                out.append(str(client_results['debloat_test']['error']))
-                out.append(str(client_results['debloat_test']['failing']))
-                out.append(str(client_results['debloat_test']['passing']))
+                if client_results['original_test'] is not None:
+                    out.append(str(client_results['original_test']['error']))
+                    out.append(str(client_results['original_test']['failing']))
+                    out.append(str(client_results['original_test']['passing']))
+                else:
+                    out.append(str(0))
+                    out.append(str(0))
+                    out.append(str(0))
+                if client_results['debloat_test'] is not None:
+                    out.append(str(client_results['debloat_test']['error']))
+                    out.append(str(client_results['debloat_test']['failing']))
+                    out.append(str(client_results['debloat_test']['passing']))
+                else:
+                    out.append(str(0))
+                    out.append(str(0))
+                    out.append(str(0))
                 if client_results['coverage_debloat'] is not None:
                     out.append(str(client_results['coverage_debloat']['coverage']))
+                    del client_results['coverage_debloat']['classes']
                 else:
                     out.append('')
                 out.append(str(client_results['test_cover_lib']))
@@ -300,10 +313,11 @@ with open(PATH_file, 'r') as fd:
                 line = ",".join(out)
                 print(line)
                 csv += (line) + '\n'
-            if len(current_lib['clients']) > 0:
-                if lib_id not in results:
-                    results[lib_id] = {}
-                results[lib_id][version] = current_lib
+            if current_lib['coverage'] is not None and 'classes' in current_lib['coverage']:
+                del current_lib['coverage']['classes']
+            if lib_id not in results:
+                results[lib_id] = {}
+            results[lib_id][version] = current_lib
 
 print("Number of error", build_errors)
 print("Invalid debloated lib on client", invalid_libs)
