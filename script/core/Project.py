@@ -84,10 +84,10 @@ class Project:
             return False
 
     def test(self, clean=True, stdout=None):
-        clean_cmd = 'mvn clean -B;'
+        clean_cmd = 'mvn clean -B -q;'
         if clean is False:
             clean_cmd = ''
-        cmd = 'cd %s;%s mvn test --fail-never -ntp -Dmaven.test.failure.ignore=true -B -Dmaven.javadoc.skip=true' % (self.path, clean_cmd)
+        cmd = 'cd %s;%s mvn test -e --fail-never -ntp -Dmaven.test.failure.ignore=true -B -Dmaven.javadoc.skip=true' % (self.path, clean_cmd)
         if stdout is not None:
             cmd += ' > %s 2>&1' % (stdout)
         try:
@@ -97,7 +97,7 @@ class Project:
             return False
 
     def package(self, stdout=None):
-        cmd = 'cd %s; mvn clean -B; mvn package --fail-never -ntp -Dmaven.test.error.ignore=true -Dmaven.test.failure.ignore=true -B -Dmaven.javadoc.skip=true' % (self.path)
+        cmd = 'cd %s; mvn clean -q -B; mvn package -e --fail-never -ntp -Dmaven.test.error.ignore=true -Dmaven.test.failure.ignore=true -B -Dmaven.javadoc.skip=true' % (self.path)
         if stdout is not None:
             cmd += ' > %s 2>&1' % (stdout)
         try:

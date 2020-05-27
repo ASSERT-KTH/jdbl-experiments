@@ -7,10 +7,11 @@ import json
 
 from core.Debloat import Debloat
 
-OUTPUT_dir = '/' 
+OUTPUT_dir = 'results' 
 
 class JDBL:
     def __init__(self, library, client, version=None, working_directory=None, commit=None, output=None):
+        global OUTPUT_dir
         self.library = library
         self.lib_commit = commit
         self.client = client
@@ -19,8 +20,8 @@ class JDBL:
         if working_directory is None:
             self.working_directory = tempfile.mkdtemp()
         if output is not None:
-            global OUTPUT_dir
             OUTPUT_dir = output
+        OUTPUT_dir = os.path.abspath(OUTPUT_dir)
 
     def run(self):
         previous_time = time.time()
