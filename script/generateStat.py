@@ -206,7 +206,9 @@ with open(PATH_file, 'r') as fd:
                 client_results = {
                     'repo_name': c['repo_name'],
                     'compiled': os.path.exists(os.path.join(original_client_path, "test-results")),
-                    'debloat': os.path.exists(os.path.join(debloat_client_path, "test-results"))
+                    'debloat': os.path.exists(os.path.join(debloat_client_path, "test-results")),
+                    'groupId': c['groupId'],
+                    'artifactId': c['artifactId'],
                 }
                 if client_results['debloat']:
                     lib_with_clients.add(lib_id)

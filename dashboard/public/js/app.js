@@ -536,12 +536,11 @@ angular
           $scope.currentLibDebloatLog = "";
         }
       );
-      console.log($scope.currentClient)
       $http
         .get(
           base +
             "clients/" +
-            $scope.currentClientName.replace("/", "_") +
+            `${$scope.currentClient.groupId}:${$scope.currentClient.artifactId}` +
             "/original/execution.log"
         )
         .then(
@@ -556,7 +555,7 @@ angular
         .get(
           base +
             "/clients/" +
-            $scope.currentClientName.replace("/", "_") +
+            `${$scope.currentClient.groupId}:${$scope.currentClient.artifactId}` +
             "/debloat/execution.log"
         )
         .then(
