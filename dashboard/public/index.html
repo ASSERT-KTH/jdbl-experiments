@@ -270,8 +270,8 @@
                 </tr>
                 <tr>
                   <th scope="row">Jar size</th>
-                  <td>{{ currentVersion.original_jar_size | number}}</td>
-                  <td>{{ currentVersion.debloat_jar_size | number}}</td>
+                  <td><a href="/data/{{currentLibName}}/{{currentVersionName}}/original/original.jar" target="__blank">{{currentVersion.original_jar_size | number}}</a></td>
+                  <td><a href="/data/{{currentLibName}}/{{currentVersionName}}/debloat/debloat.jar" target="__blank">{{ currentVersion.debloat_jar_size | number}}</a></td>
                   <td>
                     {{ currentVersion.original_jar_size -
                     currentVersion.debloat_jar_size | number}} ({{
