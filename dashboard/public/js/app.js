@@ -144,11 +144,14 @@ angular
             .replace("[INFO]", "<span class='info'>[INFO]</span>")
             .replace(" INFO ", " <span class='info'>INFO</span> ")
             .replace("[ERROR]", "<span class='error'>[ERROR]</span>")
-            .replace(" ERROR ", " <span class='error'>[ERROR]</span> ")
+            .replace(" ERROR ", " <span class='error'>ERROR</span> ")
+            .replace("<<< FAILURE!", " <span class='error'><<< FAILURE!</span> ")
+            .replace("<<< ERROR!", " <span class='error'><<< ERROR!</span> ")
             .replace("[WARNING]", "<span class='warning'>[WARNING]</span>")
-            .replace(" WARNING ", " <span class='warning'>[WARNING]</span> ")
+            .replace(" WARNING ", " <span class='warning'>WARNING</span> ")
+            .replace(" WARN ", " <span class='warning'>WARN</span> ")
             .replace("[DEBUG]", "<span class='debug'>[DEBUG]</span>")
-            .replace(" DEBUG ", " <span class='debug'>[DEBUG]</span> ")
+            .replace(" DEBUG ", " <span class='debug'>DEBUG</span> ")
             .replace("[exit]", "<span class='error'>[EXIT]</span>");
           output += "</br>";
         }
@@ -175,6 +178,7 @@ angular
       libDebloat: 'all',
       clientDebloatTest: 'all',
       clientDebloat: 'all',
+      client: 'pass',
     };
 
     // create the list of sushi rolls
@@ -227,8 +231,24 @@ angular
 
     $http.get("data/raw_results.json").then(function (response) {
       $scope.bugs = response.data;
-      $scope.openLib(Object.keys($scope.bugs)[0]);
+      const firstLib = Object.values($scope.bugs).filter($scope.libFilter)[0];
+      
+      for (let i in $scope.bugs) {
+        if ($scope.bugs[i] == firstLib) {
+          return $scope.openLib(i);
+        }
+      }
     });
+    $scope.$watch('filters', () => {
+      console.log("new filter")
+      const firstLib = Object.values($scope.bugs).filter($scope.libFilter)[0];
+      
+      for (let i in $scope.bugs) {
+        if ($scope.bugs[i] == firstLib) {
+          return $scope.openLib(i);
+        }
+      }
+    }, true)
     $scope.libFilter = function (lib) {
       const nbClient = Object.values(lib).filter($scope.versionFilter).length;
       return nbClient != 0;
@@ -267,7 +287,7 @@ angular
     }
 
     $scope.clientFilter = function (client) {
-      if ($scope.filters.clientDebloatTest == 'all' && $scope.filters.clientDebloat == 'all') {
+      if ($scope.filters.clientDebloatTest == 'all' && $scope.filters.clientDebloat == 'all'  && $scope.filters.client == 'all') {
         return true;
       }
       let matchClientDebloatTest = false;
@@ -293,19 +313,42 @@ angular
         }
       }
 
-      return matchClientDebloatTest || matchClientDebloat;
+      let matchClient = false;
+      if ($scope.filters.client != 'all') {
+        matchClient = !client.compiled;
+        if ($scope.filters.client == 'pass') {
+          matchClient = !matchClient;
+        }
+      }
+
+      return (matchClientDebloatTest || matchClientDebloat) || matchClient;
     }
 
     $scope.openLib = function (lib) {
       $scope.currentLibName = lib;
       $scope.currentVersions = $scope.bugs[$scope.currentLibName];
-      $scope.openVersion(Object.keys($scope.currentVersions)[0]);
+
+      const firstLib = Object.values($scope.currentVersions).filter($scope.versionFilter)[0];
+      
+      for (let i in $scope.currentVersions) {
+        if ($scope.currentVersions[i] == firstLib) {
+          return $scope.openVersion(i);
+        }
+      }
     };
     $scope.openVersion = function (version) {
       $scope.currentVersionName = version;
       $scope.currentVersion = $scope.currentVersions[$scope.currentVersionName];
       $scope.currentClients = $scope.currentVersion.clients;
-      $scope.openClient(Object.keys($scope.currentClients)[0]);
+
+      const firstLib = Object.values($scope.currentClients).filter($scope.clientFilter)[0];
+      
+      for (let i in $scope.currentClients) {
+        if ($scope.currentClients[i] == firstLib) {
+          $scope.openClient(i);
+          break;
+        }
+      }
 
       const key = $scope.currentLibName + "_" + $scope.currentVersionName;
       $scope.currentLibCategories = $scope.libsCategories[key] || [];

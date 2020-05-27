@@ -67,6 +67,16 @@
           </div>
           <div class="input-group input-group-sm col">
             <div class="input-group-prepend">
+              <label class="input-group-text" for="clientFilter">Client</label>
+            </div>
+            <select class="custom-select" id="clientFilter" ng-model="filters.client">
+              <option selected value="all">All</option>
+              <option value="fail">Not Compiled</option>
+              <option value="pass">Compiled</option>
+            </select>
+          </div>
+          <div class="input-group input-group-sm col">
+            <div class="input-group-prepend">
               <label class="input-group-text" for="clientDebloatFilter">Client Debloat</label>
             </div>
             <select class="custom-select" id="clientDebloatFilter" ng-model="filters.clientDebloat">
