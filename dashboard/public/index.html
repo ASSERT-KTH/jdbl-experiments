@@ -280,6 +280,14 @@
                     currentVersion.original_jar_size | percentage:2 }})
                   </td>
                 </tr>
+                <tr>
+                  <th scope="row">Dep</th>
+                  <td>{{ nbDep | number}}</td>
+                  <td>{{ nbDep - nbDebloatDep | number}}</td>
+                  <td>
+                    {{ nbDebloatDep | number}} ({{nbDebloatDep / nbDep | percentage:2 }})
+                  </td>
+                </tr>
               </tbody>
             </table>
           </section>

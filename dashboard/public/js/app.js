@@ -485,6 +485,15 @@ angular
 
       $scope.getLog();
 
+      $scope.nbDep = 0;
+      $scope.nbDebloatDep = 0;
+      for (let dep in $scope.currentVersion.dependencies) {
+        $scope.nbDep++;
+        if ($scope.currentVersion.dependencies[dep].nbClass == $scope.currentVersion.dependencies[dep].nbDebloatClass) {
+          $scope.nbDebloatDep++;
+        }
+      }
+
       const key =
         $scope.currentLibName +
         "_" +
