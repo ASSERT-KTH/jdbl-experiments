@@ -401,6 +401,21 @@
             <h5>5. Client Debloat log</h5>
             <pre class="log" ng-bind-html="currentClientDebloatLog | log"></pre>
           </section>
+          <section class="shadow-sm p-3 mb-3 bg-white rounded">
+            <h3>Analysis</h3>
+            <form>
+              <div class="form-group">
+                <label for="clientAnalysis">Client Analysis</label>
+                <textarea class="form-control" id="clientAnalysis" rows="3" ng-model="clientAnalysis"></textarea>
+                <button class="btn btn-primary my-1" ng-click="saveAnalysis()">Save</button>
+              </div>
+              <div class="form-group">
+                <label for="libAnalysis">Lib Analysis</label>
+                <textarea class="form-control" id="libAnalysis" rows="3" ng-model="libAnalysis"></textarea>
+                <button class="btn btn-primary my-1" ng-click="saveAnalysis()">Save</button>
+              </div>
+            </form>
+          </section>
         </div>
       </div>
     </div>

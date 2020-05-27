@@ -138,6 +138,14 @@ angular
         if (!input) {
           return $sce.trustAs("html", "Log not available!");
         }
+
+        function scrollLogs() {
+          const logElements = document.querySelectorAll(".log");
+          for (let log of logElements) {
+            log.scrollTop = log.scrollHeight;
+          }
+        }
+
         let output = "";
         for (let line of input.split("\n")) {
           output += line
@@ -145,7 +153,10 @@ angular
             .replace(" INFO ", " <span class='info'>INFO</span> ")
             .replace("[ERROR]", "<span class='error'>[ERROR]</span>")
             .replace(" ERROR ", " <span class='error'>ERROR</span> ")
-            .replace("<<< FAILURE!", " <span class='error'><<< FAILURE!</span> ")
+            .replace(
+              "<<< FAILURE!",
+              " <span class='error'><<< FAILURE!</span> "
+            )
             .replace("<<< ERROR!", " <span class='error'><<< ERROR!</span> ")
             .replace("[WARNING]", "<span class='warning'>[WARNING]</span>")
             .replace(" WARNING ", " <span class='warning'>WARNING</span> ")
@@ -155,38 +166,39 @@ angular
             .replace("[exit]", "<span class='error'>[EXIT]</span>");
           output += "</br>";
         }
+        setTimeout(scrollLogs, 100);
         return $sce.trustAs("html", output);
       };
     },
   ])
-  .filter('length', function() {
-    return function(input) {
+  .filter("length", function () {
+    return function (input) {
       if (!input) {
         return 0;
       }
       return Object.keys(input).length;
-    }
+    };
   })
-  .filter('filterObj', function() {
-    return function(input, search) {
+  .filter("filterObj", function () {
+    return function (input, search) {
       if (!input) return input;
       if (!search) return input;
       var result = {};
-      angular.forEach(input, function(value, key) {
+      angular.forEach(input, function (value, key) {
         if (search(value)) {
           result[key] = value;
         }
       });
       return result;
-    }
+    };
   })
   .controller("mainController", function ($scope, $http) {
     $scope.filters = {
-      libDebloatTest: 'all',
-      libDebloat: 'all',
-      clientDebloatTest: 'all',
-      clientDebloat: 'all',
-      client: 'pass',
+      libDebloatTest: "all",
+      libDebloat: "all",
+      clientDebloatTest: "all",
+      clientDebloat: "all",
+      client: "pass",
     };
 
     // create the list of sushi rolls
@@ -210,6 +222,64 @@ angular
     $scope.currentLibCategories = [];
     $scope.libCategories = [];
     $scope.libsCategories = {};
+
+    $scope.libAnalysis = "";
+    $scope.clientAnalysis = "";
+
+    $scope.saveAnalysis = function () {
+      $http
+        .post(
+          "/api/" +
+            $scope.currentLibName +
+            "/" +
+            $scope.currentVersionName +
+            "/" +
+            $scope.currentClientName.replace("/", "_") +
+            "/analysis",
+            {body: $scope.clientAnalysis}
+        )
+        .then(() => {});
+      $http
+        .post(
+          "/api/" +
+            $scope.currentLibName +
+            "/" +
+            $scope.currentVersionName +
+            "/analysis",
+          {body: $scope.libAnalysis}
+        )
+        .then(() => {});
+    };
+    function getAnalysis() {
+      $scope.libAnalysis = "";
+      $scope.clientAnalysis = "";
+      $http
+        .get(
+          "/api/" +
+            $scope.currentLibName +
+            "/" +
+            $scope.currentVersionName +
+            "/" +
+            $scope.currentClientName.replace("/", "_") +
+            "/analysis"
+        )
+        .then(function (response) {
+          $scope.clientAnalysis = response.data;
+        });
+
+      $http
+        .get(
+          "/api/" +
+            $scope.currentLibName +
+            "/" +
+            $scope.currentVersionName +
+            "/analysis"
+        )
+        .then(function (response) {
+          $scope.libAnalysis = response.data;
+        });
+    }
+
     function getCategories() {
       $http.get("/data/client_categories.json").then(function (response) {
         $scope.clientCategories = [];
@@ -239,11 +309,11 @@ angular
 
     $http.get("data/raw_results.json").then(function (response) {
       $scope.bugs = response.data;
-      
+
       count();
-      
+
       const firstLib = Object.values($scope.bugs).filter($scope.libFilter)[0];
-      
+
       for (let i in $scope.bugs) {
         if ($scope.bugs[i] == firstLib) {
           return $scope.openLib(i);
@@ -264,103 +334,123 @@ angular
         const versions = Object.values(lib).filter($scope.versionFilter);
         $scope.nbVersions += versions.length;
         for (let version of versions) {
-          const clients = Object.values(version.clients).filter($scope.clientFilter);
+          const clients = Object.values(version.clients).filter(
+            $scope.clientFilter
+          );
           $scope.nbClients += clients.length;
         }
       }
     }
-    $scope.$watch('filters', () => {
-      count();
+    $scope.$watch(
+      "filters",
+      () => {
+        count();
 
-      const libs = Object.values($scope.bugs).filter($scope.libFilter);
-      
-      for (let i in $scope.bugs) {
-        if ($scope.bugs[i] == libs[0]) {
-          return $scope.openLib(i);
+        const libs = Object.values($scope.bugs).filter($scope.libFilter);
+
+        for (let i in $scope.bugs) {
+          if ($scope.bugs[i] == libs[0]) {
+            return $scope.openLib(i);
+          }
         }
-      }
-    }, true)
+      },
+      true
+    );
     $scope.libFilter = function (lib) {
       const nbClient = Object.values(lib).filter($scope.versionFilter).length;
       return nbClient != 0;
-    }
+    };
     $scope.versionFilter = function (lib) {
-      const nbClient = Object.values(lib.clients).filter($scope.clientFilter).length;
+      const nbClient = Object.values(lib.clients).filter($scope.clientFilter)
+        .length;
       if (nbClient == 0) {
         return false;
       }
-      if ($scope.filters.libDebloatTest == 'all' && $scope.filters.libDebloat == 'all') {
+      if (
+        $scope.filters.libDebloatTest == "all" &&
+        $scope.filters.libDebloat == "all"
+      ) {
         return true;
       }
       let matchLibDebloatTest = false;
-      if ($scope.filters.libDebloatTest != 'all') {
+      if ($scope.filters.libDebloatTest != "all") {
         if (!lib.debloat_test || !lib.original_test) {
           matchLibDebloatTest = false;
-        } else if (lib.debloat_test.error > lib.original_test.error || 
-          lib.debloat_test.failing > lib.original_test.failing) {
-            matchLibDebloatTest = true;
+        } else if (
+          lib.debloat_test.error > lib.original_test.error ||
+          lib.debloat_test.failing > lib.original_test.failing
+        ) {
+          matchLibDebloatTest = true;
         } else {
           matchLibDebloatTest = false;
         }
-        if ($scope.filters.libDebloatTest == 'pass') {
+        if ($scope.filters.libDebloatTest == "pass") {
           matchLibDebloatTest = !matchLibDebloatTest;
         }
       }
 
       let matchLibDebloat = false;
-      if ($scope.filters.libDebloat != 'all') {
+      if ($scope.filters.libDebloat != "all") {
         matchLibDebloat = !lib.debloat;
-        if ($scope.filters.libDebloat == 'pass') {
+        if ($scope.filters.libDebloat == "pass") {
           matchLibDebloat = !matchLibDebloat;
         }
       }
       return matchLibDebloatTest || matchLibDebloat;
-    }
+    };
 
     $scope.clientFilter = function (client) {
-      if ($scope.filters.clientDebloatTest == 'all' && $scope.filters.clientDebloat == 'all'  && $scope.filters.client == 'all') {
+      if (
+        $scope.filters.clientDebloatTest == "all" &&
+        $scope.filters.clientDebloat == "all" &&
+        $scope.filters.client == "all"
+      ) {
         return true;
       }
       let matchClientDebloatTest = false;
-      if ($scope.filters.clientDebloatTest != 'all') {
+      if ($scope.filters.clientDebloatTest != "all") {
         if (!client.debloat_test || !client.original_test) {
           matchClientDebloatTest = false;
-        } else if (client.debloat_test.error > client.original_test.error || 
-          client.debloat_test.failing > client.original_test.failing) {
+        } else if (
+          client.debloat_test.error > client.original_test.error ||
+          client.debloat_test.failing > client.original_test.failing
+        ) {
           matchClientDebloatTest = true;
         } else {
           matchClientDebloatTest = false;
         }
-        if ($scope.filters.clientDebloatTest == 'pass') {
+        if ($scope.filters.clientDebloatTest == "pass") {
           matchClientDebloatTest = !matchClientDebloatTest;
         }
       }
 
       let matchClientDebloat = false;
-      if ($scope.filters.clientDebloat != 'all') {
+      if ($scope.filters.clientDebloat != "all") {
         matchClientDebloat = !client.debloat_test;
-        if ($scope.filters.clientDebloat == 'pass') {
+        if ($scope.filters.clientDebloat == "pass") {
           matchClientDebloat = !matchClientDebloat;
         }
       }
 
       let matchClient = false;
-      if ($scope.filters.client != 'all') {
+      if ($scope.filters.client != "all") {
         matchClient = !client.compiled;
-        if ($scope.filters.client == 'pass') {
+        if ($scope.filters.client == "pass") {
           matchClient = !matchClient;
         }
       }
 
-      return (matchClientDebloatTest || matchClientDebloat) || matchClient;
-    }
+      return matchClientDebloatTest || matchClientDebloat || matchClient;
+    };
 
     $scope.openLib = function (lib) {
       $scope.currentLibName = lib;
       $scope.currentVersions = $scope.bugs[$scope.currentLibName];
 
-      const firstLib = Object.values($scope.currentVersions).filter($scope.versionFilter)[0];
-      
+      const firstLib = Object.values($scope.currentVersions).filter(
+        $scope.versionFilter
+      )[0];
+
       for (let i in $scope.currentVersions) {
         if ($scope.currentVersions[i] == firstLib) {
           return $scope.openVersion(i);
@@ -372,8 +462,10 @@ angular
       $scope.currentVersion = $scope.currentVersions[$scope.currentVersionName];
       $scope.currentClients = $scope.currentVersion.clients;
 
-      const firstLib = Object.values($scope.currentClients).filter($scope.clientFilter)[0];
-      
+      const firstLib = Object.values($scope.currentClients).filter(
+        $scope.clientFilter
+      )[0];
+
       for (let i in $scope.currentClients) {
         if ($scope.currentClients[i] == firstLib) {
           $scope.openClient(i);
@@ -388,6 +480,8 @@ angular
     $scope.openClient = function (client) {
       $scope.currentClientName = client;
       $scope.currentClient = $scope.currentClients[$scope.currentClientName];
+
+      getAnalysis();
 
       $scope.getLog();
 
@@ -426,7 +520,7 @@ angular
             $scope.currentFrameworkLog = "";
           }
         );
-      $http.get(base + "/original/execution.log").then(
+      $http.get(base + "original/execution.log").then(
         function (response) {
           $scope.currentLibBuildLog = response.data;
         },
@@ -434,7 +528,7 @@ angular
           $scope.currentLibBuildLog = "";
         }
       );
-      $http.get(base + "/debloat/execution.log").then(
+      $http.get(base + "debloat/execution.log").then(
         function (response) {
           $scope.currentLibDebloatLog = response.data;
         },
@@ -442,11 +536,12 @@ angular
           $scope.currentLibDebloatLog = "";
         }
       );
+      console.log($scope.currentClient)
       $http
         .get(
           base +
-            "/clients/" +
-            $scope.currentClientName +
+            "clients/" +
+            $scope.currentClientName.replace("/", "_") +
             "/original/execution.log"
         )
         .then(
@@ -461,7 +556,7 @@ angular
         .get(
           base +
             "/clients/" +
-            $scope.currentClientName +
+            $scope.currentClientName.replace("/", "_") +
             "/debloat/execution.log"
         )
         .then(
@@ -520,7 +615,7 @@ angular
         "_" +
         $scope.currentVersionName +
         "_" +
-        $scope.currentClientName;
+        $scope.currentClientName.replace("/", "_");
       $http
         .post(
           "/api/" +
@@ -528,7 +623,7 @@ angular
             "/" +
             $scope.currentVersionName +
             "/" +
-            $scope.currentClientName +
+            $scope.currentClientName.replace("/", "_") +
             "/" +
             caterogy
         )
