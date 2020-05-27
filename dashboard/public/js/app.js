@@ -231,6 +231,9 @@ angular
 
     $http.get("data/raw_results.json").then(function (response) {
       $scope.bugs = response.data;
+      
+      count();
+      
       const firstLib = Object.values($scope.bugs).filter($scope.libFilter)[0];
       
       for (let i in $scope.bugs) {
@@ -239,12 +242,32 @@ angular
         }
       }
     });
+    $scope.nbLibs = 0;
+    $scope.nbVersions = 0;
+    $scope.nbClients = 0;
+
+    function count() {
+      const libs = Object.values($scope.bugs).filter($scope.libFilter);
+
+      $scope.nbLibs = libs.length;
+      $scope.nbVersions = 0;
+      $scope.nbClients = 0;
+      for (let lib of libs) {
+        const versions = Object.values(lib).filter($scope.versionFilter);
+        $scope.nbVersions += versions.length;
+        for (let version of versions) {
+          const clients = Object.values(version.clients).filter($scope.clientFilter);
+          $scope.nbClients += clients.length;
+        }
+      }
+    }
     $scope.$watch('filters', () => {
-      console.log("new filter")
-      const firstLib = Object.values($scope.bugs).filter($scope.libFilter)[0];
+      count();
+      
+      const libs = Object.values($scope.bugs).filter($scope.libFilter);
       
       for (let i in $scope.bugs) {
-        if ($scope.bugs[i] == firstLib) {
+        if ($scope.bugs[i] == libs[0]) {
           return $scope.openLib(i);
         }
       }
