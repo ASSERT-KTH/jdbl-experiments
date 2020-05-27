@@ -7,7 +7,7 @@ from core.PomExtractor import PomExtractor
 class Debloat:
     def __init__(self, project):
         self.project = project
-    
+
     def inject_library(self):
         (includes, excludes) = self.project.pom.get_included_excluded_tests()
         exclude_config = []
@@ -36,7 +36,7 @@ class Debloat:
             ]
         }])
         self.project.inject_jacoco_plugin()
-        self.project.pom.add_plugin("se.kth.castor", "jdbl-maven-plugin", "1.0-SNAPSHOT", [{
+        self.project.pom.add_plugin("se.kth.castor", "jdbl-maven-plugin", "1.0.0", [{
             "name": "executions",
             "children": [
                 {
