@@ -136,6 +136,8 @@ table tr:hover {
 
 .categories .btn {
   background: #dddddd;
+  font-size: 12px;
+  padding: 4px 7px;
 }
 .categories .btn.active {
   background: #5a6b7d;
