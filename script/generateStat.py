@@ -150,7 +150,6 @@ with open(PATH_file, 'r') as fd:
                     lines = fd.readlines()
                     for l in lines:
                         if len(l.split(",")) < 2:
-                            print(l)
                             continue
                         type = l.split(",")[0]
                         if "Method" in type:
@@ -261,7 +260,6 @@ with open(PATH_file, 'r') as fd:
                 current_lib['clients'][client] = client_results
                 
                 if client_results['original_test'] is not None and client_results['debloat_test'] is not None and client_results['original_test']['passing'] == client_results['debloat_test']['passing']:
-                    print(client_results)
                     count_debloated_clients += 1
                 out = []
                 out.append(lib['groupId'])
