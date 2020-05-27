@@ -257,7 +257,6 @@ with open(PATH_file, 'r') as fd:
                     pass
 
                 client_results['debloat_test'] = readTestResults(debloat_client_path)
-                current_lib['clients'][client] = client_results
                 
                 if client_results['original_test'] is not None and client_results['debloat_test'] is not None and client_results['original_test']['passing'] == client_results['debloat_test']['passing']:
                     count_debloated_clients += 1
