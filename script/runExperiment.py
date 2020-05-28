@@ -36,9 +36,13 @@ OUTPUT = os.path.abspath(os.path.join(os.path.dirname(__file__), "results"))
 if args.output:
     OUTPUT = os.path.abspath(args.output)
 if not os.path.exists(OUTPUT):
-    os.makedirs(OUTPUT)
+    os.makedirs(OUTPUT, mode=0o777)
+
+os.chmod(OUTPUT, 0o777)
+
 if not os.path.exists(os.path.join(OUTPUT, 'executions')):
-    os.makedirs(os.path.join(OUTPUT, 'executions'))
+    os.makedirs(os.path.join(OUTPUT, 'executions'), mode=0o777)
+
 
 timeout = args.timeout
 
