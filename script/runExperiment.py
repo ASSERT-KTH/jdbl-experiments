@@ -122,7 +122,7 @@ class Task():
         if args.local:
             cmd = 'GITHUB_OAUTH="%s" ./jdbl.py --output %s -d https://github.com/%s.git --lib-commit %s -c https://github.com/%s.git -v %s' % (token, OUTPUT, self.library['repo_name'], self.lib_commit, self.client['repo_name'], self.version)
         else:
-            cmd = 'docker run -e GITHUB_OAUTH="%s" --memory=5g -v %s:/home/jdbl/results --rm jdbl --output /results -d https://github.com/%s.git --lib-commit %s -c https://github.com/%s.git -v %s' % (token, OUTPUT, self.library['repo_name'], self.lib_commit, self.client['repo_name'], self.version)
+            cmd = 'docker run -e GITHUB_OAUTH="%s" --memory=5g -v %s:/home/jdbl/results --rm jdbl --output /home/jdbl/results -d https://github.com/%s.git --lib-commit %s -c https://github.com/%s.git -v %s' % (token, OUTPUT, self.library['repo_name'], self.lib_commit, self.client['repo_name'], self.version)
         with open(log_file, 'w') as fd:
             try:
                 p = subprocess.call(cmd, shell=True, timeout=timeout, stdout=fd, stderr=fd)
