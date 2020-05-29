@@ -97,6 +97,9 @@ angular
       clientDebloat: "all",
       client: "pass",
     };
+    if (localStorage.getItem("jdbl-dashboard.filters") != null) {
+      $scope.filters = JSON.parse(localStorage.getItem("jdbl-dashboard.filters"));
+    }
 
     // create the list of sushi rolls
     $scope.bugs = [];
@@ -247,6 +250,7 @@ angular
       "filters",
       () => {
         count();
+        localStorage.setItem("jdbl-dashboard.filters", JSON.stringify($scope.filters));
 
         const libs = Object.values($scope.bugs).filter($scope.libFilter);
 
