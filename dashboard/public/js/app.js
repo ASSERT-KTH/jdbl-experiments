@@ -1,5 +1,10 @@
 angular
   .module("jdbl-website", ["ngRoute", "anguFixedHeaderTable"])
+  .config(function ($routeProvider) {
+    $routeProvider.when("/:lib/:version/:user/:project", {
+      controller: "mainController"
+    });
+  })
   .directive("keypressEvents", [
     "$document",
     "$rootScope",
@@ -15,114 +20,6 @@ angular
       };
     },
   ])
-  .controller("libController", function (
-    $scope,
-    $location,
-    $rootScope,
-    $routeParams,
-    $uibModal
-  ) {
-    var $ctrl = $scope;
-    $ctrl.bugs = $scope.$parent.filteredBugs;
-    $ctrl.classifications = $scope.$parent.classifications;
-    $ctrl.index = -1;
-    $ctrl.bug = null;
-
-    $scope.$watch("$parent.filteredBugs", function () {
-      $ctrl.bugs = $scope.$parent.filteredBugs;
-      $ctrl.index = getIndex($routeParams.benchmark, $routeParams.id);
-    });
-    $scope.$watch("$parent.classifications", function () {
-      $ctrl.classifications = $scope.$parent.classifications;
-    });
-
-    var getIndex = function (benchmark, bugId) {
-      if ($ctrl.bugs == null) {
-        return -1;
-      }
-      for (var i = 0; i < $ctrl.bugs.length; i++) {
-        if (
-          $ctrl.bugs[i].benchmark == benchmark &&
-          ($ctrl.bugs[i].bugId == bugId || bugId == null)
-        ) {
-          return i;
-        }
-      }
-      return -1;
-    };
-
-    $scope.$on("$routeChangeStart", function (next, current) {
-      $ctrl.index = getIndex(current.params.benchmark, current.params.id);
-    });
-
-    var modalInstance = null;
-    $scope.$watch("index", function () {
-      if ($scope.index != -1) {
-        if (modalInstance == null) {
-          modalInstance = $uibModal.open({
-            animation: true,
-            ariaLabelledBy: "modal-title",
-            ariaDescribedBy: "modal-body",
-            templateUrl: "modelPatch.html",
-            controller: "bugModal",
-            controllerAs: "$ctrl",
-            size: "lg",
-            resolve: {
-              bug: function () {
-                return $scope.bugs[$scope.index];
-              },
-              classifications: $scope.classifications,
-            },
-          });
-          modalInstance.result.then(
-            function () {
-              modalInstance = null;
-              $location.path("/");
-            },
-            function () {
-              modalInstance = null;
-              $location.path("/");
-            }
-          );
-        } else {
-          $rootScope.$emit("new_bug", $scope.bugs[$scope.index]);
-        }
-      }
-    });
-    var nextPatch = function () {
-      var index = $scope.index + 1;
-      if (index == $ctrl.bugs.length) {
-        index = 0;
-      }
-      $location.path(
-        "/bug/" + $ctrl.bugs[index].benchmark + "/" + $ctrl.bugs[index].bugId
-      );
-      return false;
-    };
-    var previousPatch = function () {
-      var index = $scope.index - 1;
-      if (index < 0) {
-        index = $ctrl.bugs.length - 1;
-      }
-      $location.path(
-        "/bug/" + $ctrl.bugs[index].benchmark + "/" + $ctrl.bugs[index].bugId
-      );
-      return false;
-    };
-
-    $scope.$on("keypress:39", function () {
-      $scope.$apply(function () {
-        nextPatch();
-      });
-    });
-    $scope.$on("keypress:37", function () {
-      $scope.$apply(function () {
-        previousPatch();
-      });
-    });
-    $rootScope.$on("next_bug", nextPatch);
-    $rootScope.$on("previous_bug", previousPatch);
-  })
   .filter("percentage", [
     "$filter",
     function ($filter) {
@@ -192,7 +89,7 @@ angular
       return result;
     };
   })
-  .controller("mainController", function ($scope, $http) {
+  .controller("mainController", function ($scope, $http, $routeParams, $location) {
     $scope.filters = {
       libDebloatTest: "all",
       libDebloat: "all",
@@ -236,7 +133,7 @@ angular
             "/" +
             $scope.currentClientName.replace("/", "_") +
             "/analysis",
-            {body: $scope.clientAnalysis}
+          { body: $scope.clientAnalysis }
         )
         .then(() => {});
       $http
@@ -246,7 +143,7 @@ angular
             "/" +
             $scope.currentVersionName +
             "/analysis",
-          {body: $scope.libAnalysis}
+          { body: $scope.libAnalysis }
         )
         .then(() => {});
     };
@@ -312,11 +209,16 @@ angular
 
       count();
 
-      const firstLib = Object.values($scope.bugs).filter($scope.libFilter)[0];
-
-      for (let i in $scope.bugs) {
-        if ($scope.bugs[i] == firstLib) {
-          return $scope.openLib(i);
+      if ($routeParams.lib) {
+        $scope.openLib($routeParams.lib);
+        $scope.openVersion($routeParams.version);
+        $scope.openClient($routeParams.user + '/' + $routeParams.project);
+      } else {
+        const firstLib = Object.values($scope.bugs).filter($scope.libFilter)[0];
+        for (let i in $scope.bugs) {
+          if ($scope.bugs[i] == firstLib) {
+            return $scope.openLib(i);
+          }
         }
       }
     });
@@ -478,6 +380,7 @@ angular
     };
 
     $scope.openClient = function (client) {
+      $location.path(`/${$scope.currentLibName}/${$scope.currentVersionName}/${client}`)
       $scope.currentClientName = client;
       $scope.currentClient = $scope.currentClients[$scope.currentClientName];
 
@@ -489,7 +392,10 @@ angular
       $scope.nbDebloatDep = 0;
       for (let dep in $scope.currentVersion.dependencies) {
         $scope.nbDep++;
-        if ($scope.currentVersion.dependencies[dep].nbClass == $scope.currentVersion.dependencies[dep].nbDebloatClass) {
+        if (
+          $scope.currentVersion.dependencies[dep].nbClass ==
+          $scope.currentVersion.dependencies[dep].nbDebloatClass
+        ) {
           $scope.nbDebloatDep++;
         }
       }
