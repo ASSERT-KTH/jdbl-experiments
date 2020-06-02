@@ -107,7 +107,7 @@ class JDBL:
                 print("[exit] Unable to checkout commit %s" % (self.version), flush=True)
                 return
             
-            result_path = os.path.join(OUTPUT_dir, "%s:%s" % (dep_group, dep_artifact), self.version)
+            result_path = os.path.join(OUTPUT_dir, self.library.repo.replace('/', '_'), self.version)
             if not os.path.exists(result_path):
                 os.makedirs(result_path)
             
@@ -173,7 +173,7 @@ class JDBL:
             print("7. Execute test library debloat", flush=True)
             # TODO        
 
-            client_results_path = os.path.join(result_path, "clients", "%s:%s" % (self.client.pom.get_group(), self.client.pom.get_artifact()))
+            client_results_path = os.path.join(result_path, "clients",self.client.repo.replace('/', '_'))
             if not os.path.exists(client_results_path):
                 os.makedirs(client_results_path)
             elif os.path.exists(os.path.join(client_results_path, "/test-results")):
@@ -214,8 +214,8 @@ class JDBL:
             }
             results['steps'].append(current_status)
             self.client.clean()
-            current_status['success'] = self.client.inject_debloat_library(OUTPUT_dir, dep_group, dep_artifact, self.version)
-            current_status['success'] = self.client.unzip_debloat(OUTPUT_dir,dep_group, dep_artifact, self.version) and current_status['success']
+            current_status['success'] = self.client.inject_debloat_library(OUTPUT_dir, self.library, self.version)
+            current_status['success'] = self.client.unzip_debloat(OUTPUT_dir, self.library, self.version) and current_status['success']
 
             previous_time = time.time()
             current_status['end'] = previous_time

@@ -148,9 +148,9 @@ class Project:
         except:
             return False
 
-    def unzip_debloat(self, root, group_id, artifact_id, version):
+    def unzip_debloat(self, root, library, version):
         # self.pom.remove_dependency(group_id, artifact_id)
-        path_jar = os.path.join(root, "%s:%s" % (group_id, artifact_id), version, "debloat", "debloat.jar")
+        path_jar = os.path.join(root, library.repo.replace('/', '_'), version, "debloat", "debloat.jar")
         
 
         cmd = "mkdir -p %s/target/classes/; cd %s/target/classes/; jar xf %s;" % (self.path, self.path, path_jar)
@@ -161,9 +161,11 @@ class Project:
             traceback.print_stack()
             return False
 
-    def inject_debloat_library(self, root, group_id, artifact_id, version):
-        path_jar = os.path.join(root, "%s:%s" % (group_id, artifact_id), version, "debloat", "debloat.jar")
+    def inject_debloat_library(self, root, library, version):
+        path_jar = os.path.join(root, library.repo.replace('/', '_'), version, "debloat", "debloat.jar")
 
+        artifact_id = library.pom.get_artifact()
+        group_id = library.pom.get_group()
         cmd = "cd %s; mvn install:install-file -Dfile=%s -DgroupId=%s -DartifactId=%s -Dversion=%s -Dpackaging=jar -B -Dmaven.javadoc.skip=true;" % (self.path, path_jar, group_id, artifact_id, version)
         try:
             subprocess.check_call(cmd, shell=True)
