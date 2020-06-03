@@ -55,6 +55,8 @@ class Debloat:
                 }
             ]
         }])
+        
+        self.project.pom.add_dependency("se.kth.castor", "yajta-lean", "2.0.1", scope="test")
 
         self.project.pom.write_pom()
         pass

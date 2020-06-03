@@ -128,10 +128,6 @@ class PomExtractor:
         return False
 
     def get_included_excluded_tests(self):
-        """<excludes>
-            <exclude>**/*FunctionalTest.java</exclude>
-            <exclude>**/POP3*Test.java</exclude>
-          </excludes>"""
         excludes = []
         includes = []
         prop_parents = self.poms[0]["root"].findall('*//plugin/..')
@@ -172,6 +168,24 @@ class PomExtractor:
                     continue
                 # the plugin is the same remove it
                 parent.remove(declared_plugin)
+
+    def add_dependency(self, group_id, artifact_id, version, scope=None):
+        # check if plugin is already defined if yes, remove it
+        self.remove_dependency(group_id, artifact_id)
+
+        build_section = None
+        dependencies_section = self.poms[0]["root"].find('dependencies')
+        if dependencies_section is None:
+            # create build section
+            dependencies_section = SubElement(self.poms[0]["root"], 'dependencies')
+
+        new_dependency = SubElement(dependencies_section, 'dependency')
+        if group_id is not None:
+            SubElement(new_dependency, 'groupId').text = group_id
+        SubElement(new_dependency, 'artifactId').text = artifact_id
+        SubElement(new_dependency, 'version').text = version
+        if scope is not None:
+            SubElement(new_dependency, 'scope').text = scope
 
     def add_plugin(self, group_id, artifact_id, version, config):
         # check if plugin is already defined if yes, remove it

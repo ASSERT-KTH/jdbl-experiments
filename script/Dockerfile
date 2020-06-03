@@ -10,7 +10,7 @@ WORKDIR /home/jdbl
 
 ARG LIB_VER=unknown
 RUN git clone https://github.com/castor-software/jdbl.git
-RUN cd jdbl; mvn install -Dmaven.test.skip;
+RUN cd jdbl; git checkout yajta_integration; mvn install -Dmaven.test.skip;
 RUN cd ..;
 
 COPY requirements.txt requirements.txt
