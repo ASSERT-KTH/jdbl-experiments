@@ -2,7 +2,7 @@ angular
   .module("jdbl-website", ["ngRoute", "anguFixedHeaderTable"])
   .config(function ($routeProvider) {
     $routeProvider.when("/:lib/:version/:user/:project", {
-      controller: "mainController"
+      controller: "mainController",
     });
   })
   .directive("keypressEvents", [
@@ -89,7 +89,12 @@ angular
       return result;
     };
   })
-  .controller("mainController", function ($scope, $http, $routeParams, $location) {
+  .controller("mainController", function (
+    $scope,
+    $http,
+    $routeParams,
+    $location
+  ) {
     $scope.filters = {
       libDebloatTest: "all",
       libDebloat: "all",
@@ -98,7 +103,9 @@ angular
       client: "pass",
     };
     if (localStorage.getItem("jdbl-dashboard.filters") != null) {
-      $scope.filters = JSON.parse(localStorage.getItem("jdbl-dashboard.filters"));
+      $scope.filters = JSON.parse(
+        localStorage.getItem("jdbl-dashboard.filters")
+      );
     }
 
     // create the list of sushi rolls
@@ -215,7 +222,7 @@ angular
       if ($routeParams.lib) {
         $scope.openLib($routeParams.lib);
         $scope.openVersion($routeParams.version);
-        $scope.openClient($routeParams.user + '/' + $routeParams.project);
+        $scope.openClient($routeParams.user + "/" + $routeParams.project);
       } else {
         const firstLib = Object.values($scope.bugs).filter($scope.libFilter)[0];
         for (let i in $scope.bugs) {
@@ -250,7 +257,10 @@ angular
       "filters",
       () => {
         count();
-        localStorage.setItem("jdbl-dashboard.filters", JSON.stringify($scope.filters));
+        localStorage.setItem(
+          "jdbl-dashboard.filters",
+          JSON.stringify($scope.filters)
+        );
 
         const libs = Object.values($scope.bugs).filter($scope.libFilter);
 
@@ -384,7 +394,9 @@ angular
     };
 
     $scope.openClient = function (client) {
-      $location.path(`/${$scope.currentLibName}/${$scope.currentVersionName}/${client}`)
+      $location.path(
+        `/${$scope.currentLibName}/${$scope.currentVersionName}/${client}`
+      );
       $scope.currentClientName = client;
       $scope.currentClient = $scope.currentClients[$scope.currentClientName];
 
@@ -423,12 +435,7 @@ angular
       const lib_repo = $scope.currentVersion.repo_name.replace("/", "_");
       const client_repo = $scope.currentClient.repo_name.replace("/", "_");
 
-      const base =
-        "/data/" +
-        $scope.currentLibName +
-        "/" +
-        $scope.currentVersionName +
-        "/";
+      const base = "/data/" + lib_repo + "/" + $scope.currentVersionName + "/";
       $http
         .get("/data/executions/" + lib_repo + "_" + client_repo + ".log")
         .then(
@@ -456,12 +463,7 @@ angular
         }
       );
       $http
-        .get(
-          base +
-            "clients/" +
-            `${$scope.currentClient.groupId}:${$scope.currentClient.artifactId}` +
-            "/original/execution.log"
-        )
+        .get(base + "clients/" + `${client_repo}` + "/original/execution.log")
         .then(
           function (response) {
             $scope.currentClientBuildLog = response.data;
@@ -471,12 +473,7 @@ angular
           }
         );
       $http
-        .get(
-          base +
-            "/clients/" +
-            `${$scope.currentClient.groupId}:${$scope.currentClient.artifactId}` +
-            "/debloat/execution.log"
-        )
+        .get(base + "/clients/" + `${client_repo}` + "/debloat/execution.log")
         .then(
           function (response) {
             $scope.currentClientDebloatLog = response.data;
