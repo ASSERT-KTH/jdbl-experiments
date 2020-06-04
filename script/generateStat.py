@@ -110,7 +110,7 @@ with open(PATH_file, 'r') as fd:
     data = json.load(fd)
     for lib_id in data:
         lib = data[lib_id]
-        lib_path = os.path.join(PATH_results, lib['repo_name'])
+        lib_path = os.path.join(PATH_results, lib['repo_name'].replace('/', '_'))
         for version in lib['clients']:
             if version not in lib['releases']:
                 continue
@@ -199,7 +199,7 @@ with open(PATH_file, 'r') as fd:
                 if 'artifactId' not in c or 'groupId' not in c:
                     continue
                 client = "%s:%s" % (c['groupId'], c['artifactId'])
-                client_path = os.path.join(version_path, "clients", c['repo_name'])
+                client_path = os.path.join(version_path, "clients", c['repo_name'].replace('/', '_'))
                 original_client_path = os.path.join(client_path, 'original')
                 debloat_client_path = os.path.join(client_path, 'debloat')
 
