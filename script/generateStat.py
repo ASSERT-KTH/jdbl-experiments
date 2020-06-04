@@ -110,6 +110,7 @@ with open(PATH_file, 'r') as fd:
     data = json.load(fd)
     for lib_id in data:
         lib = data[lib_id]
+        lib_id = lib['repo_name']
         lib_path = os.path.join(PATH_results, lib['repo_name'].replace('/', '_'))
         for version in lib['clients']:
             if version not in lib['releases']:
