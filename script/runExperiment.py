@@ -210,8 +210,9 @@ with open(PATH_file) as fd:
                 client_name = os.path.basename(client['repo_name'])
                 if 'groupId' not in lib or 'groupId' not in client:
                     continue
-                path_client_debloat = os.path.join(OUTPUT, lib['groupId'] + ':' + lib['artifactId'], version, 'clients', client['groupId'] + ':' + client['artifactId'], 'debloat', 'test-results')
-                if not os.path.exists(path_client_debloat):
+                path_client_debloat = os.path.join(OUTPUT, lib['repo_name'], version, 'clients', client['repo_name'], 'debloat', 'test-results')
+                path_lib = os.path.join(OUTPUT, lib['repo_name'], version, 'debloat', 'debloat.jar')
+                if not os.path.exists(path_client_debloat) and not os.path.exists(path_lib):
                     tasks.append(Task(lib, client, version, lib['releases'][version]))
 
 
