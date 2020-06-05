@@ -1,11 +1,11 @@
 const express = require("express");
-const compression = require('compression')
+const compression = require("compression");
 const bodyParser = require("body-parser");
 const fs = require("fs");
 
 var app = express();
 app.use(bodyParser.json());
-app.use(compression())
+app.use(compression());
 
 let pathResults = __dirname + "/../script/results";
 if (process.argv.length > 2) {
@@ -26,100 +26,113 @@ app.use(
 app.use("/data/", express.static(pathResults));
 app.use(express.static(__dirname + "/public"));
 
-app.route("/api/:lib/:version/analysis").get((req, res) => {
-  const file = __dirname + "/../lib_analysis.json";
-  fs.exists(file, (exists) => {
-    if (!exists) {
-      return res.send("");
-    }
-    fs.readFile(file, (err, data) => {
-      if (err) {
-        return res.status(500).send(err);
+app
+  .route("/api/:lib/:version/analysis")
+  .get((req, res) => {
+    const file = __dirname + "/../lib_analysis.json";
+    fs.exists(file, (exists) => {
+      if (!exists) {
+        return res.send("");
       }
-      data = JSON.parse(data);
-      return res.send(data[req.params.lib + '_' + req.params.version]);
-    })
-  })
-}).post((req, res) => {
-  const file = __dirname + "/../lib_analysis.json";
-  const analysis = req.body.body;
-  fs.exists(file, (exists) => {
-    if (!exists) {
-      const body = {}
-      body[req.params.lib + '_' + req.params.version] = analysis
-      fs.writeFile(file, JSON.stringify(body), (err) => {
+      fs.readFile(file, (err, data) => {
         if (err) {
           return res.status(500).send(err);
         }
-        return res.send("ok");
-      })
-      return;  
-    }
-    fs.readFile(file, (err, data) => {
-      if (err) {
-        return res.status(500).send(err);
+        data = JSON.parse(data);
+        return res.send(data[req.params.lib + "_" + req.params.version]);
+      });
+    });
+  })
+  .post((req, res) => {
+    const file = __dirname + "/../lib_analysis.json";
+    const analysis = req.body.body;
+    fs.exists(file, (exists) => {
+      if (!exists) {
+        const body = {};
+        body[req.params.lib + "_" + req.params.version] = analysis;
+        fs.writeFile(file, JSON.stringify(body), (err) => {
+          if (err) {
+            return res.status(500).send(err);
+          }
+          return res.send("ok");
+        });
+        return;
       }
-      data = JSON.parse(data);
-      
-      data[req.params.lib + '_' + req.params.version] = analysis;
-
-      fs.writeFile(file, JSON.stringify(data), (err) => {
+      fs.readFile(file, (err, data) => {
         if (err) {
           return res.status(500).send(err);
         }
-        return res.send("ok");
-      })
-    })
-  })
-})
+        data = JSON.parse(data);
 
-app.route("/api/:lib/:version/:client/analysis").get((req, res) => {
-  const file = __dirname + "/../client_analysis.json";
-  fs.exists(file, (exists) => {
-    if (!exists) {
-      return res.send("");
-    }
-    fs.readFile(file, (err, data) => {
-      if (err) {
-        return res.status(500).send(err);
+        data[req.params.lib + "_" + req.params.version] = analysis;
+
+        fs.writeFile(file, JSON.stringify(data), (err) => {
+          if (err) {
+            return res.status(500).send(err);
+          }
+          return res.send("ok");
+        });
+      });
+    });
+  });
+
+app
+  .route("/api/:lib/:version/:client/analysis")
+  .get((req, res) => {
+    const file = __dirname + "/../client_analysis.json";
+    fs.exists(file, (exists) => {
+      if (!exists) {
+        return res.send("");
       }
-      data = JSON.parse(data);
-      return res.send(data[req.params.lib + '_' + req.params.version + "_" + req.params.client]);
-    })
-  })
-}).post((req, res) => {
-  const file = __dirname + "/../client_analysis.json";
-  const analysis = req.body.body;
-  fs.exists(file, (exists) => {
-    if (!exists) {
-      const body = {}
-      body[req.params.lib + '_' + req.params.version + "_" + req.params.client] = analysis
-      fs.writeFile(file, JSON.stringify(body), (err) => {
+      fs.readFile(file, (err, data) => {
         if (err) {
           return res.status(500).send(err);
         }
-        return res.send("ok");
-      })
-      return;  
-    }
-    fs.readFile(file, (err, data) => {
-      if (err) {
-        return res.status(500).send(err);
+        data = JSON.parse(data);
+        return res.send(
+          data[
+            req.params.lib + "_" + req.params.version + "_" + req.params.client
+          ]
+        );
+      });
+    });
+  })
+  .post((req, res) => {
+    const file = __dirname + "/../client_analysis.json";
+    const analysis = req.body.body;
+    fs.exists(file, (exists) => {
+      if (!exists) {
+        const body = {};
+        body[
+          req.params.lib + "_" + req.params.version + "_" + req.params.client
+        ] = analysis;
+        fs.writeFile(file, JSON.stringify(body), (err) => {
+          if (err) {
+            return res.status(500).send(err);
+          }
+          return res.send("ok");
+        });
+        return;
       }
-      data = JSON.parse(data);
-      
-      data[req.params.lib + '_' + req.params.version + "_" + req.params.client] = analysis;
-
-      fs.writeFile(file, JSON.stringify(data), (err) => {
+      fs.readFile(file, (err, data) => {
         if (err) {
           return res.status(500).send(err);
         }
-        return res.send("ok");
-      })
-    })
-  })
-})
+        data = JSON.parse(data);
 
+        data[
+          req.params.lib + "_" + req.params.version + "_" + req.params.client
+        ] = analysis;
+
+        fs.writeFile(file, JSON.stringify(data), (err) => {
+          if (err) {
+            return res.status(500).send(err);
+          }
+          return res.send("ok");
+        });
+      });
+    });
+  });
 
 app.route("/api/:lib/:version/:category").post(function (req, res) {
   const file = __dirname + "/../lib_categories.json";
@@ -150,22 +163,26 @@ app.route("/api/:lib/:version/:client/:category").post(function (req, res) {
     if (err) {
       return res.status(500).send(err);
     }
-    const data = JSON.parse(f);
-    const key =
-      req.params.lib + "_" + req.params.version + "_" + req.params.client;
-    if (!data[key]) {
-      data[key] = [];
-    }
-    const index = data[key].indexOf(req.params.category);
+    try {
+      const data = JSON.parse(f);
+      const key =
+        req.params.lib + "_" + req.params.version + "_" + req.params.client;
+      if (!data[key]) {
+        data[key] = [];
+      }
+      const index = data[key].indexOf(req.params.category);
 
-    if (index > -1) {
-      data[key].splice(index, 1);
-    } else {
-      data[key].push(req.params.category);
+      if (index > -1) {
+        data[key].splice(index, 1);
+      } else {
+        data[key].push(req.params.category);
+      }
+      fs.writeFile(file, JSON.stringify(data), (err) => {
+        return res.send("ok");
+      });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
     }
-    fs.writeFile(file, JSON.stringify(data), (err) => {
-      return res.send("ok");
-    });
   });
 });
 
