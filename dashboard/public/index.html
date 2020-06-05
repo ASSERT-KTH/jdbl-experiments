@@ -223,7 +223,7 @@
             </div>
           </section>
           <section class="shadow-sm p-3 mb-3 bg-white rounded">
-            <h5>Library (<a href="/data/{{currentLibName.replace('/', '_')}}/{{currentVersionName}}/original/pom.xml" target="__blank">Original pom.xml</a> <a href="/data/{{currentLibName.replace('/', '_')}}/{{currentVersionName}}/debloat/pom.xml" target="__blank">Debloated pom.xml</a>)</h5>
+            <h5>Library (<a href="/data/{{currentLibName}}/{{currentVersionName}}/original/pom.xml" target="__blank">Original pom.xml</a> <a href="/data/{{currentLibName}}/{{currentVersionName}}/debloat/pom.xml" target="__blank">Debloated pom.xml</a>)</h5>
             <table class="table my-4">
               <thead>
                 <tr>
@@ -270,8 +270,8 @@
                 </tr>
                 <tr>
                   <th scope="row">Jar size</th>
-                  <td><a href="/data/{{currentLibName.replace('/', '_')}}/{{currentVersionName}}/original/original.jar" target="__blank">{{currentVersion.original_jar_size | number}}</a></td>
-                  <td><a href="/data/{{currentLibName.replace('/', '_')}}/{{currentVersionName}}/debloat/debloat.jar" target="__blank">{{ currentVersion.debloat_jar_size | number}}</a></td>
+                  <td><a href="/data/{{currentLibName}}/{{currentVersionName}}/original/original.jar" target="__blank">{{currentVersion.original_jar_size | number}}</a></td>
+                  <td><a href="/data/{{currentLibName}}/{{currentVersionName}}/debloat/debloat.jar" target="__blank">{{ currentVersion.debloat_jar_size | number}}</a></td>
                   <td>
                     {{ currentVersion.original_jar_size -
                     currentVersion.debloat_jar_size | number}} ({{

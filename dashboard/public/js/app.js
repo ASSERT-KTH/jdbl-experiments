@@ -141,7 +141,7 @@ angular
             "/" +
             $scope.currentVersionName +
             "/" +
-            $scope.currentClientName.replace("/", "_") +
+            $scope.currentClientName +
             "/analysis",
           { body: $scope.clientAnalysis }
         )
@@ -167,7 +167,7 @@ angular
             "/" +
             $scope.currentVersionName +
             "/" +
-            $scope.currentClientName.replace("/", "_") +
+            $scope.currentClientName +
             "/analysis"
         )
         .then(function (response) {
@@ -216,6 +216,19 @@ angular
 
     $http.get("data/raw_results.json").then(function (response) {
       $scope.bugs = response.data;
+      for (let i in $scope.bugs) {
+        const newId = i.replace("/", "_");
+        $scope.bugs[newId] = $scope.bugs[i];
+        delete $scope.bugs[i];
+        for (let v in $scope.bugs[newId]) {
+          for (let c in $scope.bugs[newId][v].clients) {
+            const newClientId = c.replace("/", "_");
+            $scope.bugs[newId][v].clients[newClientId] =
+              $scope.bugs[newId][v].clients[c];
+            delete $scope.bugs[newId][v].clients[c];
+          }
+        }
+      }
 
       count();
 
@@ -432,8 +445,8 @@ angular
       $scope.currentClientBuildLog = "Loading!";
       $scope.currentClientDebloatLog = "Loading!";
 
-      const lib_repo = $scope.currentVersion.repo_name.replace("/", "_");
-      const client_repo = $scope.currentClient.repo_name.replace("/", "_");
+      const lib_repo = $scope.currentLibName;
+      const client_repo = $scope.currentClientName;
 
       const base = "/data/" + lib_repo + "/" + $scope.currentVersionName + "/";
       $http
@@ -530,7 +543,7 @@ angular
         "_" +
         $scope.currentVersionName +
         "_" +
-        $scope.currentClientName.replace("/", "_");
+        $scope.currentClientName;
       $http
         .post(
           "/api/" +
@@ -538,7 +551,7 @@ angular
             "/" +
             $scope.currentVersionName +
             "/" +
-            $scope.currentClientName.replace("/", "_") +
+            $scope.currentClientName +
             "/" +
             caterogy
         )
