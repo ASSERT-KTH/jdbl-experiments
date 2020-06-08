@@ -17,7 +17,7 @@ COPY requirements.txt requirements.txt
 RUN pip3 install --requirement requirements.txt 
 
 RUN mkdir results
-ENV M2_HOME=/home/jdbl/.m2/
+ENV M2_HOME=/usr/share/maven
 ENV GITHUB_OAUTH=''
 
 COPY coverageAgent.jar coverageAgent.jar
