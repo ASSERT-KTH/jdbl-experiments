@@ -75,6 +75,9 @@ class PomExtractor:
         return ''
 
     def get_version(self):
+        r = self.poms[0]["root"].find("version")
+        if r is not None:
+            return r.text
         r = self.poms[0]["root"].findall('*//version')[0]
         if r is not None:
             return r.text
