@@ -1,0 +1,23 @@
+{
+ "io.gsonfire:gson-fire": {
+  "repo_name": "julman99/gson-fire",
+  "groupId": "io.gsonfire",
+  "artifactId": "gson-fire",
+  "releases": {
+   "1.8.0": "bb21e8bc4da8ec1264f6a12a86bfb9392e84d367",
+   "1.8.3": "de961bacd4668dcddfb95f967f6eb055a2c00de4",
+   "1.5.1": "8876247d07eabdd4f33e5d4c2446c5eaeb7aa59f",
+   "1.8.2": "5c5d346392e5b52949bd24caa70deb063811583c"
+  },
+  "clients": {
+   "1.5.1": [
+    {
+     "repo_name": "lamarios/sherdog-parser",
+     "groupId": "com.ftpix",
+     "artifactId": "sherdog-parser",
+     "version": "1.5.1"
+    }
+   ]
+  }
+ }
+}

@@ -1,0 +1,37 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+```{r}
+# Import the header 
+source("header.R")
+# Clear the R environment
+rm(list=ls())
+```
+
+```{r}
+library(jsonlite)
+
+json <- readLines("Data/raw_results.json")
+
+# add missing comma after }
+n <- length(json)
+json[-n] <- gsub("^}$", "},", json[-n])
+
+# add brakets at the beginning and end
+json <- c("[", json, "]")
+
+table <- fromJSON(json)
+
+colnames(table)
+
+table$`Bukkit/Bukkit`
+
+table_flatten <- flatten(table)
+
+colnames(table_flatten)
+```
+
+
