@@ -165,6 +165,13 @@ with open(PATH_file, 'r') as fd:
                 build_errors['debloat'] += 1
                 invalid_debloat.add("%s:%s" % (lib_id, version))
 
+            current_lib['type_nb_class'] = 0
+            current_lib['type_nb_interface'] = 0
+            current_lib['type_nb_constant'] = 0
+            current_lib['type_nb_enum'] = 0
+            current_lib['type_nb_exception'] = 0
+            current_lib['type_nb_unknown'] = 0
+
             current_lib['nb_class'] = 0
             current_lib['nb_method'] = 0
             current_lib['nb_debloat_class'] = 0
@@ -183,6 +190,10 @@ with open(PATH_file, 'r') as fd:
                                 current_lib['nb_debloat_method'] += 1
                         elif "Class" in type:
                             current_lib['nb_class'] += 1
+                            o_type = l.split(",")[2].strip()
+                            
+                            if "type_nb_%s" % (o_type) in current_lib:
+                                current_lib["type_nb_%s" % (o_type)] += 1
                             if "BloatedClass" in type:
                                 current_lib['nb_debloat_class'] += 1 
             current_lib['dependencies'] = {}
