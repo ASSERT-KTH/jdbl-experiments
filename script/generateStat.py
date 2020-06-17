@@ -26,16 +26,23 @@ build_errors = {
     'client_debloat': 0,
     'none': 0
 }
-def parseCoverage(path, exclude=[]):
+def parseCoverage(path, exclude=[], deps=[]):
     coverage_results_path = os.path.join(path, "jacoco.csv")
     if not os.path.exists(coverage_results_path):
         return None
     o = {
         'classes': [],
-        'coveredClasses': {},
-        'nbLines': 0,
-        'nbCoveredLines': 0,
-        'coverage': 0
+        'lib_classes': [],
+        'covered_classes': {},
+        'nb_lines': 0,
+        'nb_covered_lines': 0,
+        'all_nb_lines': 0,
+        'all_nb_covered_lines': 0,
+        'dep_nb_lines': 0,
+        'dep_nb_covered_lines': 0,
+        'coverage': 0,
+        'all_coverage': 0,
+        'dep_coverage': 0
     }
     with open(coverage_results_path, 'r') as fd:
         lines = fd.readlines()
@@ -54,16 +61,34 @@ def parseCoverage(path, exclude=[]):
                 r[header[i]] = v
             cl = '%s.%s' % (r['PACKAGE'], r['CLASS'])
             if cl not in o['classes']:
-                o['classes'].append(cl)
+                if cl not in deps:
+                    o['classes'].append(cl)
+                else:
+                    o['lib_classes'].append(cl)
             if cl not in exclude:
-                o['nbLines'] += r['LINE_MISSED'] + r['LINE_COVERED']
-                o['nbCoveredLines'] += r['LINE_COVERED']
+                if cl not in deps:
+                    o['nb_lines'] += r['LINE_MISSED'] + r['LINE_COVERED']
+                    o['nb_covered_lines'] += r['LINE_COVERED']
+                else:
+                    o['dep_nb_lines'] += r['LINE_MISSED'] + r['LINE_COVERED']
+                    o['dep_nb_covered_lines'] += r['LINE_COVERED']
+                o['all_nb_lines'] += r['LINE_MISSED'] + r['LINE_COVERED']
+                o['all_nb_covered_lines'] += r['LINE_COVERED']
+                
             if r['LINE_COVERED'] > 0:
-                o['coveredClasses'][cl] = r['LINE_COVERED'] / (r['LINE_COVERED'] + r['LINE_MISSED']) 
-    if o['nbLines'] > 0:
-        o['coverage'] = o['nbCoveredLines'] / o['nbLines']
+                o['covered_classes'][cl] = r['LINE_COVERED'] / (r['LINE_COVERED'] + r['LINE_MISSED']) 
+    if o['nb_lines'] > 0:
+        o['coverage'] = o['nb_covered_lines'] / o['nb_lines']
     else: 
         o['coverage'] = 0
+    if o['all_nb_lines'] > 0:
+        o['all_coverage'] = o['all_nb_covered_lines'] / o['all_nb_lines']
+    else: 
+        o['all_coverage'] = 0
+    if o['dep_nb_lines'] > 0:
+        o['dep_coverage'] = o['dep_nb_covered_lines'] / o['dep_nb_lines']
+    else: 
+        o['dep_coverage'] = 0
     return o
 
 def readTestResults(path):
@@ -123,8 +148,7 @@ with open(PATH_file, 'r') as fd:
                 'repo_name': lib['repo_name'],
                 'compiled': os.path.exists(os.path.join(original_path, 'original.jar')),
                 'debloat': os.path.exists(os.path.join(debloat_path, 'debloat.jar')),
-                'clients': {},
-                'coverage': parseCoverage(debloat_path)
+                'clients': {}
             }
             if current_lib['compiled'] == False:
                 continue
@@ -141,10 +165,10 @@ with open(PATH_file, 'r') as fd:
                 build_errors['debloat'] += 1
                 invalid_debloat.add("%s:%s" % (lib_id, version))
 
-            current_lib['nbClass'] = 0
-            current_lib['nbMethod'] = 0
-            current_lib['nbDebloatClass'] = 0
-            current_lib['nbDebloatMethod'] = 0
+            current_lib['nb_class'] = 0
+            current_lib['nb_method'] = 0
+            current_lib['nb_debloat_class'] = 0
+            current_lib['nb_debloat_method'] = 0
 
             if os.path.exists(os.path.join(debloat_path, 'debloat-report.csv')):
                 with open(os.path.join(debloat_path, 'debloat-report.csv')) as fd:
@@ -154,15 +178,15 @@ with open(PATH_file, 'r') as fd:
                             continue
                         type = l.split(",")[0]
                         if "Method" in type:
-                            current_lib['nbMethod'] += 1
+                            current_lib['nb_method'] += 1
                             if "BloatedMethod" in type:
-                                current_lib['nbDebloatMethod'] += 1
+                                current_lib['nb_debloat_method'] += 1
                         elif "Class" in type:
-                            current_lib['nbClass'] += 1
+                            current_lib['nb_class'] += 1
                             if "BloatedClass" in type:
-                                current_lib['nbDebloatClass'] += 1 
+                                current_lib['nb_debloat_class'] += 1 
             current_lib['dependencies'] = {}
-
+            dep_classes = []
             if os.path.exists(os.path.join(debloat_path, 'debloat-dependencies-report.csv')):
                 with open(os.path.join(debloat_path, 'debloat-dependencies-report.csv')) as fd:
                     lines = fd.readlines()
@@ -171,14 +195,18 @@ with open(PATH_file, 'r') as fd:
                         if ", " not in l:
                             current_dep = l.strip()
                             current_lib['dependencies'][current_dep] = {
-                                'nbClass': 0,
-                                'nbDebloatClass': 0,
+                                'nb_class': 0,
+                                'nb_debloat_class': 0,
                             }
                         else:   
                             (type, name) = l.strip().split(", ")
-                            current_lib['dependencies'][current_dep]['nbClass'] += 1
+                            current_lib['dependencies'][current_dep]['nb_class'] += 1
+                            dep_classes.append(name)
                             if "BloatedClass" in type:
-                                current_lib['dependencies'][current_dep]['nbDebloatClass'] += 1 
+                                current_lib['dependencies'][current_dep]['nb_debloat_class'] += 1 
+            
+            current_lib['coverage'] = parseCoverage(debloat_path, deps=dep_classes)
+
             current_lib['debloatTime'] = -1
             if os.path.exists(os.path.join(debloat_path, 'debloat-execution-time.log')):
                 with open(os.path.join(debloat_path, 'debloat-execution-time.log')) as fd:
@@ -293,13 +321,13 @@ with open(PATH_file, 'r') as fd:
                 out.append(str(current_lib['debloat_jar_size']))
 
                 # nb classes
-                out.append(str(current_lib['nbClass']))
+                out.append(str(current_lib['nb_class']))
                 # nb methods
-                out.append(str(current_lib['nbMethod']))
+                out.append(str(current_lib['nb_method']))
                 # nb debloated classes
-                out.append(str(current_lib['nbDebloatClass']))
+                out.append(str(current_lib['nb_debloat_class']))
                 # nb debloated methods
-                out.append(str(current_lib['nbDebloatMethod']))
+                out.append(str(current_lib['nb_debloat_method']))
                 if current_lib['coverage'] is not None:
                     out.append(str(current_lib['coverage']['coverage']))
                 else:
@@ -338,6 +366,7 @@ with open(PATH_file, 'r') as fd:
                 csv += (line) + '\n'
             if current_lib['coverage'] is not None and 'classes' in current_lib['coverage']:
                 del current_lib['coverage']['classes']
+                del current_lib['coverage']['lib_classes']
             if lib_id not in results:
                 results[lib_id] = {}
             results[lib_id][version] = current_lib
