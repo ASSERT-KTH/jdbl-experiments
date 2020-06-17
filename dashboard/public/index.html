@@ -247,6 +247,31 @@
                     percentage:2 }})
                   </td>
                 </tr>
+
+                <tr>
+                  <th scope="row"># Class type</th>
+                  <td>{{ currentVersion.type_nb_class | number}}</td>
+                </tr>
+                <tr>
+                  <th scope="row"># Interface type</th>
+                  <td>{{ currentVersion.type_nb_interface | number}}</td>
+                </tr>
+                <tr>
+                  <th scope="row"># Constant type</th>
+                  <td>{{ currentVersion.type_nb_constant | number}}</td>
+                </tr>
+                <tr>
+                  <th scope="row"># Enum type</th>
+                  <td>{{ currentVersion.type_nb_enum | number}}</td>
+                </tr>
+                <tr>
+                  <th scope="row"># Exception type</th>
+                  <td>{{ currentVersion.type_nb_exception | number}}</td>
+                </tr>
+                <tr>
+                  <th scope="row"># Unknow type</th>
+                  <td>{{ currentVersion.type_nb_unknown | number}}</td>
+                </tr>                
                 <tr>
                   <th scope="row"># Method</th>
                   <td>{{ currentVersion.nb_method }}</td>
