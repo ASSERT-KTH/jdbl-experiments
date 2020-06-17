@@ -236,36 +236,52 @@
               <tbody>
                 <tr>
                   <th scope="row"># Class</th>
-                  <td>{{ currentVersion.nbClass | number}}</td>
+                  <td>{{ currentVersion.nb_class | number}}</td>
                   <td>
-                    {{ currentVersion.nbClass - currentVersion.nbDebloatClass |
+                    {{ currentVersion.nb_class - currentVersion.nb_debloat_class |
                     number}}
                   </td>
                   <td>
-                    {{ currentVersion.nbDebloatClass | number}} ({{
-                    currentVersion.nbDebloatClass / currentVersion.nbClass |
+                    {{ currentVersion.nb_debloat_class | number}} ({{
+                    currentVersion.nb_debloat_class / currentVersion.nb_class |
                     percentage:2 }})
                   </td>
                 </tr>
                 <tr>
                   <th scope="row"># Method</th>
-                  <td>{{ currentVersion.nbMethod }}</td>
+                  <td>{{ currentVersion.nb_method }}</td>
                   <td>
-                    {{ currentVersion.nbMethod - currentVersion.nbDebloatMethod
+                    {{ currentVersion.nb_method - currentVersion.nb_debloat_method
                     }}
                   </td>
                   <td>
-                    {{ currentVersion.nbDebloatMethod }} ({{
-                    currentVersion.nbDebloatMethod / currentVersion.nbMethod |
+                    {{ currentVersion.nb_debloat_method }} ({{
+                    currentVersion.nb_debloat_method / currentVersion.nb_method |
                     percentage:2 }})
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row">Source Coverage</th>
+                  <td colspan="3">
+                    {{ currentVersion.coverage.nb_covered_lines || 0 | number}} /
+                    {{ currentVersion.coverage.nb_lines || 0 | number}} ({{
+                    currentVersion.coverage.coverage || 0 | percentage:2}})
+                  </td>
+                </tr>
+                <tr>
+                  <th scope="row">Dep Coverage</th>
+                  <td colspan="3">
+                    {{ currentVersion.coverage.dep_nb_covered_lines || 0 | number}} /
+                    {{ currentVersion.coverage.dep_nb_lines || 0 | number}} ({{
+                    currentVersion.coverage.dep_coverage || 0 | percentage:2}})
                   </td>
                 </tr>
                 <tr>
                   <th scope="row">Coverage</th>
                   <td colspan="3">
-                    {{ currentVersion.coverage.nbCoveredLines || 0 | number}} /
-                    {{ currentVersion.coverage.nbLines || 0 | number}} ({{
-                    currentVersion.coverage.coverage || 0 | percentage:2}})
+                    {{ currentVersion.coverage.all_nb_covered_lines || 0 | number}} /
+                    {{ currentVersion.coverage.all_nb_lines || 0 | number}} ({{
+                    currentVersion.coverage.all_coverage || 0 | percentage:2}})
                   </td>
                 </tr>
                 <tr>

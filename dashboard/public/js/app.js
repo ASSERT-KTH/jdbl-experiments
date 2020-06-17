@@ -422,8 +422,8 @@ angular
       for (let dep in $scope.currentVersion.dependencies) {
         $scope.nbDep++;
         if (
-          $scope.currentVersion.dependencies[dep].nbClass ==
-          $scope.currentVersion.dependencies[dep].nbDebloatClass
+          $scope.currentVersion.dependencies[dep].nb_class ==
+          $scope.currentVersion.dependencies[dep].nb_debloat_class
         ) {
           $scope.nbDebloatDep++;
         }
