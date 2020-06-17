@@ -264,6 +264,8 @@ with open(PATH_file, 'r') as fd:
                 if client_results['original_test'] is not None and client_results['debloat_test'] is not None and client_results['original_test']['passing'] == client_results['debloat_test']['passing']:
                     count_debloated_clients += 1
                 out = []
+
+                out.append("%s_%s" %(lib['repo_name'].replace("/", "_"), version))
                 out.append(lib['groupId'])
                 out.append(lib['artifactId'])
                 out.append(version)
@@ -305,6 +307,8 @@ with open(PATH_file, 'r') as fd:
 
                 out.append(c['groupId'])
                 out.append(c['artifactId'])
+                out.append(str(client_results['compiled']))
+                out.append(str(client_results['debloat']))
                 if client_results['original_test'] is not None:
                     out.append(str(client_results['original_test']['error']))
                     out.append(str(client_results['original_test']['failing']))
@@ -345,7 +349,7 @@ print("Lib with clients", len(lib_with_clients))
 print("# successful debloated clients", count_debloated_clients)
 print("Total execution time", datetime.timedelta(seconds=total_time))
 with open(os.path.join(os.path.dirname(__file__), '..', 'raw_results.csv'), 'w') as fd:
-    header = ['"Lib groupId"', '"Lib artifactId"', '"Lib version"', '"Compile"', '"Debloat"', '"Lib original test error"', '"Lib original test failing"', '"Lib original test passing"', '"Lib debloat test error"', '"Lib debloat test failing"', '"Lib debloat test passing"', '"size original jar"', '"size debloat jar"', '"# class original"', '"# method original"', '"# debloated classes"', '"# debloated methods"', '"Lib coverage"', '"Client groupId"', '"Client artifactId"', '"Client original test error"', '"Client original test failing"', '"Client original test passing"', '"Client debloat test error"', '"Client debloat test failing"', '"Client debloat test passing"', '"Client coverage"', '"Cover lib"q']
+    header = ['ID','"Lib groupId"', '"Lib artifactId"', '"Lib version"', '"Compile"', '"Debloat"', '"Lib original test error"', '"Lib original test failing"', '"Lib original test passing"', '"Lib debloat test error"', '"Lib debloat test failing"', '"Lib debloat test passing"', '"size original jar"', '"size debloat jar"', '"# class original"', '"# method original"', '"# debloated classes"', '"# debloated methods"', '"Lib coverage"', '"Client groupId"', '"Client artifactId"', '"Client Compile"', '"Client Debloat"', '"Client original test error"', '"Client original test failing"', '"Client original test passing"', '"Client debloat test error"', '"Client debloat test failing"', '"Client debloat test passing"', '"Client coverage"', '"Cover lib"q']
     csv = ",".join(header) + '\n' + csv
     fd.write(csv)
 with open(os.path.join(os.path.dirname(__file__), '..', 'raw_results.json'), 'w') as fd:
