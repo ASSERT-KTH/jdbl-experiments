@@ -330,15 +330,11 @@ with open(PATH_file, 'r') as fd:
                 out.append(str(current_lib['nb_debloat_method']))
                 if current_lib['coverage'] is not None:
                     out.append(str(current_lib['coverage']['coverage']))
-                else:
-                    out.append('')
-                if current_lib['dep_coverage'] is not None:
                     out.append(str(current_lib['coverage']['dep_coverage']))
-                else:
-                    out.append('')
-                if current_lib['all_coverage'] is not None:
                     out.append(str(current_lib['coverage']['all_coverage']))
                 else:
+                    out.append('')
+                    out.append('')
                     out.append('')
 
                 out.append(c['groupId'])
