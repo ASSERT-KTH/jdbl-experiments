@@ -43,7 +43,7 @@ with open(path, 'r') as fd:
                 if len(lib['clients']) == 0:
                     nb_no_clients += 1
             if 'coverage' in lib and lib['coverage'] is not None:
-                nb_line_lib += lib['coverage']['nbLines']
+                nb_line_lib += lib['coverage']['nb_lines']
                 coverage_lib.append(lib['coverage']['coverage'])
             if lib['original_test'] is not None:
                 nb_test += lib['original_test']['passing'] + lib['original_test']['error'] + lib['original_test']['failing']
@@ -52,10 +52,10 @@ with open(path, 'r') as fd:
                 nb_all_client += 1
                 if 'execution_time' in client:
                     execution_time += client['execution_time']
-                if 'original_test' in client:
+                if 'original_test' in client and client['original_test'] is not None:
                     nb_client += 1
                     nb_test_client += client['original_test']['passing'] + client['original_test']['error'] + client['original_test']['failing']
-                    if 'debloat_test' in client:
+                    if 'debloat_test' in client and client['debloat_test'] is not None:
                         if client['original_test']['passing'] == client['debloat_test']['passing']:
                             nb_validated_debloated_client += 1
                         else:
@@ -64,7 +64,7 @@ with open(path, 'r') as fd:
                     else:
                         nb_fail_debloat_client += 1
                 if 'coverage_debloat' in client and client['coverage_debloat'] is not None:
-                    nb_line_client += client['coverage_debloat']['nbLines']
+                    nb_line_client += client['coverage_debloat']['nb_lines']
                     coverage_client.append(client['coverage_debloat']['coverage'])
 
     macro("nbLib", len(data))
