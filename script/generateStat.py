@@ -281,7 +281,7 @@ with open(PATH_file, 'r') as fd:
                 client_results['coverage_debloat'] = parseCoverage(debloat_client_path, exclude)
                 client_results['test_cover_lib'] = False
                 if client_results['coverage_debloat'] is not None and current_lib['coverage'] is not None:
-                    for cl in client_results['coverage_debloat']['coveredClasses']:
+                    for cl in client_results['coverage_debloat']['covered_classes']:
                         if cl in current_lib['coverage']['classes']:
                             client_results['test_cover_lib'] = True
                             break
