@@ -84,7 +84,7 @@ class Project:
             return False
 
     def test(self, clean=True, stdout=None):
-        clean_cmd = 'mvn clean -B -q;'
+        clean_cmd = 'mvn clean -B -q > /dev/null ;'
         if clean is False:
             clean_cmd = ''
         cmd = 'cd %s;%s mvn test -e --fail-never -ntp -Dmaven.test.failure.ignore=true -B -Dmaven.javadoc.skip=true' % (self.path, clean_cmd)
