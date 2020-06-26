@@ -9,6 +9,7 @@ if __name__ == "__main__":
     parser.add_argument('-d', "--dependency", required=True, help="The GitHub url of the debloated dependency")
     parser.add_argument("--lib-commit", help="The commit of the lib to debloat")
     parser.add_argument('-c', "--client", required=True, help="The GitHub url of the client")
+    parser.add_argument("--client-commit", help="The commit of the lib to debloat")
     parser.add_argument('-v', "--version", help="The version of the libray")
     parser.add_argument('--output', help="The output folder")
 

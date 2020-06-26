@@ -23,7 +23,9 @@ ENV GITHUB_OAUTH=''
 COPY coverageAgent.jar coverageAgent.jar
 COPY __init__.py /__init__.py
 COPY jdbl.py jdbl.py
+COPY main.py main.py
+COPY compile.py compile.py
 COPY core core
 
 
-ENTRYPOINT [ "./jdbl.py" ]
+ENTRYPOINT [ "./main.py" ]
