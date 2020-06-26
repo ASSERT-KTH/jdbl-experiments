@@ -1,0 +1,8 @@
+script/config.js
+data/maven_projects
+data/pom_commits
+data/poms
+data/project_tags
+data/repo_details
+data/repo_files
+data/maven_graph*

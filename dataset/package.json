@@ -1,0 +1,20 @@
+{
+  "name": "jdbl_dataset",
+  "version": "1.0.0",
+  "description": "",
+  "main": "null",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@octokit/plugin-retry": "^2.2.0",
+    "@octokit/plugin-throttling": "^2.6.0",
+    "@octokit/rest": "^16.27.0",
+    "async": "^3.2.0",
+    "pom-parser": "^1.2.0",
+    "progress": "^2.0.3",
+    "request": "^2.88.2"
+  }
+}
