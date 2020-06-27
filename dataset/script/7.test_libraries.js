@@ -59,10 +59,7 @@ function execTest(repo, commit) {
     width: 30,
     total: tasks.length,
   });
-  async.eachOfLimit(utils.shuffle(tasks), 2, async (task, index) => {
-    bar.tick({
-      step: `${task.repo} ${task.commit}`,
-    });
+  async.eachOfLimit(utils.shuffle(tasks), 8, async (task, index) => {
     if (!task.lib.test_results) {
       task.lib.test_results = {};
     }
@@ -77,5 +74,9 @@ function execTest(repo, commit) {
       config.output + "maven_graph_with_test_results.json",
       JSON.stringify(mavenGraph)
     );
+
+    bar.tick({
+      step: `${task.repo} ${task.commit}`,
+    });
   });
 })();
