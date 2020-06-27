@@ -28,7 +28,6 @@ function execTest(repo, commit) {
             return resolve(results);
           } catch (error) {}
         }
-        console.log(error, stdout, stderr);
         resolve(null);
       }
     );
@@ -84,10 +83,10 @@ function execTest(repo, commit) {
     bar.tick({
       step: `${task.repo} for ${task.lib.repo_name}`,
     });
-
-    console.log(results);
-    task.client.commit = results.commit;
-    task.client.test_results = results.test_results;
+    if (results != null) {
+      task.client.commit = results.commit;
+      task.client.test_results = results.test_results;
+    }
 
     fs.writeFileSync(
       config.output + "maven_graph_with_client_test_results.json",

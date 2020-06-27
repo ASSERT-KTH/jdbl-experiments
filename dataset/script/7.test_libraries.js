@@ -26,7 +26,7 @@ function execTest(repo, commit) {
             return resolve(results);
           } catch (error) {}
         }
-        console.log(error, stdout, stderr);
+
         resolve(null);
       }
     );
@@ -70,10 +70,9 @@ function execTest(repo, commit) {
       task.lib.test_results[task.commit] = [];
     }
     const results = await execTest(task.repo, task.commit);
-    console.log(results)
-
-    task.lib.test_results[task.commit] = results.test_results;
-
+    if (results != null) {
+      task.lib.test_results[task.commit] = results.test_results;
+    }
     fs.writeFileSync(
       config.output + "maven_graph_with_test_results.json",
       JSON.stringify(mavenGraph)
