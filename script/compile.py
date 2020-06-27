@@ -58,6 +58,6 @@ if __name__ == "__main__":
         "test_results": []
     }
     for i in range(0, args.iteration):
-        project.test(stdout="output.log")
+        project.test(clean=False, stdout="output.log")
         output['test_results'].append(readTestResults(project.path))
     print(json.dumps(output))
