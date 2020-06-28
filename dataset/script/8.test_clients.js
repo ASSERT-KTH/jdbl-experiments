@@ -20,7 +20,7 @@ if (
 function execTest(repo, commit) {
   return new Promise((resolve) => {
     exec(
-      `timeout 1h docker run --rm jdbl compile --url https://github.com/${repo} --commit ${commit}`,
+      `timeout -k 1m 1h docker run --rm jdbl compile --url https://github.com/${repo} --commit ${commit}`,
       (error, stdout, stderr) => {
         if (!error && stdout) {
           try {
@@ -36,6 +36,7 @@ function execTest(repo, commit) {
 
 (async () => {
   const tasks = [];
+  const testExecutionResults = {};
   for (let libId in mavenGraph) {
     const lib = mavenGraph[libId];
     version: for (let version in lib.clients) {
@@ -68,6 +69,10 @@ function execTest(repo, commit) {
       }
     }
   }
+  fs.writeFileSync(
+    config.output + "maven_graph_with_client_test_results.json",
+    JSON.stringify(mavenGraph)
+  );
   var bar = new ProgressBar(
     "[:bar] :current/:total :rate/bps :percent :etas :step",
     {
@@ -77,11 +82,11 @@ function execTest(repo, commit) {
       total: tasks.length,
     }
   );
-  const testExecutionResults = {};
   async.eachOfLimit(utils.shuffle(tasks), 5, async (task, index) => {
     let results = null;
     if (testExecutionResults[task.repo] != null) {
-      results = testExecutionResults[task.repo];
+      results = testExecutionResults[task.repo].test_results;
+      task.client.commit = testExecutionResults[task.repo].commit;
     } else {
       results = await execTest(task.repo, "HEAD");
     }
