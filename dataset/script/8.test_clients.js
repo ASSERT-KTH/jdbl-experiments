@@ -77,13 +77,20 @@ function execTest(repo, commit) {
       total: tasks.length,
     }
   );
+  const testExecutionResults = {};
   async.eachOfLimit(utils.shuffle(tasks), 5, async (task, index) => {
-    const results = await execTest(task.repo, "HEAD");
+    let results = null;
+    if (testExecutionResults[task.repo] != null) {
+      results = testExecutionResults[task.repo];
+    } else {
+      results = await execTest(task.repo, "HEAD");
+    }
 
     bar.tick({
       step: `${task.repo} for ${task.lib.repo_name}`,
     });
     if (results != null) {
+      testExecutionResults[task.repo] = results;
       task.client.commit = results.commit;
       task.client.test_results = results.test_results;
     }
