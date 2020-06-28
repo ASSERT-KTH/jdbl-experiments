@@ -20,7 +20,7 @@ if (
 function execTest(repo, commit) {
   return new Promise((resolve) => {
     exec(
-      `docker run --rm jdbl compile --url https://github.com/${repo} --commit ${commit}`,
+      `timeout 1h docker run --rm jdbl compile --url https://github.com/${repo} --commit ${commit}`,
       (error, stdout, stderr) => {
         if (!error && stdout) {
           try {
