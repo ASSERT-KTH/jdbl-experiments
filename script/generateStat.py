@@ -12,7 +12,7 @@ parser.add_argument("--output", help="The output directory")
 
 args = parser.parse_args()
 
-PATH_file = os.path.join(os.path.dirname(__file__), '..', 'dependants', 'single_module_java_projects_with_5_stars.json')
+PATH_file = os.path.join(os.path.dirname(__file__), '..', 'dataset', 'data', 'jdbl_dataset.json')
 
 PATH_results = os.path.join(os.path.dirname(__file__), 'results')
 if args.output:
@@ -199,7 +199,7 @@ with open(PATH_file, 'r') as fd:
                                 current_lib["type_nb_%s" % (o_type)] += 1
                             if "BloatedClass" in type:
                                 current_lib['nb_debloat_class'] += 1 
-                            if "BloatPreservedClassedClass" in type:
+                            if "PreservedClass" in type:
                                 current_lib['nb_preserved_class'] += 1 
             current_lib['dependencies'] = {}
             dep_classes = []
