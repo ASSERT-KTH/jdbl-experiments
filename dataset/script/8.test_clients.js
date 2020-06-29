@@ -58,7 +58,7 @@ function execTest(repo, commit) {
       }
       const clients = lib.clients[version];
       for (let client of clients) {
-        if (client.test_results) {
+        if (client.test_results || !client.commit) {
           continue;
         }
         tasks.push({

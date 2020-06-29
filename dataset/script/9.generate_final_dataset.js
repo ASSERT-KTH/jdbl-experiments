@@ -63,7 +63,7 @@ let mavenGraph = JSON.parse(
         if (testExecutionResults[client.repo_name]) {
           client.test_results = testExecutionResults[client.repo_name];
         }
-        if (!client.test_results || client.test_results.length != 3) {
+        if (!client.test_results || client.test_results.length != 3 || !client.commit) {
           lib.clients[version].splice(i, 1);
           continue;
         }
