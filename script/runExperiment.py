@@ -28,7 +28,7 @@ args = parser.parse_args()
 
 PATH_file = os.path.join(os.path.dirname(__file__), 'considered_cases.json')
 if args.all:
-    PATH_file = os.path.join(os.path.dirname(__file__), '..', 'dependants', 'single_module_java_projects_with_5_stars.json')
+    PATH_file = os.path.join(os.path.dirname(__file__), '..', 'dataset', 'data', 'jdbl_dataset.json')
 if args.test:
     PATH_file = os.path.join(os.path.dirname(__file__), 'test_dataset.json')
 
@@ -214,6 +214,7 @@ with open(PATH_file) as fd:
                 path_lib = os.path.join(OUTPUT, lib['repo_name'].replace("/", "_"), version, 'debloat', 'debloat.jar')
                 if not os.path.exists(path_client_debloat) and not os.path.exists(path_lib):
                     tasks.append(Task(lib, client, version, lib['releases'][version]))
+                    break
 
 
 finished = []
