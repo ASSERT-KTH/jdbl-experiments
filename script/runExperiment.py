@@ -125,9 +125,9 @@ class Task():
         log_file = os.path.join(OUTPUT, 'executions', '%s_%s.log' % (self.library['repo_name'].replace('/', '_'), self.client['repo_name'].replace('/', '_')))
         cmd = None
         if args.local:
-            cmd = 'GITHUB_OAUTH="%s" ./jdbl.py --output %s -d https://github.com/%s.git --lib-commit %s -c https://github.com/%s.git -v %s' % (token, OUTPUT, self.library['repo_name'], self.lib_commit, self.client['repo_name'], self.version)
+            cmd = 'GITHUB_OAUTH="%s" ./jdbl.py --output %s -d https://github.com/%s.git --lib-commit %s -c https://github.com/%s.git --client-commit %s -v %s' % (token, OUTPUT, self.library['repo_name'], self.lib_commit, self.client['repo_name'], self.client['commit'], self.version)
         else:
-            cmd = 'docker run -e GITHUB_OAUTH="%s" --memory=5g -v %s:/home/jdbl/results --rm jdbl debloat --output /home/jdbl/results -d https://github.com/%s.git --lib-commit %s -c https://github.com/%s.git --client-commit -v %s' % (token, OUTPUT, self.library['repo_name'], self.lib_commit, self.client['repo_name'], self.client['commit'], self.version)
+            cmd = 'docker run -e GITHUB_OAUTH="%s" --memory=5g -v %s:/home/jdbl/results --rm jdbl debloat --output /home/jdbl/results -d https://github.com/%s.git --lib-commit %s -c https://github.com/%s.git --client-commit %s -v %s' % (token, OUTPUT, self.library['repo_name'], self.lib_commit, self.client['repo_name'], self.client['commit'], self.version)
         with open(log_file, 'w') as fd:
             try:
                 p = subprocess.call(cmd, shell=True, timeout=timeout, stdout=fd, stderr=fd)
