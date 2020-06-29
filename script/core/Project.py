@@ -87,7 +87,7 @@ class Project:
         clean_cmd = 'mvn clean -B -q > /dev/null ;'
         if clean is False:
             clean_cmd = ''
-        cmd = 'cd %s;%s mvn test -e --fail-never -ntp -Dmaven.test.failure.ignore=true -B -Dmaven.javadoc.skip=true' % (self.path, clean_cmd)
+        cmd = 'cd %s;%s mvn test -e --fail-never -ntp -Dmaven.test.failure.ignore=true -B -Dmaven.javadoc.skip=true -Drat.skip=true -Danimal.sniffer.skip=true -Dmaven.javadoc.skip=true -Dlicense.skip=true -Dsource.skip=true' % (self.path, clean_cmd)
         if stdout is not None:
             cmd += ' > %s 2>&1' % (stdout)
         try:
@@ -97,7 +97,7 @@ class Project:
             return False
 
     def package(self, stdout=None):
-        cmd = 'cd %s; mvn clean -q -B; mvn package -e --fail-never -ntp -Dmaven.test.error.ignore=true -Dmaven.test.failure.ignore=true -B -Dmaven.javadoc.skip=true' % (self.path)
+        cmd = 'cd %s; mvn clean -q -B; mvn package -e --fail-never -ntp -Dmaven.test.error.ignore=true -Dmaven.test.failure.ignore=true -B -Dmaven.javadoc.skip=true -Drat.skip=true -Danimal.sniffer.skip=true -Dmaven.javadoc.skip=true -Dlicense.skip=true -Dsource.skip=true' % (self.path)
         if stdout is not None:
             cmd += ' > %s 2>&1' % (stdout)
         try:
@@ -141,7 +141,7 @@ class Project:
             return False
 
     def copy_report(self, dst):
-        cmd = 'cd %s; cp -r debloat-* %s;' % (self.path, dst)
+        cmd = 'cd %s; cp -r .jdbl/* %s;' % (self.path, dst)
         try:
             subprocess.check_call(cmd, shell=True)
             return True
