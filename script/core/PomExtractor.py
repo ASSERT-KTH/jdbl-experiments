@@ -1,6 +1,7 @@
 import xml.etree.ElementTree as xml
 from xml.etree.ElementTree import Element, SubElement, Comment, tostring
 from xml.dom import minidom
+import re
 
 from pathlib import Path
 
@@ -17,6 +18,8 @@ def stripNs(el):
   for child in el:
     stripNs(child)
 
+def clean_value(text):
+    return text.replace("\n", "").replace("\t", "").replace(" ", "")
 
 def indent(elem, level=0, more_sibs=False):
     i = "\n"
@@ -65,22 +68,22 @@ class PomExtractor:
     def get_artifact(self):
         r = self.poms[0]["root"].find('artifactId')
         if r is not None:
-            return r.text
+            return clean_value(r.text)
         return ''
 
     def get_group(self):
         r = self.poms[0]["root"].find('groupId')
         if r is not None:
-            return r.text
+            return clean_value(r.text)
         return ''
 
     def get_version(self):
         r = self.poms[0]["root"].find("version")
         if r is not None:
-            return r.text
+            return clean_value(r.text)
         r = self.poms[0]["root"].findall('*//version')[0]
         if r is not None:
-            return r.text
+            return clean_value(r.text)
         return ''
 
     def remove_dependency(self, group_id, artifact_id):
@@ -90,12 +93,12 @@ class PomExtractor:
                 for dep in parent:
                     gr = dep.find('groupId')
                     if gr is not None:
-                        gr = gr.text
+                        gr = clean_value(gr.text)
                     if group_id != gr:
                         continue
                     ar = dep.find('artifactId')
                     if ar is not None:
-                        ar = ar.text
+                        ar = clean_value(ar.text)
                     if ar != artifact_id:
                         continue
                     parent.remove(dep)
@@ -106,12 +109,12 @@ class PomExtractor:
         for pom in self.poms:
             deps = pom["root"].findall('*//dependency')
             for dep in deps:
-                gr = dep.find('groupId').text
-                ar = dep.find('artifactId').text
+                gr = clean_value(dep.find('groupId').text)
+                ar = clean_value(dep.find('artifactId').text)
                 if gr == group_id and ar == artifact_id:
                     version = dep.find('version')
                     if version is not None:
-                        version = version.text
+                        version = clean_value(version.text)
                     return version
         return None
 
@@ -119,8 +122,8 @@ class PomExtractor:
         for pom in self.poms:
             deps = pom["root"].findall('*//dependency')
             for dep in deps:
-                gr = dep.find('groupId').text
-                ar = dep.find('artifactId').text
+                gr = clean_value(dep.find('groupId').text)
+                ar = clean_value(dep.find('artifactId').text)
                 if gr == group_id and ar == artifact_id:
                     scope = dep.find('scope')
                     if scope is None:
@@ -140,12 +143,12 @@ class PomExtractor:
             for declared_plugin in parent:
                 gr = declared_plugin.find('groupId')
                 if gr is not None:
-                    gr = gr.text
+                    gr = clean_value(gr.text)
                 if group_id != gr:
                     continue
                 ar = declared_plugin.find('artifactId')
                 if ar is not None:
-                    ar = ar.text
+                    ar = clean_value(ar.text)
                 if ar != artifact_id:
                     continue
                 for exclude in declared_plugin.findall('*//exclude'):
@@ -161,12 +164,12 @@ class PomExtractor:
             for declared_plugin in parent:
                 gr = declared_plugin.find('groupId')
                 if gr is not None:
-                    gr = gr.text
+                    gr = clean_value(gr.text)
                 if group_id != gr:
                     continue
                 ar = declared_plugin.find('artifactId')
                 if ar is not None:
-                    ar = ar.text
+                    ar = clean_value(ar.text)
                 if ar != artifact_id:
                     continue
                 # the plugin is the same remove it
