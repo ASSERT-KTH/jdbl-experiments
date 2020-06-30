@@ -42,6 +42,8 @@ angular
             log.scrollTop = log.scrollHeight;
           }
         }
+        setTimeout(scrollLogs, 100);
+        return $sce.trustAs("html", input.replace(/\n/g, "<br>"));
 
         let output = "";
         input.replace(/</g, "&#60;").replace(/>/g, "&#62;")
