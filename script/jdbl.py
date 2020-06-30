@@ -18,6 +18,6 @@ if __name__ == "__main__":
     dep = Project(args.dependency)
     client = Project(args.client)
 
-    jdbl = JDBL(dep, client, version=args.version, commit=args.lib_commit, output=args.output)
+    jdbl = JDBL(dep, client, version=args.version, commit=args.lib_commit, client_commit=args.client_commit, output=args.output)
     jdbl.run()
     pass

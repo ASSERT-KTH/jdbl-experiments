@@ -10,10 +10,11 @@ from core.Debloat import Debloat
 OUTPUT_dir = 'results' 
 
 class JDBL:
-    def __init__(self, library, client, version=None, working_directory=None, commit=None, output=None):
+    def __init__(self, library, client, version=None, working_directory=None, commit=None, client_commit=None, output=None):
         global OUTPUT_dir
         self.library = library
         self.lib_commit = commit
+        self.client_commit = client_commit
         self.client = client
         self.version = version
         self.working_directory = working_directory
@@ -53,7 +54,9 @@ class JDBL:
             }
             results['steps'].append(current_status)
             current_status['success'] = self.client.clone(self.working_directory)
-            current_status['commit'] = self.library.get_commit()
+            if self.client_commit is not None:
+                self.client.checkout_commit(self.client_commit)
+            current_status['commit'] = self.client.get_commit()
 
             previous_time = time.time()
             current_status['end'] = previous_time
