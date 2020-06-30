@@ -11,10 +11,12 @@ let pathResults = __dirname + "/../script/results";
 if (process.argv.length > 2) {
   pathResults = fs.realpathSync(process.argv[2]);
 }
-app.use(
-  "/data/raw_results.json",
-  express.static(__dirname + "/../raw_results.json")
-);
+let pathJSONResults = __dirname + "/../raw_results.json";
+if (process.argv.length > 3) {
+  pathJSONResults = fs.realpathSync(process.argv[3]);
+}
+app.use("/data/raw_results.json", express.static(pathJSONResults));
+
 app.use(
   "/data/client_categories.json",
   express.static(__dirname + "/../client_categories.json")
