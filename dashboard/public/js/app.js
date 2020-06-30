@@ -44,6 +44,7 @@ angular
         }
 
         let output = "";
+        input.replace(/</g, "&#60;").replace(/>/g, "&#62;")
         for (let line of input.split("\n")) {
           output += line
             .replace("[INFO]", "<span class='info'>[INFO]</span>")
