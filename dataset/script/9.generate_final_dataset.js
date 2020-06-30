@@ -10,6 +10,7 @@ let mavenGraph = JSON.parse(
 (async () => {
   let count = 0;
   const testExecutionResults = {};
+  const repoCommit = {};
   for (let libId in mavenGraph) {
     const lib = mavenGraph[libId];
     version: for (let version in lib.clients) {
@@ -30,6 +31,9 @@ let mavenGraph = JSON.parse(
           continue;
         }
         testExecutionResults[client.repo_name] = client.test_results;
+        if (client.commit) {
+          repoCommit[client.repo_name] = client.commit;
+        }
       }
     }
   }
@@ -62,6 +66,9 @@ let mavenGraph = JSON.parse(
         const client = clients[i];
         if (testExecutionResults[client.repo_name]) {
           client.test_results = testExecutionResults[client.repo_name];
+        }
+        if (!client.commit && repoCommit[client.repo_name]) {
+          client.commit = repoCommit[client.repo_name]
         }
         if (!client.test_results || client.test_results.length != 3 || !client.commit) {
           lib.clients[version].splice(i, 1);
