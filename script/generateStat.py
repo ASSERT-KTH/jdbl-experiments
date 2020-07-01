@@ -216,11 +216,11 @@ with open(PATH_file, 'r') as fd:
                                 'nb_debloat_class': 0,
                                 'nb_preserved_class': 0,
                             }
-                        current_lib['dependencies'][current_dep]['nb_class'] += 1
+                        current_lib['dependencies'][dep]['nb_class'] += 1
                         if "BloatedClass" in bloat:
-                            current_lib['dependencies'][current_dep]['nb_debloat_class'] += 1
+                            current_lib['dependencies'][dep]['nb_debloat_class'] += 1
                         elif "PreservedClass" in bloat:
-                            current_lib['dependencies'][current_dep]['nb_debloat_class'] += 1
+                            current_lib['dependencies'][dep]['nb_debloat_class'] += 1
             
             current_lib['coverage'] = parseCoverage(debloat_path, deps=dep_classes)
 
