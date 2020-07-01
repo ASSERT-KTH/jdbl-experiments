@@ -245,6 +245,7 @@
                     {{ currentVersion.nb_debloat_class | number}} ({{
                     currentVersion.nb_debloat_class / currentVersion.nb_class |
                     percentage:2 }})
+                    (Preserved {{ currentVersion.nb_preserved_class | number}})
                   </td>
                 </tr>
 
@@ -259,6 +260,10 @@
                 <tr>
                   <th scope="row"># Constant type</th>
                   <td>{{ currentVersion.type_nb_constant | number}}</td>
+                </tr>
+                <tr>
+                  <th scope="row"># Singleton type</th>
+                  <td>{{ currentVersion.type_nb_signeton | number}}</td>
                 </tr>
                 <tr>
                   <th scope="row"># Enum type</th>
