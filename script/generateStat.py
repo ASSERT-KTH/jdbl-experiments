@@ -27,7 +27,9 @@ build_errors = {
     'none': 0
 }
 def parseCoverage(path, exclude=[], deps=[]):
-    coverage_results_path = os.path.join(path, "jacoco.csv")
+    coverage_results_path = os.path.join(path, "jacoco.xml")
+    if not os.path.exists(coverage_results_path):
+        coverage_results_path = os.path.join(path, "report.xml")
     if not os.path.exists(coverage_results_path):
         return None
     o = {
@@ -44,39 +46,39 @@ def parseCoverage(path, exclude=[], deps=[]):
         'all_coverage': 0,
         'dep_coverage': 0
     }
-    with open(coverage_results_path, 'r') as fd:
-        lines = fd.readlines()
-        if len(lines) == 0:
-            return None
-        header = lines[0].split(',')
-        for l in lines[1:]:
-            r = {}
-            values = l.split(',')
-            if len(values) != len(header):
-                continue
-            for i in range(0, len(header)):
-                v = values[i]
-                if v.isdigit():
-                    v = int(v)
-                r[header[i]] = v
-            cl = '%s.%s' % (r['PACKAGE'], r['CLASS'])
-            if cl not in o['classes']:
-                if cl not in deps:
-                    o['classes'].append(cl)
+    coverage = xml.parse(coverage_results_path).getroot()
+    for package in coverage.findall("package"):
+        package_name = package.attrib['name'].replace("/", ".")
+        for cl in package.findall("class"):
+            class_name = cl.attrib['name'].replace("/", ".")
+            class_covered = 0
+            class_missed = 0
+            if class_name not in o['classes']:
+                if class_name not in deps:
+                    o['classes'].append(class_name)
                 else:
-                    o['lib_classes'].append(cl)
-            if cl not in exclude:
-                if cl not in deps:
-                    o['nb_lines'] += r['LINE_MISSED'] + r['LINE_COVERED']
-                    o['nb_covered_lines'] += r['LINE_COVERED']
-                else:
-                    o['dep_nb_lines'] += r['LINE_MISSED'] + r['LINE_COVERED']
-                    o['dep_nb_covered_lines'] += r['LINE_COVERED']
-                o['all_nb_lines'] += r['LINE_MISSED'] + r['LINE_COVERED']
-                o['all_nb_covered_lines'] += r['LINE_COVERED']
-                
-            if r['LINE_COVERED'] > 0:
-                o['covered_classes'][cl] = r['LINE_COVERED'] / (r['LINE_COVERED'] + r['LINE_MISSED']) 
+                    o['lib_classes'].append(class_name)
+            for method in cl.findall("method"):
+                method_name = method.attrib['name'].replace("/", ".")
+                for counter in method:
+                    if counter.attrib['type'] != "INSTRUCTION":
+                        continue
+                    nb_missed = int(counter.attrib['missed'])
+                    nb_covered = int(counter.attrib['covered'])
+                    nb_line = nb_missed + nb_covered
+                    class_covered += nb_covered
+                    class_missed +=  nb_missed
+                    if class_name not in exclude:
+                        if class_name not in deps:
+                            o['nb_lines'] += nb_line
+                            o['nb_covered_lines'] += nb_covered
+                        else:
+                            o['dep_nb_lines'] += nb_line
+                            o['dep_nb_covered_lines'] += nb_covered
+                        o['all_nb_lines'] += nb_line
+                        o['all_nb_covered_lines'] += nb_covered
+        if class_covered > 0:
+            o['covered_classes'][class_name] = class_covered / (class_covered + class_missed) 
     if o['nb_lines'] > 0:
         o['coverage'] = o['nb_covered_lines'] / o['nb_lines']
     else: 
@@ -208,7 +210,7 @@ with open(PATH_file, 'r') as fd:
                     lines = fd.readlines()
                     current_dep = None
                     for l in lines:
-                        (dep, bloat, class_name) = l.split(',')
+                        (dep, bloat, class_name) = l.strip().split(',')
                         dep_classes.append(class_name)
                         if dep not in current_lib['dependencies']:
                             current_lib['dependencies'][dep] = {
