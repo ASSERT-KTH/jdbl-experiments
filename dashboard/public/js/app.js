@@ -1,7 +1,7 @@
 angular
   .module("jdbl-website", ["ngRoute", "anguFixedHeaderTable"])
   .config(function ($routeProvider) {
-    $routeProvider.when("/:lib/:version/:user/:project", {
+    $routeProvider.when("/:lib/:version/:project", {
       controller: "mainController",
     });
   })
@@ -238,7 +238,7 @@ angular
       if ($routeParams.lib) {
         $scope.openLib($routeParams.lib);
         $scope.openVersion($routeParams.version);
-        $scope.openClient($routeParams.user + "/" + $routeParams.project);
+        $scope.openClient($routeParams.project);
       } else {
         const firstLib = Object.values($scope.bugs).filter($scope.libFilter)[0];
         for (let i in $scope.bugs) {
