@@ -202,12 +202,14 @@ with open(PATH_file, 'r') as fd:
                             if "PreservedClass" in type:
                                 current_lib['nb_preserved_class'] += 1 
             current_lib['dependencies'] = {}
+            dep_classes = []
             if os.path.exists(os.path.join(debloat_path, 'debloat-dependencies-report.csv')):
                 with open(os.path.join(debloat_path, 'debloat-dependencies-report.csv')) as fd:
                     lines = fd.readlines()
                     current_dep = None
                     for l in lines:
                         (dep, bloat, class_name) = l.split(',')
+                        dep_classes.append(class_name)
                         if dep not in current_lib['dependencies']:
                             current_lib['dependencies'][dep] = {
                                 'nb_class': 0,
