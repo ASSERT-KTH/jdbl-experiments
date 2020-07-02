@@ -16,7 +16,7 @@ if (process.argv.length > 3) {
   pathJSONResults = fs.realpathSync(process.argv[3]);
 }
 app.use("/data/raw_results.json", express.static(pathJSONResults));
-app.use("/data/raw_results.csv", express.static(pathJSONResults));
+app.use("/data/raw_results.csv", express.static(pathJSONResults.replace(".json", ".csv")));
 
 app.use(
   "/data/client_categories.json",
