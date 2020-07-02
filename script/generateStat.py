@@ -46,7 +46,12 @@ def parseCoverage(path, exclude=[], deps=[]):
         'all_coverage': 0,
         'dep_coverage': 0
     }
-    coverage = xml.parse(coverage_results_path).getroot()
+    coverage = None
+    try:
+        coverage = xml.parse(coverage_results_path).getroot()
+    except:
+        return None
+
     for package in coverage.findall("package"):
         package_name = package.attrib['name'].replace("/", ".")
         for cl in package.findall("class"):
