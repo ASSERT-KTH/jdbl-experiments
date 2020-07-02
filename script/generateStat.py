@@ -324,17 +324,17 @@ with open(PATH_file, 'r') as fd:
                     out.append(str(current_lib['original_test']['failing']))
                     out.append(str(current_lib['original_test']['passing']))
                 else:
-                    out.append(str(0))
-                    out.append(str(0))
-                    out.append(str(0))
+                    out.append('')
+                    out.append('')
+                    out.append('')
                 if current_lib['debloat_test'] is not None:
                     out.append(str(current_lib['debloat_test']['error']))
                     out.append(str(current_lib['debloat_test']['failing']))
                     out.append(str(current_lib['debloat_test']['passing']))
                 else:
-                    out.append(str(0))
-                    out.append(str(0))
-                    out.append(str(0))
+                    out.append('')
+                    out.append('')
+                    out.append('')
 
                 out.append(str(current_lib['original_jar_size']))
                 out.append(str(current_lib['debloat_jar_size']))
@@ -350,14 +350,27 @@ with open(PATH_file, 'r') as fd:
                 # nb debloated methods
                 out.append(str(current_lib['nb_debloat_method']))
 
-                # nb dependencies
-                out.append(str(len(current_lib['dependencies'])))
                 count_bloated_dependencies = 0
+                count_bloated_class_dependencies = 0
+                count_bloated_preserved_dependencies = 0
+                count_class_dependencies = 0
                 for dep in current_lib['dependencies']:
+                    count_bloated_class_dependencies += current_lib['dependencies'][dep]['nb_debloat_class']
+                    count_bloated_preserved_dependencies += current_lib['dependencies'][dep]['nb_preserved_class']
+                    count_class_dependencies += current_lib['dependencies'][dep]['nb_class']
                     if current_lib['dependencies'][dep]['nb_class'] == current_lib['dependencies'][dep]['nb_debloat_class']:
                         count_bloated_dependencies += 1
-                # nb bloated dependencies
+
+                # nb dependencies
                 out.append(str(len(current_lib['dependencies'])))
+                # nb bloated dependencies
+                out.append(str(count_bloated_dependencies))
+                # nb dependency class
+                out.append(str(count_class_dependencies))
+                # nb bloated dependency class
+                out.append(str(count_bloated_class_dependencies))
+                # nb preserved dependency class
+                out.append(str(count_bloated_preserved_dependencies))
 
                 if current_lib['coverage'] is not None:
                     out.append(str(current_lib['coverage']['coverage']))
@@ -377,17 +390,17 @@ with open(PATH_file, 'r') as fd:
                     out.append(str(client_results['original_test']['failing']))
                     out.append(str(client_results['original_test']['passing']))
                 else:
-                    out.append(str(0))
-                    out.append(str(0))
-                    out.append(str(0))
+                    out.append('')
+                    out.append('')
+                    out.append('')
                 if client_results['debloat_test'] is not None:
                     out.append(str(client_results['debloat_test']['error']))
                     out.append(str(client_results['debloat_test']['failing']))
                     out.append(str(client_results['debloat_test']['passing']))
                 else:
-                    out.append(str(0))
-                    out.append(str(0))
-                    out.append(str(0))
+                    out.append('')
+                    out.append('')
+                    out.append('')
                 if client_results['coverage_debloat'] is not None:
                     out.append(str(client_results['coverage_debloat']['coverage']))
                     del client_results['coverage_debloat']['classes']
@@ -413,7 +426,7 @@ print("Lib with clients", len(lib_with_clients))
 print("# successful debloated clients", count_debloated_clients)
 print("Total execution time", datetime.timedelta(seconds=total_time))
 with open(os.path.join(os.path.dirname(__file__), '..', 'raw_results.csv'), 'w') as fd:
-    header = ['ID','"Lib groupId"', '"Lib artifactId"', '"Lib version"', '"Compile"', '"Debloat"', '"Lib original test error"', '"Lib original test failing"', '"Lib original test passing"', '"Lib debloat test error"', '"Lib debloat test failing"', '"Lib debloat test passing"', '"size original jar"', '"size debloat jar"', '"# class original"', '"# method original"', '"# debloated classes"', '"# preserved classes"', '"# debloated methods"', '"# Dependenies"', '"# bloated dependenies"', '"Lib coverage"', '"Lib dep coverage"', '"Lib all coverage"', '"Client groupId"', '"Client artifactId"', '"Client Compile"', '"Client Debloat"', '"Client original test error"', '"Client original test failing"', '"Client original test passing"', '"Client debloat test error"', '"Client debloat test failing"', '"Client debloat test passing"', '"Client coverage"', '"Cover lib"q']
+    header = ['ID','"Lib groupId"', '"Lib artifactId"', '"Lib version"', '"Compile"', '"Debloat"', '"Lib original test error"', '"Lib original test failing"', '"Lib original test passing"', '"Lib debloat test error"', '"Lib debloat test failing"', '"Lib debloat test passing"', '"size original jar"', '"size debloat jar"', '"# class original"', '"# method original"', '"# debloated classes"', '"# preserved classes"', '"# debloated methods"', '"# Dependenies"', '"# bloated dependenies"', '"# bloated dependeny class"', '"# bloated bloated dependeny class"', '"# bloated preserved dependeny class"', '"Lib coverage"', '"Lib dep coverage"', '"Lib all coverage"', '"Client groupId"', '"Client artifactId"', '"Client Compile"', '"Client Debloat"', '"Client original test error"', '"Client original test failing"', '"Client original test passing"', '"Client debloat test error"', '"Client debloat test failing"', '"Client debloat test passing"', '"Client coverage"', '"Cover lib"q']
     csv = ",".join(header) + '\n' + csv
     fd.write(csv)
 with open(os.path.join(os.path.dirname(__file__), '..', 'raw_results.json'), 'w') as fd:
