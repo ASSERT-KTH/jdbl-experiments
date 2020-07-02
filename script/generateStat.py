@@ -236,7 +236,7 @@ with open(PATH_file, 'r') as fd:
 
             current_lib['coverage'] = parseCoverage(debloat_path, deps=dep_classes)
 
-            current_lib['debloatTime'] = -1
+            current_lib['debloatTime'] = ''
             if os.path.exists(os.path.join(debloat_path, 'debloat-execution-time.log')):
                 with open(os.path.join(debloat_path, 'debloat-execution-time.log')) as fd:
                     # Total debloat time: 33.458 s
@@ -328,6 +328,7 @@ with open(PATH_file, 'r') as fd:
                 out.append(version)
                 out.append(str(current_lib['compiled']))
                 out.append(str(current_lib['debloat']))
+                out.append(str(current_lib['debloatTime']))
 
                 if current_lib['original_test'] is not None:
                     out.append(str(current_lib['original_test']['error']))
@@ -444,7 +445,7 @@ print("Lib with clients", len(lib_with_clients))
 print("# successful debloated clients", count_debloated_clients)
 print("Total execution time", datetime.timedelta(seconds=total_time))
 with open(os.path.join(os.path.dirname(__file__), '..', 'raw_results.csv'), 'w') as fd:
-    header = ['ID','"Lib groupId"', '"Lib artifactId"', '"Lib version"', '"Compile"', '"Debloat"', '"Lib original test error"', '"Lib original test failing"', '"Lib original test passing"', '"Lib debloat test error"', '"Lib debloat test failing"', '"Lib debloat test passing"', '"size original jar"', '"size debloat jar"', '"# class original"', '"# method original"', '"# debloated classes"', '"# preserved classes"', '"# debloated methods"', '"# Dependenies"', '"# bloated dependenies"', '"# dependeny class"', '"# bloated dependeny class"', '"# preserved dependeny class"', '"# dependeny method"', '"# bloated dependeny method"', '"Lib coverage"', '"Lib dep coverage"', '"Lib all coverage"', '"Client groupId"', '"Client artifactId"', '"Client Compile"', '"Client Debloat"', '"Client original test error"', '"Client original test failing"', '"Client original test passing"', '"Client debloat test error"', '"Client debloat test failing"', '"Client debloat test passing"', '"Client coverage"', '"Cover lib"']
+    header = ['ID','"Lib groupId"', '"Lib artifactId"', '"Lib version"', '"Compile"', '"Debloat"', '"Debloat Time"', '"Lib original test error"', '"Lib original test failing"', '"Lib original test passing"', '"Lib debloat test error"', '"Lib debloat test failing"', '"Lib debloat test passing"', '"size original jar"', '"size debloat jar"', '"# class original"', '"# method original"', '"# debloated classes"', '"# preserved classes"', '"# debloated methods"', '"# Dependenies"', '"# bloated dependenies"', '"# dependeny class"', '"# bloated dependeny class"', '"# preserved dependeny class"', '"# dependeny method"', '"# bloated dependeny method"', '"Lib coverage"', '"Lib dep coverage"', '"Lib all coverage"', '"Client groupId"', '"Client artifactId"', '"Client Compile"', '"Client Debloat"', '"Client original test error"', '"Client original test failing"', '"Client original test passing"', '"Client debloat test error"', '"Client debloat test failing"', '"Client debloat test passing"', '"Client coverage"', '"Cover lib"']
     csv = ",".join(header) + '\n' + csv
     fd.write(csv)
 with open(os.path.join(os.path.dirname(__file__), '..', 'raw_results.json'), 'w') as fd:
