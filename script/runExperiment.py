@@ -21,6 +21,9 @@ parser.add_argument('--all', dest='all', action='store_true', help="Run the expe
 parser.add_argument('-p', "--process", help="Number of process", type=int, default=4)
 parser.add_argument("--local", action='store_true', help="Run JDBL locally.")
 parser.add_argument("--test", action='store_true', help="Run JDBL on a subset dataset.")
+parser.add_argument("--first-client", action='store_true', help="Only run first client for each lib.")
+parser.add_argument("--existing-lib", action='store_true', help="Only run clients for successfully debloated libs.")
+
 parser.add_argument("--output", help="The output directory")
 parser.add_argument("--timeout", help="The maximum execution time per execution", type=int, default=60 * 60)
 
@@ -136,6 +139,7 @@ class Task():
                 self.status = "Kill"
                 # p.send_signal(signal.SIGINT)
             except Exception as e:
+                print(e)
                 self.status = str(e)
 
 class RunnerWorker(Thread):
@@ -210,11 +214,15 @@ with open(PATH_file) as fd:
                 client_name = os.path.basename(client['repo_name'])
                 if 'groupId' not in lib or 'groupId' not in client:
                     continue
-                path_client_debloat = os.path.join(OUTPUT, lib['repo_name'].replace("/", "_"), version, 'clients', client['repo_name'], 'debloat', 'test-results')
+                path_client_debloat = os.path.join(OUTPUT, lib['repo_name'].replace("/", "_"), version, 'clients', client['repo_name'].replace("/", "_"), 'debloat', 'test-results')
                 path_lib = os.path.join(OUTPUT, lib['repo_name'].replace("/", "_"), version, 'debloat', 'debloat.jar')
-                if not os.path.exists(path_client_debloat) and not os.path.exists(path_lib):
+                consider_lib = os.path.exists(path_lib)
+                if not args.existing_lib:
+                    consider_lib = not consider_lib
+                if not os.path.exists(path_client_debloat) and consider_lib:
                     tasks.append(Task(lib, client, version, lib['releases'][version]))
-                    break
+                    if args.first_client:
+                        break
 
 
 finished = []
