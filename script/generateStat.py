@@ -236,13 +236,13 @@ with open(PATH_file, 'r') as fd:
                                     current_lib['dependencies'][classes_dep_map[class_name]]['nb_debloat_method'] += 1
                         elif "Class" in type:
                             current_lib['nb_class'] += 1
-                            debloated_class.append(l.split(",")[1])
                             o_type = l.split(",")[2].strip().lower()
                             
                             if "type_nb_%s" % (o_type) in current_lib:
                                 current_lib["type_nb_%s" % (o_type)] += 1
                             if "BloatedClass" in type:
                                 current_lib['nb_debloat_class'] += 1 
+                                debloated_class.append(l.split(",")[1])
                             if "PreservedClass" in type:
                                 current_lib['nb_preserved_class'] += 1 
 
