@@ -26,7 +26,7 @@ build_errors = {
     'client_debloat': 0,
     'none': 0
 }
-def parseCoverage(path, exclude=[], deps=[]):
+def parseCoverage(path, exclude=[], deps=[], debloated_class=[], current_lib=None):
     coverage_results_path = os.path.join(path, "jacoco.xml")
     if not os.path.exists(coverage_results_path):
         coverage_results_path = os.path.join(path, "report.xml")
@@ -63,7 +63,10 @@ def parseCoverage(path, exclude=[], deps=[]):
                     o['classes'].append(class_name)
                 else:
                     o['lib_classes'].append(class_name)
-            for method in cl.findall("method"):
+            methods = cl.findall("method")
+            if current_lib is not None and class_name in debloated_class:
+                current_lib['nb_debloat_method'] += len(methods)
+            for method in methods:
                 method_name = method.attrib['name'].replace("/", ".")
                 for counter in method:
                     if counter.attrib['type'] != "INSTRUCTION":
@@ -196,6 +199,8 @@ with open(PATH_file, 'r') as fd:
                     current_dep = None
                     for l in lines:
                         (dep, bloat, class_name) = l.strip().split(',')
+                        if "jcov" in dep:
+                            continue
                         dep_classes.append(class_name)
                         classes_dep_map[class_name] = dep
                         if dep not in current_lib['dependencies']:
@@ -212,6 +217,7 @@ with open(PATH_file, 'r') as fd:
                         elif "PreservedClass" in bloat:
                             current_lib['dependencies'][dep]['nb_debloat_class'] += 1
             
+            debloated_class = []
             if os.path.exists(os.path.join(debloat_path, 'debloat-report.csv')):
                 with open(os.path.join(debloat_path, 'debloat-report.csv')) as fd:
                     lines = fd.readlines()
@@ -230,6 +236,7 @@ with open(PATH_file, 'r') as fd:
                                     current_lib['dependencies'][classes_dep_map[class_name]]['nb_debloat_method'] += 1
                         elif "Class" in type:
                             current_lib['nb_class'] += 1
+                            debloated_class.append(l.split(",")[1])
                             o_type = l.split(",")[2].strip().lower()
                             
                             if "type_nb_%s" % (o_type) in current_lib:
@@ -239,7 +246,7 @@ with open(PATH_file, 'r') as fd:
                             if "PreservedClass" in type:
                                 current_lib['nb_preserved_class'] += 1 
 
-            current_lib['coverage'] = parseCoverage(debloat_path, deps=dep_classes)
+            current_lib['coverage'] = parseCoverage(debloat_path, deps=dep_classes, debloated_class=debloated_class, current_lib=current_lib)
 
             current_lib['debloatTime'] = ''
             if os.path.exists(os.path.join(debloat_path, 'debloat-execution-time.log')):
