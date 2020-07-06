@@ -65,6 +65,7 @@ def parseCoverage(path, exclude=[], deps=[], debloated_class=[], current_lib=Non
                     o['lib_classes'].append(class_name)
             methods = cl.findall("method")
             if current_lib is not None and class_name in debloated_class:
+                current_lib['nb_method'] += len(methods)
                 current_lib['nb_debloat_method'] += len(methods)
             for method in methods:
                 method_name = method.attrib['name'].replace("/", ".")
