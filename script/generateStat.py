@@ -26,7 +26,7 @@ build_errors = {
     'client_debloat': 0,
     'none': 0
 }
-def parseCoverage(path, exclude=[], deps=[], debloated_class=[], current_lib=None):
+def parseCoverage(path, exclude=[], deps=[], debloated_class=[], classes_dep_map={}, current_lib=None):
     coverage_results_path = os.path.join(path, "jacoco.xml")
     if not os.path.exists(coverage_results_path):
         coverage_results_path = os.path.join(path, "report.xml")
@@ -65,6 +65,9 @@ def parseCoverage(path, exclude=[], deps=[], debloated_class=[], current_lib=Non
                     o['lib_classes'].append(class_name)
             methods = cl.findall("method")
             if current_lib is not None and class_name in debloated_class:
+                if class_name in classes_dep_map:
+                    current_lib['dependencies'][classes_dep_map[class_name]]['nb_method'] += len(methods)
+                    current_lib['dependencies'][classes_dep_map[class_name]]['nb_debloat_method'] += len(methods)
                 current_lib['nb_method'] += len(methods)
                 current_lib['nb_debloat_method'] += len(methods)
             for method in methods:
@@ -247,7 +250,7 @@ with open(PATH_file, 'r') as fd:
                             if "PreservedClass" in type:
                                 current_lib['nb_preserved_class'] += 1 
 
-            current_lib['coverage'] = parseCoverage(debloat_path, deps=dep_classes, debloated_class=debloated_class, current_lib=current_lib)
+            current_lib['coverage'] = parseCoverage(debloat_path, deps=dep_classes, debloated_class=debloated_class, classes_dep_map=classes_dep_map, current_lib=current_lib)
 
             current_lib['debloatTime'] = ''
             if os.path.exists(os.path.join(debloat_path, 'debloat-execution-time.log')):
