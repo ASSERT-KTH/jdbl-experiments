@@ -91,76 +91,82 @@ loadData((result) => {
   displayResult("# Lib", nbLib);
   const nbCompiled = libs.filter((l) => l.compiled).length;
   displayResult("# Compiled Lib", nbCompiled, nbLib);
-  const nbDebloated = libs.filter((l) => l.debloat).length;
+  const nbDebloated = libs.filter((l) => l.debloat && l.nb_debloat_method).length;
   displayResult("# Debloated Lib", nbDebloated, nbCompiled);
 
-  const debloatTime = libs.filter((l) => l.debloat).map((l) => l.debloatTime);
+  const libsWithTests = libs.filter((l) => l.original_test && l.debloat_test);
+  displayResult("# Lib with tests", libsWithTests.length, nbDebloated);
+
+  const libsWithIdenticalNbTest = libsWithTests.filter((l) => (l.original_test.error + l.original_test.failing + l.original_test.passing) == (l.original_test.error + l.debloat_test.failing + l.debloat_test.passing));
+  displayResult("# Lib with same nb of tests", libsWithIdenticalNbTest.length, libsWithTests);
+
+  const debloatTime = libsWithIdenticalNbTest.filter((l) => l.debloat).map((l) => l.debloatTime);
   displayResult("Debloat time", debloatTime);
 
-  const nbDependencies = libs.map((l) => Object.keys(l.dependencies).length);
+  const nbDependencies = libsWithIdenticalNbTest.map((l) => Object.keys(l.dependencies).length);
   displayResult("# Dependencies", nbDependencies);
 
-  const nbClass = libs.map((l) => l.nb_class);
+  const nbClass = libsWithIdenticalNbTest.map((l) => l.nb_class);
   displayResult("# Class", nbClass);
-  const nbBloatedClass = libs.map((l) => l.nb_debloat_class);
+  const nbBloatedClass = libsWithIdenticalNbTest.map((l) => l.nb_debloat_class);
   displayResult("# Debloated Class", nbBloatedClass, nbClass);
 
-  const nbMethod = libs.map((l) => l.nb_method);
+  const nbMethod = libsWithIdenticalNbTest.map((l) => l.nb_method);
   displayResult("# Method", nbMethod);
-  const nbDebloatedMethod = libs.map((l) => l.nb_debloat_method);
+  const nbDebloatedMethod = libsWithIdenticalNbTest.map((l) => l.nb_debloat_method);
   displayResult("# Debloated Method", nbDebloatedMethod, nbMethod);
 
-  const coverages = libs
+  const coverages = libsWithIdenticalNbTest
     .filter((l) => l.coverage != null)
     .map((l) => l.coverage.coverage * 100);
   displayResult("Coverage", coverages);
 
-  const nbTest = libs.map(
+  const nbTest = libsWithIdenticalNbTest.map(
     (l) =>
       l.original_test.error + l.original_test.failing + l.original_test.passing
   );
   displayResult("# Test", nbTest);
 
-  const nbFailingTest = libs.map((l) => l.original_test.failing);
+  const nbFailingTest = libsWithIdenticalNbTest.map((l) => l.original_test.failing);
   displayResult("# Failing Test", nbFailingTest, nbTest);
 
-  const nbErrorTest = libs.map((l) => l.original_test.error);
+  const nbErrorTest = libsWithIdenticalNbTest.map((l) => l.original_test.error);
   displayResult("# Error Test", nbErrorTest, nbTest);
 
-  const nbPassingTest = libs.map((l) => l.original_test.passing);
+  const nbPassingTest = libsWithIdenticalNbTest.map((l) => l.original_test.passing);
   displayResult("# Passing Test", nbPassingTest, nbTest);
 
-  const testExecution = libs.map((l) => l.original_test.execution_time);
+  const testExecution = libsWithIdenticalNbTest.map((l) => l.original_test.execution_time);
   displayResult("Test Execution", testExecution);
 
 
-  const nbDeboatTest = libs.filter((l) => l.debloat).map(
+  const nbDeboatTest = libsWithIdenticalNbTest.filter((l) => l.debloat).map(
     (l) =>
       l.original_test.error + l.debloat_test.failing + l.debloat_test.passing
   );
   displayResult("# Deboated Test", nbDeboatTest);
 
-  const nbDeboatFailingTest = libs.filter((l) => l.debloat).map((l) => l.debloat_test.failing);
+  const nbDeboatFailingTest = libsWithIdenticalNbTest.filter((l) => l.debloat).map((l) => l.debloat_test.failing);
   displayResult("# Deboated Failing Test", nbDeboatFailingTest, nbDeboatTest);
 
-  const nbDeboatErrorTest = libs.filter((l) => l.debloat).map((l) => l.debloat_test.error);
+  const nbDeboatErrorTest = libsWithIdenticalNbTest.filter((l) => l.debloat).map((l) => l.debloat_test.error);
   displayResult("# Deboated Error Test", nbDeboatErrorTest, nbDeboatTest);
 
-  const nbDeboatPassingTest = libs.filter((l) => l.debloat).map((l) => l.debloat_test.passing);
+  const nbDeboatPassingTest = libsWithIdenticalNbTest.filter((l) => l.debloat).map((l) => l.debloat_test.passing);
   displayResult("# Deboated Passing Test", nbDeboatPassingTest, nbDeboatTest);
 
-  const testDeboatExecution = libs.filter((l) => l.debloat).map((l) => l.debloat_test.execution_time);
+  const testDeboatExecution = libsWithIdenticalNbTest.filter((l) => l.debloat).map((l) => l.debloat_test.execution_time);
   displayResult("Deboated Test Execution", testDeboatExecution);
 
-  const jarSize = libs.filter((l) => l.debloat).map((l) => l.original_jar_size);
+  const jarSize = libsWithIdenticalNbTest.filter((l) => l.debloat).map((l) => l.original_jar_size);
   displayResult("Jar size", jarSize);
 
-  const debloatJarSize = libs
+  const debloatJarSize = libsWithIdenticalNbTest
     .filter((l) => l.debloat)
     .map((l) => l.debloat_jar_size);
   displayResult("Debloat Jar size", debloatJarSize, jarSize);
 
-  const clients = libs.map((l) => Object.values(l.clients));
+  const clients = libsWithIdenticalNbTest.map((l) => Object.values(l.clients));
   const nbClient = clients.map((c) => c.length);
   displayResult("# Clients", nbClient);
   const nbCompiledClient = clients.map(
