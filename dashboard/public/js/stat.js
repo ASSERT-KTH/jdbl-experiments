@@ -95,10 +95,10 @@ loadData((result) => {
   displayResult("# Debloated Lib", nbDebloated, nbCompiled);
 
   const libsWithTests = libs.filter((l) => l.original_test && l.debloat_test);
-  displayResult("# Lib with tests", libsWithTests.length, nbDebloated);
+  displayResult("# Lib with tests", libsWithTests.length, nbCompiled);
 
   const libsWithIdenticalNbTest = libsWithTests.filter((l) => (l.original_test.error + l.original_test.failing + l.original_test.passing) == (l.original_test.error + l.debloat_test.failing + l.debloat_test.passing));
-  displayResult("# Lib with same nb of tests", libsWithIdenticalNbTest.length, libsWithTests);
+  displayResult("# Lib with same nb of tests", libsWithIdenticalNbTest.length, libsWithTests.length);
 
   const debloatTime = libsWithIdenticalNbTest.filter((l) => l.debloat).map((l) => l.debloatTime);
   displayResult("Debloat time", debloatTime);
