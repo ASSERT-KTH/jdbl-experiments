@@ -268,6 +268,11 @@ with open(PATH_file, 'r') as fd:
                 current_lib['debloat_jar_size'] = os.stat(os.path.join(debloat_path, 'debloat.jar')).st_size
             else:
                 current_lib['debloat_jar_size'] = 0
+            
+            if os.path.exists(os.path.join(debloat_path, 'dup.jar')):
+                current_lib['workaround_jar_size'] = os.stat(os.path.join(debloat_path, 'dup.jar')).st_size
+            else:
+                current_lib['workaround_jar_size'] = 0
 
             for c in lib['clients'][version]:
                 if 'artifactId' not in c or 'groupId' not in c:
@@ -365,6 +370,7 @@ with open(PATH_file, 'r') as fd:
 
                 out.append(str(current_lib['original_jar_size']))
                 out.append(str(current_lib['debloat_jar_size']))
+                out.append(str(current_lib['workaround_jar_size']))
 
                 # nb classes
                 out.append(str(current_lib['nb_class']))
@@ -461,7 +467,7 @@ print("Lib with clients", len(lib_with_clients))
 print("# successful debloated clients", count_debloated_clients)
 print("Total execution time", datetime.timedelta(seconds=total_time))
 with open(os.path.join(os.path.dirname(__file__), '..', 'raw_results.csv'), 'w') as fd:
-    header = ['ID','"Lib.groupId"', '"Lib.artifactId"', '"Lib.version"', '"Compile"', '"Debloat"', '"Debloat.Time"', '"Lib.original.test.error"', '"Lib.original.test.failing"', '"Lib.original.test.passing"', '"Lib.debloat.test.error"', '"Lib.debloat.test.failing"', '"Lib.debloat.test.passing"', '"Size.original.jar"', '"Size.debloat.jar"', '"Nb.class.original"', '"Nb.method.original"', '"Nb.debloated.classes"', '"Nb.preserved.classes"', '"Nb.debloated.methods"', '"Nb.Dependenies"', '"Nb.bloated.dependenies"', '"Nb.dependeny.class"', '"Nb.bloated.dependeny.class"', '"Nb.preserved.dependeny.class"', '"Nb.dependeny.method"', '"Nb.bloated.dependeny.method"', '"Lib.coverage"', '"Lib.dep.coverage"', '"Lib.all.coverage"', '"Client.groupId"', '"Client.artifactId"', '"Client.Compile"', '"Client.Debloat"', '"Client.original.test.error"', '"Client.original.test.failing"', '"Client.original.test.passing"', '"Client.debloat.test.error"', '"Client.debloat.test.failing"', '"Client.debloat.test.passing"', '"Client.coverage"', '"Cover.lib"']
+    header = ['ID','"Lib.groupId"', '"Lib.artifactId"', '"Lib.version"', '"Compile"', '"Debloat"', '"Debloat.Time"', '"Lib.original.test.error"', '"Lib.original.test.failing"', '"Lib.original.test.passing"', '"Lib.debloat.test.error"', '"Lib.debloat.test.failing"', '"Lib.debloat.test.passing"', '"Size.original.jar"', '"Size.debloat.jar"', '"Size.workaround.jar"', '"Nb.class.original"', '"Nb.method.original"', '"Nb.debloated.classes"', '"Nb.preserved.classes"', '"Nb.debloated.methods"', '"Nb.Dependenies"', '"Nb.bloated.dependenies"', '"Nb.dependeny.class"', '"Nb.bloated.dependeny.class"', '"Nb.preserved.dependeny.class"', '"Nb.dependeny.method"', '"Nb.bloated.dependeny.method"', '"Lib.coverage"', '"Lib.dep.coverage"', '"Lib.all.coverage"', '"Client.groupId"', '"Client.artifactId"', '"Client.Compile"', '"Client.Debloat"', '"Client.original.test.error"', '"Client.original.test.failing"', '"Client.original.test.passing"', '"Client.debloat.test.error"', '"Client.debloat.test.failing"', '"Client.debloat.test.passing"', '"Client.coverage"', '"Cover.lib"']
     csv = ",".join(header) + '\n' + csv
     fd.write(csv)
 with open(os.path.join(os.path.dirname(__file__), '..', 'raw_results.json'), 'w') as fd:
