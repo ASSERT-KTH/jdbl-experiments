@@ -69,12 +69,22 @@ class PomExtractor:
         r = self.poms[0]["root"].find('artifactId')
         if r is not None:
             return clean_value(r.text)
+        r = self.poms[0]["root"].find('parent')
+        if r is not None:
+            r = r.find('artifactId')
+            if r is not None:
+                return clean_value(r.text)
         return ''
 
     def get_group(self):
         r = self.poms[0]["root"].find('groupId')
         if r is not None:
             return clean_value(r.text)
+        r = self.poms[0]["root"].find('parent')
+        if r is not None:
+            r = r.find('groupId')
+            if r is not None:
+                return clean_value(r.text)
         return ''
 
     def get_version(self):
