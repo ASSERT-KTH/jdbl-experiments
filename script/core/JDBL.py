@@ -240,10 +240,37 @@ class JDBL:
                 os.mkdir(debloat_client_results_path)
 
             self.client.inject_jacoco_plugin()
+            (includes, excludes) = self.client.pom.get_included_excluded_tests()
+            exclude_config = []
+            for exclude in excludes:
+                exclude_config.append({
+                    "name": "exclude",
+                    "text": exclude
+                })
+            include_config = []
+            for include in includes:
+                include_config.append({
+                    "name": "include",
+                    "text": include
+                })
+            self.client.pom.add_plugin("org.apache.maven.plugins", "maven-surefire-plugin", "2.19.1", [{
+                "name": "configuration",
+                "children": [
+                    {
+                        "name": "excludes",
+                        "children": exclude_config
+                    },
+                    {
+                        "name": "includes",
+                        "children": include_config
+                    }
+                ]
+            }])
+            
             current_status['success'] = self.client.copy_pom(debloat_client_results_path + "/pom.xml")
-            current_status['success'] = current_status['success'] and self.client.test(clean=False,stdout=debloat_client_results_path + "/execution.log")
-            current_status['success'] = current_status['success'] and self.client.copy_jacoco(debloat_client_results_path)
-            current_status['success'] = current_status['success'] and self.client.copy_test_results(debloat_client_results_path + "/test-results")
+            current_status['success'] =  self.client.test(clean=False,stdout=debloat_client_results_path + "/execution.log") and current_status['success']
+            current_status['success'] = self.client.copy_jacoco(debloat_client_results_path) and current_status['success']
+            current_status['success'] = self.client.copy_test_results(debloat_client_results_path + "/test-results") and current_status['success']
 
             previous_time = time.time()
             current_status['end'] = previous_time
