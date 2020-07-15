@@ -29,9 +29,40 @@ colnames(table)
 
 table$`Bukkit/Bukkit`
 
-table_flatten <- flatten(table)
+colnames(table)
+
+
+
+
+unnested <- table %>% 
+  select(`10cella/hashids-java`) %>% 
+  unnest(cols = c(`10cella/hashids-java`)) %>% 
+  select(-clients)
+flatten(unnested)
+
+
+unnested <- table %>% 
+  select(`alibaba/fastjson`) %>% 
+  unnest() %>% 
+  select(-clients)
+flatten(unnested)
+
+
+table_flatten <- flatten(table, recursive = TRUE)
+# table_flatten <- flatten(table_flatten, recursive = F)
+
+table_flatten$`10cella/hashids-java.1.0.1.repo_name`
+
 
 colnames(table_flatten)
+
+
+subset <- table_flatten %>% filter(`10cella/hashids-java.1.0.1` == "10cella/hashids-java")
+
+
+yelp_tbl <- as_tibble(subset)
+
+
 ```
 
 

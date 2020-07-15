@@ -20,72 +20,124 @@ source("header.R")
 rm(list=ls())
 ```
 
-# Prepare dataset 
-
-The raw dataset has 613 libs GAV with information of the following variables:
+# Prepare the Dataset 
 
 ```{r echo=FALSE}
 # Read the data
-raw_results <- read.delim("Data/raw_results.csv", sep = ",", header = T)
+raw_results <- read.delim("Data/raw_results_final_3.csv", sep = ",", header = T, stringsAsFactors = TRUE)
 
 # Prepare the data
-raw_results <- raw_results %>%
-  mutate(Lib = paste(Lib_groupId, Lib_artifactId, sep = ":")) %>% 
-  mutate(Lib_gav = paste(Lib, Lib_version, sep = ":")) %>% 
-  mutate(Client = paste(Client_groupId, Client_artifactId, sep = ":"))
+results <- raw_results %>%
+  filter(ID != "False") %>% 
+  # Create Lib, Lib.gav, and Client variables
+  mutate(Lib = paste(Lib.groupId, Lib.artifactId, sep = ":")) %>% 
+  mutate(Lib.av = paste(Lib.artifactId, Lib.version, sep = ":")) %>% 
+  mutate(Lib.gav = paste(Lib, Lib.version, sep = ":")) %>% 
+  mutate(Client = paste(Client.groupId, Client.artifactId, sep = ":")) %>% 
+  # Create
+  mutate(Nb.test.debloat = (Lib.debloat.test.error + Lib.debloat.test.failing + Lib.debloat.test.passing)) %>% 
+  filter(Nb.test.debloat == Lib.original.test.passing) %>% 
+  select(-Nb.test.debloat) %>% 
+  # Remove libs with weird executions due to config issues
+  filter(ID != "FasterXML_woodstox_6.1.1" & 
+           ID != "FasterXML_woodstox_6.0.2")
+colnames(results)
 
-raw_results$Lib_groupId <- NULL
-raw_results$Lib_artifactId <- NULL
-raw_results$Lib_version <- NULL
-raw_results$Client_groupId <- NULL
-raw_results$Client_artifactId <- NULL
 
-# View(raw_results)
-# raw_results %>% count(Lib_gav)
-
-colnames(raw_results)
+# raw_results %>% filter(Nb.Dependenies == 1) %>% select(ID) %>% distinct()
+# raw_results %>% filter(Nb.Dependenies > 1) %>% select(ID) %>% distinct()
 ```
 
-We exclude the libs with `Size_debloat_jar == 0` and `Nb_classes_original == 0`, this results in a dataset with 72 diferent libs and 468 libs GAV
+## Total unique Lib GAVs:
 
 ```{r echo=FALSE}
-results <- raw_results %>%
-  filter(Size_debloat_jar > 0 & Nb_classes_original > 0) %>%
-  select(
-    "Lib_gav"      ,
-    "Lib"  ,
-    "Client" ,
-    "Size_original_jar",
-    "Size_debloat_jar",
-    "Nb_classes_original" ,
-    "Nb_methods_original"   ,
-    "Nb_classes_debloated"  ,
-    "Nb_methods_debloated" ,
-    "Lib_coverage"   ,
-    "Client_original_test_error"  ,
-    "Client_original_test_failing",
-    "Client_original_test_passing",
-    "Client_debloat_test_error"  ,
-    "Client_debloat_test_failing" ,
-    "Client_debloat_test_passing" ,
-    "Client_coverage"      ,
-    "Cover_lib"
-  )           
+results %>% count(Lib.gav) %>% arrange(desc(n))
+```
 
-# results %>% count(Lib_gav)
+## Total unique Lib GAs:
 
-# View(results)
+```{r echo=FALSE}
+results %>% count(Lib) %>% arrange(desc(n))
+```
 
-results
+# Overall Lib debloat success
+
+```{r echo=FALSE, warning=FALSE}
+debloat_effectiveness_stacked_barplot <- results %>%
+  select(Lib.gav, Debloat) %>% 
+  distinct() %>% 
+  count(Debloat) %>% 
+  mutate(`Debloat result` = ifelse(Debloat == "True", "Success", "Failure")) %>% 
+  ggplot(aes(x = "Libs", y = n, fill = `Debloat result`, label = n)) +
+  geom_bar(stat = "identity", width = 0.75, position=position_dodge()) +
+  geom_text(aes(label=n), size = 6, position=position_dodge(width=0.75), hjust=-0.25) +
+  scale_y_continuous(limits = c(0, 270), breaks=c(0, 50, 100, 150, 200, 252), labels=c("0", "50", "100", "150","200","252")) +
+  scale_fill_manual(values = c( "#ff1f5d", "#00cd6c")) +
+  coord_flip() +
+  ylab("\\# Libraries") +
+  xlab(NULL) + 
+  theme(axis.text.y=element_blank(),
+        axis.ticks.y=element_blank(),
+        panel.grid.major.y = element_blank(),
+        panel.grid.minor.y = element_blank(),
+        # panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank()
+        ) 
+
+results %>%
+  select(Lib.gav, Debloat) %>% 
+  distinct() %>% 
+  filter(Debloat == "False")
+
+# PLOT
+debloat_effectiveness_stacked_barplot
+save_figure(debloat_effectiveness_stacked_barplot, "Figures/debloat_effectiveness_stacked_barplot", 6, 2)
+```
+
+For the rest of the analysis, we exclude the libs for which the debloat fail.
+The current number of Libs, Versions, and Clients in the dataset are:
+
+```{r echo=FALSE, warning=FALSE}
+
+results <- results %>% 
+  filter(Debloat == "True")
+
+results %>% select(Lib) %>% distinct() %>% count()
+results %>% select(Lib.gav) %>% distinct() %>% count()
+results %>% select(Client) %>% distinct() %>% count()
+```
+# Distribution of versions per library
+
+```{r echo=FALSE}
+results %>% 
+  select(Lib.artifactId, Lib.version) %>% 
+  distinct() %>% 
+  group_by(Lib.artifactId) %>% 
+  summarise(n = n()) %>% 
+  ggplot(aes(x= "Libs", y = n)) +
+  geom_violin(fill="goldenrod") +
+  geom_boxplot(width = 0.1) +
+  scale_y_continuous(breaks=c(0, 1,10,100,1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000), trans="log1p") +
+  xlab(NULL) +
+  ylab("#Versions")+
+  coord_flip()
+
+results %>%
+  select(Lib.artifactId, Lib.version) %>%
+  distinct() %>%
+  group_by(Lib.artifactId) %>%
+  summarise(Nb.Versions = n()) %>%
+  arrange(desc(Nb.Versions))
 ```
 
 # Distribution of clients per library
 
-The lib `commons-io:commons-io:2.4` has the larger number of clients with 874, followed by `commons-cli:commons-cli:1.2` with 279, and `commons-codec:commons-codec:1.10` with 257.
-
 ```{r echo=FALSE}
 results %>% 
-  count(Lib_gav) %>% 
+  select(Lib.gav, Client) %>% 
+  distinct() %>% 
+  group_by(Lib.gav) %>% 
+  summarise(n = n()) %>% 
   ggplot(aes(x= "Libs", y = n)) +
   geom_violin(fill="goldenrod") +
   geom_boxplot(width = 0.1) +
@@ -95,99 +147,890 @@ results %>%
   coord_flip()
 
 results %>% 
-  count(Lib_gav) %>% 
-  arrange(desc(n))
-```
-
-
-# Library plots
-
-## Size of the original vs size debloated
-
-The size of the debloated jar is slightly bigger than the original one. It seems that JDBL is adding some dependencies or resourses that should't be included in the bundled jar. We need to invesitigate this in more details.
-
-```{r echo=FALSE}
-results_size <- results %>% select(Lib_gav, Size_original_jar, Size_debloat_jar) %>% 
-  gather(libs, size, Size_original_jar:Size_debloat_jar) %>% 
-  distinct() 
-
-# violin plot of the sizes
-violinplot_size <- results_size %>%  ggplot(aes(x = libs, y =size, fill = libs)) +
-   geom_violin() +
-  geom_boxplot(width = 0.1) +
-   scale_y_continuous(breaks=c(0, 1,10,100,1000, 10000, 100000, 1000000, 10000000), trans="log1p") +
-  scale_fill_manual(values = c("dodgerblue3","goldenrod")) +
-  coord_flip() +
-  ylab("Libs") +
-  xlab(NULL) +
-  theme(legend.position = "none")
-
-violinplot_size
-
-# save the plot
-ggsave(filename = "Figures/analysis_initial/violinplot_size.pdf", plot = violinplot_size ,
-       height = 5, width = 7,  units = c("in"), device=cairo_pdf)
-```
-
-Let's see wich are those libraries for which the debloated jar is bigger than the original one.
-
-```{r echo=FALSE}
-
-results_size <- results %>% 
-  filter(Size_original_jar < Size_debloat_jar) %>% 
-  mutate (Diff_size = Size_debloat_jar - Size_original_jar) %>% 
-  select(Lib_gav, Size_original_jar, Size_debloat_jar, Diff_size) %>% 
+    select(Lib.gav, Client) %>% 
   distinct() %>% 
-  arrange(desc(Diff_size))
-
-results_size
+  group_by(Lib.gav) %>% 
+  summarise(Nb.Clients = n()) %>% 
+  arrange(desc(Nb.Clients))
 ```
 
-Let's see plot the difference in size between the debloatead and the original JARs.
 
-```{r echo=FALSE}
-results_size <- results %>% 
-  # filter(Size_original_jar < Size_debloat_jar) %>% 
-  mutate (Diff_size = Size_debloat_jar - Size_original_jar) %>% 
-  mutate (SizeType = ifelse(Diff_size > 0, "above", "below")) %>% 
-  select(Lib_gav, Diff_size, SizeType) %>% 
+# Libs test results (global)
+
+
+## Percentage of tests with errors 
+
+```{r}
+results_debloat_errors <- results %>% 
+  select(Lib, Lib.gav, Lib.debloat.test.error, Lib.debloat.test.failing, Lib.debloat.test.passing) %>% 
+  distinct() %>% 
+  group_by(Lib) %>% 
+  summarise(errors = sum(Lib.debloat.test.error), failing = sum(Lib.debloat.test.failing), passing = sum(Lib.debloat.test.passing))
+
+sum_errors <- sum(results_debloat_errors$errors)
+sum_failing <- sum(results_debloat_errors$failing)
+sum_passing <- sum(results_debloat_errors$passing)
+perc_errors <- (sum_errors) * 100/sum_passing
+perc_errors
+
+```
+## Number of tests with failures
+
+```{r}
+perc_failing <- (sum_failing) * 100/sum_passing
+perc_failing
+```
+
+```{r}
+debloat_nb_test_errors_failures_barplot <- 
+  data.frame(`Test result` = c("Pass", "Error", "Failure"), n = c(353623, 38, 56)) %>% 
+  rename(`Test result` = Test.result) %>% 
+  ggplot(aes(x = "Libs", y = n, fill = `Test result`, label = n)) +
+    geom_bar(stat = "identity", width = 0.75, position=position_dodge()) +
+    geom_text(aes(label=n), size = 6, position=position_dodge(width=0.75), hjust=-0.1) +
+    scale_fill_manual(values = c("#ff1f5d", "#ffc61e", "#00cd6c")) +
+    coord_flip() +
+    ylab("\\# Tests (log scale)") +
+    xlab(NULL) + 
+   scale_y_continuous(limits = c(0, 1500000), breaks=c(0, 1, 10, 100, 1000, 10000), trans="log1p") +
+    # scale_y_log10(
+    #   breaks = scales::trans_breaks("log10", function(x) 10 ^ x),
+    #   labels = scales::trans_format("log10", scales::math_format(10 ^ .x))
+    # ) +
+    # scale_y_continuous(limits = c(0, 3500000), labels = paste0(ylab, "M"), breaks = 10^6 * ylab) +
+    theme(axis.text.y=element_blank(),
+          axis.ticks.y=element_blank(),
+          panel.grid.major.y = element_blank(),
+          # panel.grid.major.x = element_blank(),
+          panel.grid.minor.x = element_blank(),
+          panel.grid.minor.y = element_blank()) 
+# PLOT
+debloat_nb_test_errors_failures_barplot
+save_figure(debloat_nb_test_errors_failures_barplot, "Figures/debloat_nb_test_errors_failures_stacked_barplot", 6, 2)
+```
+
+
+```{r}
+df <- data.frame( `Test result`= c("Not all pass", "All pass"), n = c(26, 226))
+
+debloat_nb_test_errors_failures_barplot <- 
+  df %>% 
+  rename(`Test result` = Test.result) %>% 
+  ggplot(aes(x = "Libs", y = n, fill = factor(`Test result`, levels = rev(levels(`Test result`))) , label = n)) +
+    geom_bar(stat = "identity", width = 0.75, position=position_dodge()) +
+    geom_text(aes(label=n), size = 6, position=position_dodge(width=0.75), hjust=-0.1) +
+    scale_fill_manual(values = c("#ff1f5d", "#00cd6c")) +
+    coord_flip() +
+    ylab("\\# Libraries") +
+    xlab(NULL) + 
+    labs(fill = "Tests result") +
+    # scale_y_log10(
+    #   breaks = scales::trans_breaks("log10", function(x) 10 ^ x),
+    #   labels = scales::trans_format("log10", scales::math_format(10 ^ .x))
+    # ) +
+    scale_y_continuous(limits = c(0, 235)) +
+    theme(axis.text.y=element_blank(),
+          axis.ticks.y=element_blank(),
+          panel.grid.major.y = element_blank(),
+          # panel.grid.major.x = element_blank(),
+          panel.grid.minor.x = element_blank(),
+          panel.grid.minor.y = element_blank()) 
+# PLOT
+debloat_nb_test_errors_failures_barplot
+save_figure(debloat_nb_test_errors_failures_barplot, "Figures/debloat_nb_test_errors_failures_stacked_barplot", 6, 2)
+```
+
+
+
+
+## Libraries with Debloat Errors or Failures
+
+```{r}
+percentages <- results %>% 
+  select(Lib.av, Lib.debloat.test.error, Lib.debloat.test.failing, Lib.debloat.test.passing) %>% 
+  filter(Lib.debloat.test.error != 0 | Lib.debloat.test.failing != 0) %>% 
+  mutate(Total = Lib.debloat.test.error + Lib.debloat.test.failing) %>% 
+  mutate(Lib.debloat.test.error = round(Lib.debloat.test.error*100/Lib.debloat.test.passing, 2)) %>%
+  mutate(Lib.debloat.test.failing = round(Lib.debloat.test.failing*100/Lib.debloat.test.passing, 2)) %>%
+  mutate(Lib.debloat.test.error = ifelse(is.infinite(Lib.debloat.test.error), 100, Lib.debloat.test.error)) %>%
+  mutate(Lib.debloat.test.failing = ifelse(is.na(Lib.debloat.test.failing), 0, Lib.debloat.test.failing)) %>%
+  mutate(Total.percent = Lib.debloat.test.error + Lib.debloat.test.failing ) %>%
   distinct()
 
-barplot_size <- ggplot(results_size, aes(x=Lib_gav, y=Diff_size, label=Diff_size)) + 
-  geom_bar(stat='identity', aes(fill=SizeType), width=.5)  +
-  scale_fill_manual(name="Size", 
-                    labels = c("Above Original", "Below Original"), 
-                    values = c("above"="#00ba38", "below"="#f8766d")) + 
-  coord_flip() +
-   theme(axis.title.y=element_blank(),
-        axis.text.y=element_blank(),
-        axis.ticks.y=element_blank())
+debloat_nb_test_errors_failures_lib_stacked_barplot <- results %>% 
+  select(Lib.av, Lib.debloat.test.error, Lib.debloat.test.failing) %>% 
+  filter(Lib.debloat.test.error != 0 | Lib.debloat.test.failing != 0) %>% 
+  distinct() %>% 
+  group_by(Lib.av) %>% 
+  summarise(Error = sum(Lib.debloat.test.error), Failure = sum(Lib.debloat.test.failing)) %>% 
+  gather(key = Error, value = Failure, - Lib.av) %>% 
+  rename(`Test result` = Error, n = Failure) %>% 
+  ggplot(aes(x = Lib.av, y = n, fill = `Test result`, label = n)) +
+    geom_bar(stat = "identity", width = 0.9) +
+    # geom_text(size = 4, position = position_stack(vjust = 0.5)) +
+    scale_fill_manual(values = c( "#ff1f5d", "#ffc61e", "#00cd6c")) +
+    coord_flip() +
+    ylab("\\# Tests") +
+    xlab(NULL) + 
+    geom_text(aes(Lib.av, Total, label = paste(Total.percent, "\\%", sep=" "), fill = NULL, hjust = -0.1), data = percentages) +
+    scale_y_continuous(limits = c(0, 40)) +
+  
+    theme(#axis.text.y=element_blank(),
+          # axis.ticks.y=element_blank(),
+          axis.text.y = element_text(size=10),
+          panel.grid.major.y = element_blank())
 
-barplot_size
-
-# save the plot
-ggsave(filename = "Figures/analysis_initial/barplot_size.pdf", plot = barplot_size , 
-       height = 10, width = 7,  units = c("in"), device=cairo_pdf)
+debloat_nb_test_errors_failures_lib_stacked_barplot
+save_figure(debloat_nb_test_errors_failures_lib_stacked_barplot, "Figures/debloat_nb_test_errors_failures_lib_stacked_barplot", 5.5, 3.5)
 ```
 
-## Number of classes in the original vs number classes debloated
+# Libraries and dependencies
+
+## Library classes beanplot
+
+```{r}
+data <- results %>% 
+  select(ID, Nb.class.original, Nb.debloated.classes) %>% 
+  mutate(Nb.class.debloated = Nb.class.original - Nb.debloated.classes) %>% 
+  select(ID, Nb.class.original, Nb.class.debloated) %>% 
+  distinct() %>% 
+  gather(Nb.class.original, Nb.class.debloated, -ID) %>% 
+  rename(Lib = Nb.class.original, Classes = Nb.class.debloated)
+
+tikz(file = "Figures/lib_classes_beanplot.tex", width = 4, height =3)
+
+lib_classes_beanplot <- beanplot(
+  Classes ~ Lib,
+  data = data,
+  side = "both",
+  border = NA,
+  col = list("#ffc61e", "#a6761d"),
+  ll = 0,
+  log = "auto",
+  beanlines = "mean",
+  horizontal = TRUE
+)
+legend("topleft", bty="n", c("\\#Classes original", "\\#Classes debloated"),
+       fill = c("#a6761d", "#ffc61e"))
+
+print(lib_classes_beanplot)
+dev.off()
+```
+
+## Library methods beanplot
+
+```{r}
+data <- results %>% 
+  select(ID, Nb.method.original, Nb.debloated.methods) %>% 
+  mutate(Nb.method.debloated = Nb.method.original - Nb.debloated.methods) %>% 
+  select(ID, Nb.method.original, Nb.method.debloated) %>% 
+  distinct() %>% 
+  gather(Nb.method.original, Nb.method.debloated, -ID) %>% 
+  rename(Lib = Nb.method.original, Methods = Nb.method.debloated)
+
+tikz(file = "Figures/lib_methods_beanplot.tex", width = 4, height =3)
+
+lib_classes_beanplot <- beanplot(
+  Methods ~ Lib,
+  data = data,
+  side = "both",
+  border = NA,
+  col = list("#ffc61e", "#a6761d"),
+  ll = 0,
+  log = "auto",
+  horizontal = TRUE
+)
+
+legend("topright", bty="n", c("\\#Methods original", "\\#Methods debloated"),
+       fill = c("#a6761d", "#ffc61e"))
+
+print(lib_classes_beanplot)
+dev.off()
+```
+
+## Dependency classes beanplot
+
+```{r}
+data <- results %>% 
+  select(ID, Nb.dependeny.class, Nb.bloated.dependeny.class) %>% 
+  mutate(Nb.dependeny.class.bloated = Nb.dependeny.class - Nb.bloated.dependeny.class) %>% 
+  select(ID, Nb.dependeny.class, Nb.dependeny.class.bloated) %>% 
+  distinct() %>% 
+  gather(Nb.dependeny.class, Nb.dependeny.class.bloated, -ID) %>% 
+  rename(Lib = Nb.dependeny.class, Classes = Nb.dependeny.class.bloated)
+
+tikz(file = "Figures/deps_classes_beanplot.tex", width = 4, height =3)
+
+lib_classes_beanplot <- beanplot(
+  Classes ~ Lib,
+  data = data,
+  side = "both",
+  border = NA,
+  col = list("#ffc61e", "#a6761d"),
+  ll = 0,
+  bw="nrd0",
+  log = "auto",
+  horizontal = TRUE
+)
+legend("topright", bty="n", c("\\#Classes original", "\\#Classes debloated"),
+       fill = c("#ffc61e", "#a6761d"))
+```
+## Dependency methods beanplot
+
+```{r}
+data <- results %>% 
+  select(ID, Nb.dependeny.method, Nb.bloated.dependeny.method) %>% 
+  mutate(Nb.dependeny.method.bloated = Nb.dependeny.method - Nb.bloated.dependeny.method) %>% 
+  select(ID, Nb.dependeny.method.bloated, Nb.dependeny.method) %>% 
+  distinct() %>% 
+  gather(Nb.dependeny.method, Nb.dependeny.method.bloated, -ID) %>% 
+  rename(Lib = Nb.dependeny.method, Methods = Nb.dependeny.method.bloated)
+
+tikz(file = "Figures/deps_methods_beanplot.tex", width = 4, height = 3)
+
+lib_classes_beanplot <- beanplot(
+  Methods ~ Lib,
+  data = data,
+  side = "both",
+  border = NA,
+  col = list("#ffc61e", "#a6761d"),
+  ll = 0,
+  bw="nrd0",
+  log = "auto",
+  horizontal = TRUE
+)
+legend("topright", bty="n", c("\\#Methods original", "\\#Methods debloated"),
+       fill = c("#ffc61e", "#a6761d"))
+
+print(lib_classes_beanplot)
+dev.off()
+```
+
+## Percentage of bloat in library classes and dependencies
+
+```{r}
+data <- results %>% 
+  filter(Debloat == "True") %>% 
+    filter(Lib.debloat.test.error == 0 & Lib.debloat.test.failing == 0) %>% 
+  # Libraries with no dependencies
+  mutate(Type = ifelse(Nb.dependeny.class == 0, "Library without dependency", "Library with dependencies")) %>% 
+  select(ID, Type, Nb.class.original, Nb.debloated.classes, Nb.dependeny.class, Nb.bloated.dependeny.class) %>% 
+  mutate(PercBloatClassesLib = (Nb.debloated.classes*100/Nb.class.original)) %>% 
+  mutate(PercBloatClassesDeps = (Nb.bloated.dependeny.class*100/Nb.dependeny.class)) %>% 
+  select(ID, PercBloatClassesLib, PercBloatClassesDeps) %>% 
+  distinct() %>% 
+  gather(PercBloatClassesLib, PercBloatClassesDeps, -ID) %>% 
+  rename(Type = PercBloatClassesLib, Perc = PercBloatClassesDeps)
+
+tikz(file = "Figures/bloat_libs_deps_bean.tex", width = 4.25, height = 2.75)
+
+bloat_libs_deps_bean <- beanplot(
+  Perc ~ Type,
+  data = data,
+  side = "both",
+  method = "jitter",
+  border = NA,
+  col = list("#009ade", "#b5e3eb"),
+  ll = 0.05,
+  bw="nrd0",
+  log = "auto",
+  horizontal = TRUE,
+  yaxt='n',
+  # ylim = c(0,100),
+  # ylab = "Libraries",
+  xlab = "\\% Classes"
+)
+axis(2, at=1:1, labels=c("Libraries"))
+legend("topright", bty="n", c("\\% Bloat in libraries", "\\% Bloat in dependencies"),
+       fill = c("#009ade", "#b5e3eb"))
+
+print(bloat_libs_deps_bean)
+dev.off()
+  
+```
+
+
+
+
+## Library classes area
+
+```{r}
+data <- results %>% 
+  filter(Debloat == "True") %>% 
+  filter(Lib.debloat.test.error == 0 & Lib.debloat.test.failing == 0) %>% 
+  # Libraries with no dependencies
+  filter(Nb.dependeny.class == 0) %>% 
+  select(ID, Nb.class.original, Nb.debloated.classes) %>% 
+  mutate(Bloated = (Nb.debloated.classes*100/Nb.class.original)) %>% 
+  mutate(Used = 100 - Bloated) %>% 
+  select(ID, Used, Bloated) %>%
+  distinct() %>%
+  gather(Used, Bloated, -ID) %>%
+  rename(`Usage status` = Used, Perc = Bloated) %>% 
+  arrange(desc(Perc)) 
+ 
+data$ID <- as.factor(data$ID)
+data <- data %>% mutate(ID = fct_reorder(ID, Perc))
+data$NumID <- as.numeric(data$ID)
+
+data_used <- data %>% filter(`Usage status` == "Used")
+data_used$NumID <- c(1:(nrow(data)/2))
+data_bloated <- data %>% filter(`Usage status` == "Bloated")
+data_bloated$NumID <- c((nrow(data)/2):1)
+
+data <- bind_rows(data_used, data_bloated)
+
+lib_classes_area <- data %>% 
+  ggplot(aes(x = NumID, y = Perc, fill = `Usage status`)) +
+  geom_area(aes(fill = `Usage status`), position = "fill") +
+  xlab(NULL) +
+  ylab("\\% Classes") +
+  # scale_y_continuous(labels = scales::percent) +
+  # theme( legend.title = element_blank()) +
+  scale_y_continuous(labels = function(x) paste0(x*100, "\\%")) +
+  scale_x_continuous(limits = c(0, 119), 
+                     breaks=c(1, 25 , 50, 75, 100, (nrow(data)/2)),
+                     labels=c("1", "25", "50", "75", "100", "119")) +
+  scale_fill_manual(values = c("#a6761d", "#ffc61e")) +
+  theme(
+        # panel.grid.major.y = element_blank()
+        # panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.minor.y = element_blank()
+        )
+lib_classes_area
+save_figure(lib_classes_area, "Figures/lib_classes_area", 6, 2)
+```
+
+## Library methods barplot 
+
+```{r}
+data2 <- results %>% 
+  filter(Debloat == "True") %>% 
+  filter(Lib.debloat.test.error == 0 & Lib.debloat.test.failing == 0) %>% 
+  # Libraries with no dependencies
+  filter(Nb.dependeny.class == 0) %>% 
+  select(ID, Nb.method.original, Nb.debloated.methods) %>% 
+  mutate(Bloated = (Nb.debloated.methods*100/Nb.method.original)) %>% 
+  mutate(Used = 100 - Bloated) %>% 
+  select(ID, Used, Bloated) %>%
+  distinct() %>%
+  mutate(Used = ifelse(is.na(Used), 100, Used), Bloated = ifelse(is.na(Bloated), 0, Bloated)) %>% 
+  gather(Used, Bloated, -ID) %>%
+  rename(Type.methods = Used, Perc.methods = Bloated) %>% 
+  arrange(desc(Perc.methods)) %>% 
+  mutate(Perc.methods = ifelse(is.na(Perc.methods), 0, Perc.methods))
+
+# data <- data %>% filter(`Usage status` == "Used")
+data$ID <- as.character(data$ID)
+data2$ID <- as.character(data2$ID)
+data3 <- inner_join(data, data2, by = "ID")
+
+lib_methods_bar <- data3 %>% 
+  filter(Type.methods == "Bloated" & `Usage status` == "Used") %>% 
+  select(NumID, Perc.methods) %>% 
+  ggplot(aes(x = NumID, y = Perc.methods)) +
+  geom_bar(stat = "identity", fill = "#a6761d", width = 2) +
+  scale_x_continuous(limits = c(0, 128), 
+                     breaks=c(0, 50, 100, 128),
+                     labels=c("1", "50", "100", "129")) +
+  scale_y_continuous(limits = c(0, 100), labels = function(x) paste0(x, "\\%")) +
+  xlab(NULL) +
+  ylab("\\% Methods") +
+  theme(
+        # panel.grid.major.y = element_blank()
+        # panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.minor.y = element_blank()
+        )
+
+lib_methods_bar
+save_figure(lib_methods_bar, "Figures/lib_methods_bar", 6, 1.75)
+
+
+# Area chart
+
+lib_methods_area <- data3 %>% 
+  filter(`Usage status` == "Used") %>% 
+  ggplot(aes(x = NumID, y = Perc.methods, fill = Type.methods)) +
+  geom_area(aes(fill = Type.methods), position = "fill") +
+  ylab("\\% Methods") +
+  xlab(NULL) +
+  # scale_y_continuous(labels = scales::percent) +
+  theme( legend.title = element_blank()) +
+  scale_x_continuous(limits = c(1, 119), 
+                     breaks=c(1, 25, 50, 75, 100, 119),
+                     labels=c("1", "25", "50", "75", "100", "119")) +
+  scale_y_continuous(labels = function(x) paste0(x*100, "\\%")) +
+  # scale_y_continuous(limits = c(0, 100), labels = function(x) paste0(x, "\\%")) +
+  scale_fill_manual(values = c("#a6761d", "#ffc61e")) +
+  theme(
+        # panel.grid.major.y = element_blank()
+        # panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.minor.y = element_blank()
+        ) +
+  theme(legend.position = "none")
+
+lib_methods_area
+save_figure(lib_methods_area, "Figures/lib_methods_area", 6, 1.5)
+
+```
+
+
+## Dependency classes area 
+
+```{r}
+data <- results %>% 
+  filter(Debloat == "True") %>% 
+  filter(Lib.debloat.test.error == 0 & Lib.debloat.test.failing == 0) %>% 
+  select(ID, Nb.class.original, Nb.dependeny.class, Nb.bloated.dependeny.class, Nb.debloated.classes) %>% 
+  filter(Nb.dependeny.class > 0) %>% 
+  mutate(Bloated = ((Nb.bloated.dependeny.class +Nb.debloated.classes)*100/(Nb.dependeny.class +Nb.class.original))) %>% 
+  mutate(Used = 100 - Bloated) %>% 
+  select(ID, Used, Bloated) %>%
+  distinct() %>%
+  gather(Used, Bloated, -ID) %>%
+  rename(`Usage status` = Used, Perc = Bloated) %>% 
+  arrange(desc(Perc)) 
+ 
+data$NumID <- as.factor(data$ID)
+data <- data %>% mutate(ID = fct_reorder(ID, Perc))
+data$NumID <- as.numeric(data$ID)
+
+data_used <- data %>% filter(`Usage status` == "Used")
+data_used$NumID <- c(1:(nrow(data)/2))
+data_bloated <- data %>% filter(`Usage status` == "Bloated")
+data_bloated$NumID <- c((nrow(data)/2):1)
+
+data <- bind_rows(data_used, data_bloated)
+
+deps_classes_area <- data %>% 
+  ggplot(aes(x = NumID, y = Perc, fill = `Usage status`)) +
+  geom_area(aes(fill = `Usage status`), position = "fill") +
+  xlab(NULL) +
+  ylab(NULL) +
+  scale_y_continuous(labels = function(x) paste0(x*100, "\\%")) +
+  # theme( legend.title = element_blank()) +
+  scale_x_continuous(limits = c(0, (nrow(data)/2)), breaks=c(1,25, 50,75, 100, (nrow(data)/2)), labels=c("1", "25", "50","75" ,"100", "107")) +
+  scale_fill_manual(values = c("#a6761d", "#ffc61e")) +
+  theme(
+        # panel.grid.major.y = element_blank()
+        # panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.minor.y = element_blank()
+        )
+  
+deps_classes_area
+save_figure(deps_classes_area, "Figures/deps_classes_area", 6, 2)
+```
+
+
+## Dependency methods barplot 
+
+```{r}
+data2 <- results %>% 
+  filter(Debloat == "True") %>% 
+  filter(Lib.debloat.test.error == 0 & Lib.debloat.test.failing == 0) %>% 
+  # Libraries with no dependencies
+  filter(Nb.dependeny.class > 0) %>% 
+  select(ID, Nb.method.original, Nb.debloated.methods) %>% 
+  mutate(Bloated = (Nb.debloated.methods*100/Nb.method.original)) %>% 
+  mutate(Used = 100 - Bloated) %>% 
+  select(ID, Used, Bloated) %>%
+  distinct() %>%
+  gather(Used, Bloated, -ID) %>%
+  rename(Type.methods = Used, Perc.methods = Bloated) %>% 
+  arrange(desc(Perc.methods)) %>% 
+  mutate(Perc.method = ifelse(is.na(Perc.methods), 50,Perc.methods ))
+
+
+# data <- data %>% filter(`Usage status` == "Used")
+data$ID <- as.character(data$ID)
+data2$ID <- as.character(data2$ID)
+data3 <- inner_join(data, data2, by = "ID")
+
+lib_methods_bar <- data3 %>% 
+  filter(Type.methods == "Bloated" & `Usage status` == "Used") %>% 
+  select(NumID, Perc.methods) %>% 
+  ggplot(aes(x = NumID, y = Perc.methods)) +
+  geom_bar(stat = "identity", fill = "#a6761d", width = 2) +
+  scale_x_continuous(limits = c(0, (nrow(data3)/4)), 
+                     breaks=c(0, 25, 50, 75, 100, (nrow(data3)/4)),
+                     labels=c("1", "25", "50","75", "100", "107")) +
+  scale_y_continuous(limits = c(0, 100), labels = function(x) paste0(x, "\\%")) +
+  xlab(NULL) +
+  ylab(NULL) +
+  theme(
+        # panel.grid.major.y = element_blank()
+        # panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.minor.y = element_blank()
+        )
+
+lib_methods_bar
+save_figure(lib_methods_bar, "Figures/deps_methods_bar", 6, 1.75)
+
+
+# Area chart
+deps_methods_area <- data3 %>% 
+   filter(`Usage status` == "Bloated") %>% 
+  ggplot(aes(x = NumID, y = Perc.methods, fill = Type.methods)) +
+  geom_area(aes(fill = Type.methods), position = "fill") +
+  ylab(NULL) +
+  xlab(NULL) +
+  # scale_y_continuous(labels = scales::percent) +
+  theme( legend.title = element_blank()) +
+  scale_x_continuous(limits = c(0, 107), breaks=c(1, 25, 50, 75, 100, 107), labels=c("1","25", "50","75", "100", "107")) +
+  scale_y_continuous(labels = function(x) paste0(x*100, "\\%")) +
+  scale_fill_manual(values = c("#a6761d", "#ffc61e")) +
+  theme(
+        # panel.grid.major.y = element_blank()
+        # panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.minor.y = element_blank()
+        ) +
+  theme(legend.position = "none")
+  
+deps_methods_area
+save_figure(deps_methods_area, "Figures/deps_methods_area", 6, 1.5)
+
+```
+
+```{r}
+results %>% 
+  filter(ID == "jettison-json_jettison_1.3.2") %>% 
+  # filter(Nb.debloated.classes == 0) %>% 
+  select(Nb.method.original, Nb.debloated.methods, Nb.dependeny.method, Nb.bloated.dependeny.method)
+
+```
+
+## Dependency methods area 
+
+```{r}
+data <- results %>% 
+  select(ID, Nb.dependeny.method, Nb.bloated.dependeny.method) %>% 
+  filter(Nb.dependeny.method > 0) %>% 
+  mutate(Bloated = (Nb.bloated.dependeny.method*100/Nb.dependeny.method)) %>% 
+  mutate(Used = 100 - Bloated) %>% 
+  select(ID, Used, Bloated) %>%
+  distinct() %>%
+  gather(Used, Bloated, -ID) %>%
+  rename(Type = Used, Perc = Bloated) %>% 
+  arrange(desc(Perc)) 
+ 
+data$ID <- as.factor(data$ID)
+data <- data %>% mutate(ID = fct_reorder(ID, Perc))
+data$ID <- as.numeric(data$ID)
+
+data_used <- data %>% filter(Type == "Used")
+data_used$ID <- c(1:(nrow(data)/2))
+data_bloated <- data %>% filter(Type == "Bloated")
+data_bloated$ID <- c(1:(nrow(data)/2))
+
+data <- bind_rows(data_used, data_bloated)
+
+deps_methods_area <- data %>% 
+  ggplot(aes(x = ID, y = Perc, fill = Type)) +
+  geom_area(aes(fill = Type), position = "fill") +
+  xlab(NULL) +
+  ylab("\\% Methods") +
+  # scale_y_continuous(labels = scales::percent) +
+  theme( legend.title = element_blank()) +
+  scale_x_continuous(limits = c(0, (nrow(data)/2)), breaks=c(1, (nrow(data)/2)), labels=c("1", "124")) +
+  scale_fill_manual(values = c("#a6761d", "#ffc61e")) +
+  theme(panel.grid.major.y = element_blank(),
+        panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank(),
+        panel.grid.minor.y = element_blank())
+  
+deps_methods_area
+save_figure(deps_methods_area, "Figures/deps_methods_area", 5, 2.5)
+```
+
+# Completely removed dependencies
+
+```{r echo=FALSE}
+data <- results %>% 
+  filter(Debloat == "True") %>%
+  select(ID, Nb.Dependenies, Nb.bloated.dependenies) %>% 
+  distinct()
+
+a <- sum(data$Nb.Dependenies)
+b <- sum(data$Nb.bloated.dependenies)
+
+b <- round(b*100/a, 2)
+a <- 100 - b
+
+df <- data.frame(`Dependency status` = c("Used", "Bloated"), n = c(a, b))
+  
+deps_status_total <- df %>% ggplot(aes(x = "Deps", y = n, fill = Dependency.status, label = n)) +
+  geom_bar(stat = "identity", width = 0.75) +
+  geom_text(aes(label=n), size = 6, position = position_stack(vjust = 0.5)) +
+  scale_fill_manual(values = c( "#a6761d", "#ffc61e")) +
+  coord_flip() +
+  ylab("\\% Dependencies") +
+  xlab(NULL) + 
+  scale_y_continuous(labels = function(x) paste0(x, "\\%")) +
+  theme(axis.text.y=element_blank(),
+        axis.ticks.y=element_blank(),
+        panel.grid.major.y = element_blank(),
+        panel.grid.minor.y = element_blank(),
+        # panel.grid.major.x = element_blank(),
+        panel.grid.minor.x = element_blank()
+        ) 
+
+deps_status_total
+save_figure(deps_status_total, "Figures/deps_status_total", 6, 2.1)
+
+```
+
+# Debloat summary
+
+```{r}
+data <- results %>% 
+  filter(Debloat == "True") %>% 
+  filter(Lib.debloat.test.error == 0 & Lib.debloat.test.failing == 0) %>% 
+  select(ID, Nb.class.original, Nb.method.original, Nb.debloated.classes, Nb.debloated.methods) %>% 
+  distinct()
+
+sum(data$Nb.debloated.classes)*100/sum(data$Nb.class.original)
+sum(data$Nb.debloated.methods)*100/sum(data$Nb.method.original)
+
+
+```
+
+
+
+# Lib coverage
+
+```{r echo=FALSE}
+data <- results %>%
+  filter(Debloat == "True") %>% 
+  # filter(Nb.dependeny.class > 0) %>% 
+  select(ID, Nb.class.original, Nb.debloated.classes, Lib.coverage, Lib.dep.coverage, Lib.all.coverage, Nb.method.original, Nb.debloated.methods) %>% 
+  mutate(Perc.bloated.methods = Nb.debloated.methods*100/Nb.method.original) %>% 
+  select(ID, Perc.bloated.methods, Lib.coverage, Lib.dep.coverage, Lib.all.coverage) %>% 
+  distinct() %>% 
+  ggplot(aes(Perc.bloated.methods, Lib.coverage)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+
+a <- data %>% select(ID, Perc.bloated.classes, Lib.coverage) %>% mutate(Type = "Lib.coverage") %>% rename(Coverage =
+                                                                                                           Lib.coverage)
+
+b <- data %>% select(ID, Perc.bloated.classes, Lib.dep.coverage) %>% mutate(Type = "Lib.dep.coverage") %>% rename(Coverage = Lib.dep.coverage)
+
+c <- data %>% select(ID, Perc.bloated.classes, Lib.coverage) %>% mutate(Type = "LibCoverage") %>% rename(Coverage =
+                                                                                                           Lib.coverage)
+
+
+
+
+%>% 
+  gather(ID, Perc.bloated.classes, -c(ID,Lib.coverage)) %>% 
+
+  
+  
+
+classes_coverage + methods_coverage + plot_layout(ncol = 1)
+```
+
+
+
+# Size of the JAR
+
+```{r echo=FALSE}
+library(tibble)
+results_size <- results %>%
+  filter(Debloat == "True") %>% 
+  select(ID, Size.original.jar, Size.debloat.jar) %>% 
+  mutate(Perc.reduction.size = ((Size.original.jar - Size.debloat.jar)*100/Size.original.jar)) %>% 
+  distinct() %>% 
+  arrange(desc(Perc.reduction.size)) %>% 
+  mutate(Perc.reduction.size = ifelse(Perc.reduction.size < 0, 0, Perc.reduction.size)) %>% 
+  filter(Perc.reduction.size != 0)
+
+# violin plot of the sizes
+lib_size_violinplot <- results_size %>%  
+  ggplot(aes(x = "JARs", y =Perc.reduction.size)) +
+  geom_violin(fill = "#a0b1ba") +
+  geom_boxplot(width = 0.1) +
+  scale_y_continuous(breaks=c(0, 1,10,100), trans="log1p") +
+  # scale_fill_manual(values = c("dodgerblue3","goldenrod")) +
+  coord_flip() +
+  ylab("\\% Reduction (log scale)") +
+  xlab("JARs") +
+  theme(legend.position = "none",
+        axis.text.y=element_blank(),)
+
+lib_size_violinplot
+
+save_figure(lib_size_violinplot, "Figures/lib_size_violinplot", 6, 2)
+
+```
+
+
+<!-- ```{r echo=FALSE} -->
+<!-- boxplot_libs_classes_used <- results %>% -->
+<!--   select(Lib_gav, nbLibUsedClasses) %>%  -->
+<!--   distinct() %>% -->
+<!--   ggplot(aes(x = "Libs", y = nbLibUsedClasses)) + -->
+<!--   geom_violin(fill="dodgerblue3") + -->
+<!--   geom_boxplot(width = 0.05) + -->
+<!--   ylab("#Classes used") + -->
+<!--   xlab(NULL) + -->
+<!--   scale_y_continuous( -->
+<!--     breaks = c(0, 1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000), -->
+<!--     trans = "log1p" -->
+<!--   ) + -->
+<!--   coord_flip() -->
+
+<!-- boxplot_libs_classes_bloated <- results %>%  -->
+<!--   select(Lib_gav, nbLibBloatedClasses) %>%  -->
+<!--   distinct() %>% -->
+<!--   ggplot(aes(x = "Libs", y = nbLibBloatedClasses)) + -->
+<!--   geom_violin(fill="dodgerblue3") + -->
+<!--   geom_boxplot(width = 0.05) + -->
+<!--   ylab("#Classes bloated") + -->
+<!--   xlab(NULL) + -->
+<!--   scale_y_continuous( -->
+<!--     breaks = c(0, 1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000), -->
+<!--     trans = "log1p" -->
+<!--   ) + -->
+<!--   coord_flip() -->
+
+<!-- boxplot_libs_methods_used <- results %>%  -->
+<!--   select(Lib_gav, nbLibUsedMethods) %>%  -->
+<!--   distinct() %>%  -->
+<!--   ggplot(aes(x = "Libs", y = nbLibUsedMethods)) + -->
+<!--   geom_violin(fill="goldenrod") + -->
+<!--   geom_boxplot(width = 0.05) + -->
+<!--   ylab("#Methods used") + -->
+<!--   xlab(NULL) + -->
+<!--   scale_y_continuous( -->
+<!--     breaks = c(0, 1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000), -->
+<!--     trans = "log1p" -->
+<!--   ) + -->
+<!--   coord_flip() -->
+
+<!-- boxplot_libs_methods_bloated <- results %>%  -->
+<!--   select(Lib_gav, nbLibBloatedMethods) %>%  -->
+<!--   distinct() %>%  -->
+<!--   ggplot(aes(x = "Libs", y = nbLibBloatedMethods)) + -->
+<!--   geom_violin(fill="goldenrod") + -->
+<!--   geom_boxplot(width = 0.05) + -->
+<!--   ylab("#Methods bloated") + -->
+<!--   xlab(NULL) + -->
+<!--   scale_y_continuous( -->
+<!--     breaks = c(0, 1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000), -->
+<!--     trans = "log1p" -->
+<!--   ) + -->
+<!--   coord_flip() -->
+
+<!-- debloat_classes_methods_libs <- boxplot_libs_classes_used + boxplot_libs_methods_used + boxplot_libs_classes_bloated + boxplot_libs_methods_bloated -->
+
+<!-- debloat_classes_methods_libs -->
+
+<!-- ggsave(filename = "Figures/analysis_initial/debloat_classes_methods_libs.pdf", plot = debloat_classes_methods_libs,  -->
+<!--        height = 4, width = 7,  units = c("in"), device=cairo_pdf) -->
+
+<!-- ``` -->
+
+<!-- ## Dependencies -->
+
+<!-- ```{r echo=FALSE} -->
+<!-- boxplot_deps_classes_used <- results %>%  -->
+<!--   select(Lib_gav, nbDepsUsedClasses) %>%  -->
+<!--   distinct() %>%  -->
+<!--   ggplot(aes(x = "Deps", y = nbDepsUsedClasses)) + -->
+<!--   geom_violin(fill="dodgerblue3") + -->
+<!--   geom_boxplot(width = 0.05) + -->
+<!--   ylab("#Classes used") + -->
+<!--   xlab(NULL) + -->
+<!--   scale_y_continuous( -->
+<!--     breaks = c(0, 1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000), -->
+<!--     trans = "log1p" -->
+<!--   ) + -->
+<!--   coord_flip() -->
+
+<!-- boxplot_deps_classes_bloated <- results %>%  -->
+<!--   select(Lib_gav, nbDepsBloatedClasses) %>%  -->
+<!--   distinct() %>%  -->
+<!--   ggplot(aes(x = "Deps", y = nbDepsBloatedClasses)) + -->
+<!--   geom_violin(fill="dodgerblue3") + -->
+<!--   geom_boxplot(width = 0.05) + -->
+<!--   ylab("#Classes bloated") + -->
+<!--   xlab(NULL) + -->
+<!--   scale_y_continuous( -->
+<!--     breaks = c(0, 1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000), -->
+<!--     trans = "log1p" -->
+<!--   ) + -->
+<!--   coord_flip() -->
+
+<!-- boxplot_deps_methods_used <- results %>%  -->
+<!--   select(Lib_gav, nbDepsUsedMethods) %>%  -->
+<!--   distinct() %>%  -->
+<!--   ggplot(aes(x = "Deps", y = nbDepsUsedMethods)) + -->
+<!--   geom_violin(fill="goldenrod") + -->
+<!--   geom_boxplot(width = 0.05) + -->
+<!--   ylab("#Methods used") + -->
+<!--   xlab(NULL) + -->
+<!--   scale_y_continuous( -->
+<!--     breaks = c(0, 1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000), -->
+<!--     trans = "log1p" -->
+<!--   ) + -->
+<!--   coord_flip() -->
+
+<!-- boxplot_deps_methods_bloated <- results %>%  -->
+<!--   select(Lib_gav, nbDepsBloatedMethods) %>%  -->
+<!--   distinct() %>%  -->
+<!--   ggplot(aes(x = "Deps", y = nbDepsBloatedMethods)) + -->
+<!--    geom_violin(fill="goldenrod") + -->
+<!--   geom_boxplot(width = 0.05) + -->
+<!--   ylab("#Methods bloated") + -->
+<!--   xlab(NULL) + -->
+<!--   scale_y_continuous( -->
+<!--     breaks = c(0, 1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000), -->
+<!--     trans = "log1p" -->
+<!--   ) + -->
+<!--   coord_flip() -->
+
+<!-- debloat_classes_methods_deps <- boxplot_deps_classes_used + boxplot_deps_methods_used + boxplot_deps_classes_bloated + boxplot_deps_methods_bloated  -->
+
+<!-- debloat_classes_methods_deps -->
+
+<!-- ggsave(filename = "Figures/analysis_initial/debloat_classes_methods_deps.pdf", plot = debloat_classes_methods_deps,  -->
+<!--        height = 4, width = 7,  units = c("in"), device=cairo_pdf) -->
+
+<!-- ``` -->
+
+# Libs Classes
 
 ```{r echo=FALSE}
 results_classes <- results %>% 
+  mutate(Nb_classes_debloated = Nb_classes_original - Nb_debloated_classes) %>% 
   select(Lib_gav, Nb_classes_original, Nb_classes_debloated) %>% 
-  gather(libs, classes, Nb_classes_original:Nb_classes_debloated) %>% 
+  distinct() %>% 
+  gather(Libs, Classes, Nb_classes_original:Nb_classes_debloated) %>% 
   distinct()
 
 # violin plot of the classes
-violinplot_classes <- results_classes %>%  ggplot(aes(x = libs, y = classes, fill = libs)) +
+violinplot_classes <- results_classes %>%  ggplot(aes(x = Libs, y = Classes, fill = Libs)) +
   geom_violin() +
   geom_boxplot(width = 0.1) +
   scale_fill_manual(values = c("goldenrod","dodgerblue3")) +
   scale_y_continuous(breaks=c(0, 1,10,100,1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000), trans="log1p") +
   coord_flip() +
-  theme(legend.position = "none")
+  theme(legend.position = "none") +
+  labs(x="Libs", y="#Classes")
 
 violinplot_classes
+
+a <- results_classes %>% filter(Libs == "Nb_classes_original")
+summary(a)
+b <- results_classes %>% filter(Libs == "Nb_classes_debloated")
+summary(b)
 
 # save the plot
 ggsave(filename = "Figures/analysis_initial/violinplot_classes.pdf", plot = violinplot_classes,
@@ -199,17 +1042,20 @@ ggsave(filename = "Figures/analysis_initial/violinplot_classes.pdf", plot = viol
 
 # barplot of the classes
 barplot_classes <- results_classes %>%  
-  ggplot(aes(x = reorder(Lib_gav, classes), y = classes, fill = libs)) +
+  ggplot(aes(x = reorder(Lib_gav, Classes), y = Classes, fill = Libs)) +
   geom_bar(stat = "identity", position = position_dodge()) +
   scale_y_continuous(
     breaks = c(0, 1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000),
     trans = "log1p"
   ) +
-  labs(x = "libs") +
+  labs(y = "#Classes", x="Libs") +
   coord_flip() +
   scale_fill_manual(values = c("goldenrod","dodgerblue3")) +
   theme(axis.text.x = element_text(hjust = 1, size =  6), 
-        axis.text.y = element_text(hjust = 1, size =  6))
+        axis.text.y = element_text(hjust = 1, size =  6)) +
+     theme(axis.title.y=element_blank(),
+        axis.text.y=element_blank(),
+        axis.ticks.y=element_blank())
 
 barplot_classes
 
@@ -220,6 +1066,7 @@ ggsave(filename = "Figures/analysis_initial/barplot_classes.pdf", plot = barplot
 
 ```{r echo=FALSE}
 perc_reduction_classes <- results %>% 
+   mutate(Nb_classes_debloated = Nb_classes_original - Nb_debloated_classes) %>% 
   select(Lib_gav, Nb_classes_original, Nb_classes_debloated) %>% 
   mutate(Perc_reduction = ((Nb_classes_original - Nb_classes_debloated)/Nb_classes_original)*100) %>% 
   select(Lib_gav, Perc_reduction) %>% 
@@ -233,16 +1080,20 @@ barplot_perc_reduction_classes <- perc_reduction_classes %>%
   coord_flip() +
   theme(axis.text.x = element_text(hjust = 1, size =  6), 
         axis.text.y = element_text(hjust = 1, size =  6)) +
-  ylab("%Reduction of #Classes") 
+  ylab("%Reduction of #Classes") +
+  theme(axis.title.y=element_blank(),
+        axis.text.y=element_blank(),
+        axis.ticks.y=element_blank())
 
 barplot_perc_reduction_classes
 ```
 
 
-## Number of methods in the original vs number of methods in the debloated
+# Libs methods
 
 ```{r echo=FALSE}
 results_methods <- results %>% 
+  mutate(Nb_methods_debloated = Nb_methods_original - Nb_debloated_methods) %>% 
   select(Lib_gav, Nb_methods_original, Nb_methods_debloated) %>% 
   gather(libs, methods, Nb_methods_original:Nb_methods_debloated) %>% 
   distinct()
@@ -255,7 +1106,8 @@ violinplot_methods <- results_methods %>%
   scale_y_continuous(breaks=c(0, 1,10,100,1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000), trans="log1p") +
   scale_fill_manual(values = c("dodgerblue3","goldenrod")) +
   coord_flip() +
-  theme(legend.position = "none")
+  theme(legend.position = "none") +
+  labs(x="Libs", y="#Classes")
 
 violinplot_methods
 
@@ -276,7 +1128,10 @@ barplot_methods <- results_methods %>%  ggplot(aes(x = reorder(Lib_gav, methods)
   coord_flip() +
   scale_fill_manual(values = c("dodgerblue3","goldenrod")) +
   theme(axis.text.x = element_text(hjust = 1, size =  6), 
-        axis.text.y = element_text(hjust = 1, size =  6))
+        axis.text.y = element_text(hjust = 1, size =  6)) +
+   theme(axis.title.y=element_blank(),
+        axis.text.y=element_blank(),
+        axis.ticks.y=element_blank())
 
 barplot_methods
 
@@ -284,11 +1139,13 @@ barplot_methods
 ggsave(filename = "Figures/analysis_initial/barplot_methods.pdf", plot = barplot_methods, 
        height = 10, width = 7,  units = c("in"), device=cairo_pdf)
 ```
+
 Percentage of methods reduced per library.
 
 
 ```{r echo=FALSE}
 perc_reduction_methods <- results %>% 
+    mutate(Nb_methods_debloated = Nb_methods_original - Nb_debloated_methods) %>% 
   select(Lib_gav, Nb_methods_original, Nb_methods_debloated) %>% 
   mutate(Perc_reduction = ((Nb_methods_original - Nb_methods_debloated)/Nb_methods_original)*100) %>% 
   select(Lib_gav, Perc_reduction) %>% 
@@ -302,13 +1159,16 @@ barplot_perc_reduction_methods <- perc_reduction_methods %>%
   coord_flip() +
   theme(axis.text.x = element_text(hjust = 1, size =  6), 
         axis.text.y = element_text(hjust = 1, size =  6)) +
-  ylab("%Reduction of #Methods") 
+  ylab("%Reduction of #Methods")  +
+   theme(axis.title.y=element_blank(),
+        axis.text.y=element_blank(),
+        axis.ticks.y=element_blank())
 
 barplot_perc_reduction_methods
 ```
 
 
-There are some libs, such as DiUS_java-faker, for which the #Methods is equal zero
+There are some libs, such as DiUS_java-faker, for which the #Methods is equal zero. These are those libraries:
 
 ```{r echo=FALSE, warning=FALSE}
 results %>% 
@@ -316,27 +1176,6 @@ results %>%
   filter(Nb_methods_original == 0) %>% 
   distinct(Lib_gav)
 ```
-
-
-
-# Lib coverage
-
-```{r echo=FALSE}
-methods_coverage<- results %>%
-  # filter(Lib_coverage > 0) %>% 
-  select(Nb_methods_debloated, Lib_coverage) %>% 
-  ggplot(aes(y = Nb_methods_debloated, x = Lib_coverage)) +
-  geom_point()
-
-classes_coverage <- results %>%
-  # filter(Lib_coverage > 0) %>% 
-  select(Nb_classes_debloated, Lib_coverage) %>% 
-  ggplot(aes(y = Nb_classes_debloated, x = Lib_coverage)) +
-  geom_point()
-
-classes_coverage + methods_coverage + plot_layout(ncol = 1)
-```
-
 
 
 # Client plots
@@ -555,4 +1394,3 @@ ggsave(filename = "Figures/analysis_initial/barplot_passs.pdf", plot = barplot_p
 ```{r echo=FALSE}
 barplot_errors + barplot_fails + barplot_passs + plot_layout(ncol = 1)
 ```
-
