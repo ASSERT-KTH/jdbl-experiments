@@ -34,6 +34,7 @@ def get_type(path):
         return "text"
     if '.xml' in extension:
         return "xml"
+    return 'other'
 def get_zip_content(path):
     output = {}
     zip = zipfile.ZipFile(path)
