@@ -17,7 +17,7 @@ if (process.argv.length > 3) {
 }
 app.use("/data/raw_results.json", express.static(pathJSONResults));
 app.use("/data/raw_results.csv", express.static(pathJSONResults.replace(".json", ".csv")));
-app.use("/data/jar_analysis.csv", express.static(__dirname + "/../jar_analysis.json"));
+app.use("/data/jar_analysis.csv", express.static(__dirname + "/../jar_analysis.csv"));
 
 app.use(
   "/data/client_categories.json",
