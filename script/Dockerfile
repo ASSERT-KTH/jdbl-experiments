@@ -21,10 +21,12 @@ ENV M2_HOME=/usr/share/maven
 ENV GITHUB_OAUTH=''
 
 COPY coverageAgent.jar coverageAgent.jar
+COPY extractclassusage.jar extractclassusage.jar
 COPY __init__.py /__init__.py
 COPY jdbl.py jdbl.py
 COPY main.py main.py
 COPY compile.py compile.py
+COPY usage.py usage.py
 COPY core core
 
 

@@ -13,6 +13,8 @@ def run():
         program = "compile.py"
     elif sys.argv[1] == "debloat":
         program = "jdbl.py"
+    elif sys.argv[1] == "usage":
+        program = "usage.py"
     subprocess.call("./%s %s" % (program, " ".join(sys.argv[2:])), shell=True)
 
 if __name__ == "__main__":

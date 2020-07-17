@@ -16,6 +16,8 @@ class Project:
         self.url = url
         self.name = os.path.basename(url).replace(".git", '')
         self.repo = url.replace("https://github.com/", '').replace(".git", '')
+        if self.repo[-1] == '/':
+            self.repo = self.repo[:-1]
         self.path = None
         self.original_path = None
         self.pom = None
@@ -118,6 +120,7 @@ class Project:
         if not os.path.exists(os.path.join(self.path, "target", "surefire-reports")):
             return False
         cmd = 'cd %s/target/; cp -r surefire-reports %s' % (self.path, dst)
+        print(cmd)
         try:
             subprocess.check_call(cmd, shell=True)
             return True
