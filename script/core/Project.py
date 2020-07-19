@@ -109,6 +109,7 @@ class Project:
             return False
     
     def copy_jar(self, dst):
+        dst = os.path.abspath(dst)
         cmd = 'cd %s/target; cp *jar-with-dependencies.jar %s;' % (self.path, dst)
         try:
             subprocess.check_call(cmd, shell=True)
@@ -117,6 +118,9 @@ class Project:
             return False
     
     def copy_test_results(self, dst):
+        if not os.path.exists(dst):
+            os.makedirs(dst)
+        dst = os.path.abspath(dst)
         if not os.path.exists(os.path.join(self.path, "target", "surefire-reports")):
             return False
         cmd = 'cd %s/target/; cp -r surefire-reports %s' % (self.path, dst)
@@ -128,6 +132,7 @@ class Project:
             return False
     
     def copy_jacoco(self, dst):
+        dst = os.path.abspath(dst)
         cmd = 'cd %s/target/; cp -r site/jacoco/jacoco.xml %s; cp -r site/jacoco/jacoco.csv %s' % (self.path, dst, dst)
         try:
             subprocess.check_call(cmd, shell=True)
@@ -136,6 +141,7 @@ class Project:
             return False
     
     def copy_pom(self, dst):
+        dst = os.path.abspath(dst)
         cmd = 'cd %s; cp -r %s %s' % (self.path, self.pom.poms[0]['path'], dst)
         try:
             subprocess.check_call(cmd, shell=True)
@@ -144,6 +150,7 @@ class Project:
             return False
 
     def copy_report(self, dst):
+        dst = os.path.abspath(dst)
         cmd = 'cd %s; cp -r .jdbl/* %s;' % (self.path, dst)
         try:
             subprocess.check_call(cmd, shell=True)
@@ -151,10 +158,12 @@ class Project:
         except:
             return False
 
-    def unzip_debloat(self, root, library, version):
+    def unzip_debloat(self, root, library, version, debloated=True):
         # self.pom.remove_dependency(group_id, artifact_id)
-        path_jar = os.path.join(root, library.repo.replace('/', '_'), version, "debloat", "debloat.jar")
-        
+        path_lib = os.path.join(root, library.repo.replace('/', '_'), version)
+        path_jar = os.path.join(path_lib, "debloat", "debloat.jar")
+        if not debloated:
+            path_jar = os.path.join(path_lib, "original", "original.jar")
 
         cmd = "mkdir -p %s/target/classes/; cd %s/target/classes/; jar xf %s;" % (self.path, self.path, path_jar)
         try:
@@ -164,8 +173,11 @@ class Project:
             traceback.print_stack()
             return False
 
-    def inject_debloat_library(self, root, library, version):
-        path_jar = os.path.join(root, library.repo.replace('/', '_'), version, "debloat", "debloat.jar")
+    def inject_debloat_library(self, root, library, version, debloated=True):
+        path_lib = os.path.join(root, library.repo.replace('/', '_'), version)
+        path_jar = os.path.join(path_lib, "debloat", "debloat.jar")
+        if not debloated:
+            path_jar = os.path.join(path_lib, "original", "original.jar")
 
         artifact_id = library.pom.get_artifact()
         group_id = library.pom.get_group()

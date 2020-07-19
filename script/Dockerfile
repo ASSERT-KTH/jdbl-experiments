@@ -27,6 +27,7 @@ COPY jdbl.py jdbl.py
 COPY main.py main.py
 COPY compile.py compile.py
 COPY usage.py usage.py
+COPY verify.py verify.py
 COPY core core
 
 
