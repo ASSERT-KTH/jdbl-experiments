@@ -4,6 +4,7 @@ import os
 import json
 import datetime
 import argparse
+import zipfile
 
 import xml.etree.ElementTree as xml
 
@@ -26,7 +27,7 @@ build_errors = {
     'client_debloat': 0,
     'none': 0
 }
-def parseCoverage(path, exclude=[], deps=[], debloated_class=[], classes_dep_map={}, current_lib=None):
+def parseCoverage(path, exclude=[], deps=[], debloated_class=[], classes_dep_map={}, current_lib=None, include=[]):
     coverage_results_path = os.path.join(path, "jacoco.xml")
     if not os.path.exists(coverage_results_path):
         coverage_results_path = os.path.join(path, "report.xml")
@@ -56,6 +57,8 @@ def parseCoverage(path, exclude=[], deps=[], debloated_class=[], classes_dep_map
         package_name = package.attrib['name'].replace("/", ".")
         for cl in package.findall("class"):
             class_name = cl.attrib['name'].replace("/", ".")
+            if len(include) > 0 and class_name not in include:
+                continue
             class_covered = 0
             class_missed = 0
             if class_name not in o['classes']:
@@ -104,6 +107,16 @@ def parseCoverage(path, exclude=[], deps=[], debloated_class=[], classes_dep_map
     else: 
         o['dep_coverage'] = 0
     return o
+
+def get_jar_content(path):
+    output = []
+    zip = zipfile.ZipFile(path)
+    for f in zip.filelist:
+        if '.class' not in f.filename:
+            continue
+        cl = f.filename.replace(".class", "").replace("/", '.')
+        output.append(cl)
+    return output
 
 def readTestResults(path):
     output = {
@@ -156,11 +169,12 @@ with open(PATH_file, 'r') as fd:
                 continue
             version_path = os.path.join(lib_path, version)
             original_path = os.path.join(version_path, 'original')
-            debloat_path = os.path.join(version_path, 'debloat')     
+            debloat_path = os.path.join(version_path, 'debloat')
+            original_jar_path = os.path.join(original_path, 'original.jar')   
             
             current_lib = {
                 'repo_name': lib['repo_name'],
-                'compiled': os.path.exists(os.path.join(original_path, 'original.jar')),
+                'compiled': os.path.exists(original_jar_path),
                 'debloat': os.path.exists(os.path.join(debloat_path, 'debloat.jar')),
                 'clients': {}
             }
@@ -172,8 +186,12 @@ with open(PATH_file, 'r') as fd:
                 if (current_lib['debloat_test']['error'] > current_lib['original_test']['error']) or (current_lib['debloat_test']['failing'] > current_lib['original_test']['failing']):
                     build_errors['failing_test_debloat'] += 1
             
-            if not os.path.exists(os.path.join(original_path, 'original.jar')) and os.path.exists(original_path): 
+            if not os.path.exists(original_jar_path) and os.path.exists(original_path): 
                 build_errors['lib'] += 1
+            
+            jarClasses = []
+            if os.path.exists(original_jar_path):
+                jarClasses = get_jar_content(original_jar_path)
             
             if not os.path.exists(os.path.join(debloat_path, 'debloat.jar')) and os.path.exists(debloat_path):
                 build_errors['debloat'] += 1
@@ -203,7 +221,7 @@ with open(PATH_file, 'r') as fd:
                     current_dep = None
                     for l in lines:
                         (dep, bloat, class_name) = l.strip().split(',')
-                        if "jcov" in dep:
+                        if len(jarClasses) > 0 and class_name not in jarClasses:
                             continue
                         dep_classes.append(class_name)
                         classes_dep_map[class_name] = dep
@@ -229,8 +247,14 @@ with open(PATH_file, 'r') as fd:
                         if len(l.split(",")) < 2:
                             continue
                         type = l.split(",")[0]
+                        class_name = l.split(",")[1].strip()
+                        if ":" in class_name:
+                            class_name = class_name.split(":")[0]
+                        
+                        if len(jarClasses) > 0 and class_name not in jarClasses:
+                            continue
+
                         if "Method" in type:
-                            class_name = l.split(",")[1].strip().split(":")[0]
                             if class_name in dep_classes:
                                 current_lib['dependencies'][classes_dep_map[class_name]]['nb_method'] += 1
                             current_lib['nb_method'] += 1
@@ -246,11 +270,11 @@ with open(PATH_file, 'r') as fd:
                                 current_lib["type_nb_%s" % (o_type)] += 1
                             if "BloatedClass" in type:
                                 current_lib['nb_debloat_class'] += 1 
-                                debloated_class.append(l.split(",")[1])
+                                debloated_class.append(class_name)
                             if "PreservedClass" in type:
                                 current_lib['nb_preserved_class'] += 1 
 
-            current_lib['coverage'] = parseCoverage(debloat_path, deps=dep_classes, debloated_class=debloated_class, classes_dep_map=classes_dep_map, current_lib=current_lib)
+            current_lib['coverage'] = parseCoverage(debloat_path, deps=dep_classes, debloated_class=debloated_class, classes_dep_map=classes_dep_map, current_lib=current_lib, include=jarClasses)
 
             current_lib['debloatTime'] = ''
             if os.path.exists(os.path.join(debloat_path, 'debloat-execution-time.log')):
@@ -260,8 +284,8 @@ with open(PATH_file, 'r') as fd:
                     if len(content) > 0:
                         current_lib['debloatTime'] = float(content.replace("Total debloat time: ", '').replace(" s", ''))
 
-            if os.path.exists(os.path.join(original_path, 'original.jar')):
-                current_lib['original_jar_size'] = os.stat(os.path.join(original_path, 'original.jar')).st_size
+            if os.path.exists(original_jar_path):
+                current_lib['original_jar_size'] = os.stat(original_jar_path).st_size
             else:
                 current_lib['original_jar_size'] = 0
             if os.path.exists(os.path.join(debloat_path, 'debloat.jar')):
@@ -288,7 +312,17 @@ with open(PATH_file, 'r') as fd:
                     'debloat': os.path.exists(os.path.join(debloat_client_path, "test-results")),
                     'groupId': c['groupId'],
                     'artifactId': c['artifactId'],
+                    'static_use': 'unknown'
                 }
+                path_usage = os.path.join(os.path.dirname(__file__), 'usageAnalysis', c['repo_name'].replace("/", '_') + '.csv')
+                if os.path.exists(path_usage):
+                    client_results['static_use'] = False
+                    with open(path_usage) as usage_fd:
+                        content = usage_fd.read()
+                        for cl in jarClasses:
+                            if cl in content:
+                                client_results['static_use'] = True 
+                                break
                 if client_results['debloat']:
                     lib_with_clients.add(lib_id)
                     build_errors['none'] += 1
@@ -448,6 +482,7 @@ with open(PATH_file, 'r') as fd:
                 else:
                     out.append('')
                 out.append(str(client_results['test_cover_lib']))
+                out.append(str(client_results['static_use']))
 
                 
                 line = ",".join(out)
@@ -467,7 +502,7 @@ print("Lib with clients", len(lib_with_clients))
 print("# successful debloated clients", count_debloated_clients)
 print("Total execution time", datetime.timedelta(seconds=total_time))
 with open(os.path.join(os.path.dirname(__file__), '..', 'raw_results.csv'), 'w') as fd:
-    header = ['ID','"Lib.groupId"', '"Lib.artifactId"', '"Lib.version"', '"Compile"', '"Debloat"', '"Debloat.Time"', '"Lib.original.test.error"', '"Lib.original.test.failing"', '"Lib.original.test.passing"', '"Lib.debloat.test.error"', '"Lib.debloat.test.failing"', '"Lib.debloat.test.passing"', '"Size.original.jar"', '"Size.debloat.jar"', '"Size.workaround.jar"', '"Nb.class.original"', '"Nb.method.original"', '"Nb.debloated.classes"', '"Nb.preserved.classes"', '"Nb.debloated.methods"', '"Nb.Dependenies"', '"Nb.bloated.dependenies"', '"Nb.dependeny.class"', '"Nb.bloated.dependeny.class"', '"Nb.preserved.dependeny.class"', '"Nb.dependeny.method"', '"Nb.bloated.dependeny.method"', '"Lib.coverage"', '"Lib.dep.coverage"', '"Lib.all.coverage"', '"Client.groupId"', '"Client.artifactId"', '"Client.Compile"', '"Client.Debloat"', '"Client.original.test.error"', '"Client.original.test.failing"', '"Client.original.test.passing"', '"Client.debloat.test.error"', '"Client.debloat.test.failing"', '"Client.debloat.test.passing"', '"Client.coverage"', '"Cover.lib"']
+    header = ['ID','"Lib.groupId"', '"Lib.artifactId"', '"Lib.version"', '"Compile"', '"Debloat"', '"Debloat.Time"', '"Lib.original.test.error"', '"Lib.original.test.failing"', '"Lib.original.test.passing"', '"Lib.debloat.test.error"', '"Lib.debloat.test.failing"', '"Lib.debloat.test.passing"', '"Size.original.jar"', '"Size.debloat.jar"', '"Size.workaround.jar"', '"Nb.class.original"', '"Nb.method.original"', '"Nb.debloated.classes"', '"Nb.preserved.classes"', '"Nb.debloated.methods"', '"Nb.Dependenies"', '"Nb.bloated.dependenies"', '"Nb.dependeny.class"', '"Nb.bloated.dependeny.class"', '"Nb.preserved.dependeny.class"', '"Nb.dependeny.method"', '"Nb.bloated.dependeny.method"', '"Lib.coverage"', '"Lib.dep.coverage"', '"Lib.all.coverage"', '"Client.groupId"', '"Client.artifactId"', '"Client.Compile"', '"Client.Debloat"', '"Client.original.test.error"', '"Client.original.test.failing"', '"Client.original.test.passing"', '"Client.debloat.test.error"', '"Client.debloat.test.failing"', '"Client.debloat.test.passing"', '"Client.coverage"', '"Cover.lib"', '"Use.lib"']
     csv = ",".join(header) + '\n' + csv
     fd.write(csv)
 with open(os.path.join(os.path.dirname(__file__), '..', 'raw_results.json'), 'w') as fd:
