@@ -75,6 +75,10 @@ with open(PATH_file, 'r') as fd:
 
     original_total = 0
     debloat_total = 0
+    method_total = 0
+    preserved_total = 0
+    resource_total = 0
+    bytecode_total = 0
 
     content = 'lib,file.path,file.type,debloat.type,original.size,debloated.size\n'
     for lib_id in data:
@@ -109,18 +113,34 @@ with open(PATH_file, 'r') as fd:
                     type = "none"
                     class_name = path.replace(".class", '').replace("/", '.')
                     if class_name in debloat_report['bloated']:
+                        debloat_total += info['size']
                         debloat_size = 0
                         type = "bloated"
                     elif class_name in debloat_report['preserved']:
+                        preserved_total += info['size']
                         type = "preserved"
                     elif class_name in debloat_report['method']:
+                        method_total += info['size'] - debloat_size
                         type = "method"
+                if type == "resource":
+                    resource_total += info['size']
+                else:
+                    bytecode_total += info['size']
                 original_total += info['size']
-                debloat_total += debloat_size
                 content += (f"{lib_id.replace('/', '_')}_{version},{path},{info['type']},{type},{info['size']},{debloat_size}\n")
     with open("../jar_analysis.csv", 'w') as fdo:
         fdo.write(content)
-    print(original_total, debloat_total, (original_total-debloat_total)*100/original_total)
+    
+    def print_latex_variable(name, value):
+        print("\def\%s{%s}" % (name, value))
+    
+    print_latex_variable("totalSize", original_total)
+    print_latex_variable("resourceSize", resource_total)
+    print_latex_variable("bytcodeSize", bytecode_total)
+    print_latex_variable("debloatedSize", debloat_total)
+    print_latex_variable("debloatedMethodSize", method_total)
+    print_latex_variable("preservedSize", preserved_total)
+    print(bytecode_total, debloat_total, (debloat_total)*100/bytecode_total)
             
             
 
