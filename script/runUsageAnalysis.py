@@ -181,7 +181,12 @@ with open(PATH_file) as fd:
                 client_name = os.path.basename(client['repo_name'])
                 if 'groupId' not in lib or 'groupId' not in client:
                     continue
-                tasks.append(Task(client['repo_name'], client['commit']))
+                path_output = os.path.join(OUTPUT, client['repo_name'].replace("/", '_') + '.csv')
+                if os.path.exists(path_output):
+                    if os.stat(path_output).st_size == 0:
+                        os.remove(path_output)
+                if not os.path.exists(path_output):
+                    tasks.append(Task(client['repo_name'], client['commit']))
 
 
 finished = []
