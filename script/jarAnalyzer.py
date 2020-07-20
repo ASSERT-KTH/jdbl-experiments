@@ -49,7 +49,7 @@ def get_zip_content(path):
     return output
 
 def get_debloat_report(path):
-    output = {'bloated': [], 'preserved': []}
+    output = {'bloated': [], 'preserved': [], 'method': []}
     if os.path.exists(os.path.join(path, 'debloat-report.csv')):
         with open(os.path.join(path, 'debloat-report.csv')) as fd:
             lines = fd.readlines()
@@ -62,6 +62,8 @@ def get_debloat_report(path):
                 class_name = l.split(",")[1].strip()
                 if ":" in class_name:
                     class_name = class_name.split(":")[0]
+                if type == "BloatedMethod":
+                    output['method'].append(class_name)
                 if type == "BloatedClass":
                     output['bloated'].append(class_name)
                 elif type == "PreservedClass":
@@ -106,12 +108,13 @@ with open(PATH_file, 'r') as fd:
                 if '.class' in path:
                     type = "none"
                     class_name = path.replace(".class", '').replace("/", '.')
-                    print(class_name)
                     if class_name in debloat_report['bloated']:
                         debloat_size = 0
                         type = "bloated"
-                    if class_name in debloat_report['preserved']:
+                    elif class_name in debloat_report['preserved']:
                         type = "preserved"
+                    elif class_name in debloat_report['method']:
+                        type = "method"
                 original_total += info['size']
                 debloat_total += debloat_size
                 content += (f"{lib_id.replace('/', '_')}_{version},{path},{info['type']},{type},{info['size']},{debloat_size}\n")
