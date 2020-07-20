@@ -51,6 +51,9 @@ if __name__ == "__main__":
     path_client_test_results = os.path.join(client_path_result, "verify-test-results")
 
     if not os.path.exists(path_client_test_results):
+        if dep.pom is None:
+            dep.clone(working_directory)
+            dep.checkout_commit(args.lib_commit)
         client.clone(working_directory)
         client.checkout_commit(args.client_commit)
         client.inject_debloat_library(args.output, dep, args.version, debloated=False)

@@ -118,8 +118,6 @@ class Project:
             return False
     
     def copy_test_results(self, dst):
-        if not os.path.exists(dst):
-            os.makedirs(dst)
         dst = os.path.abspath(dst)
         if not os.path.exists(os.path.join(self.path, "target", "surefire-reports")):
             return False
