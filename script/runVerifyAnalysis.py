@@ -20,6 +20,7 @@ parser.add_argument("--timeout", help="The maximum execution time per execution"
 args = parser.parse_args()
 
 PATH_file = os.path.join(os.path.dirname(__file__), '..', 'dataset', 'data', 'jdbl_dataset.json')
+#PATH_file = os.path.join(os.path.dirname(__file__), 'test_dataset.json')
 
 OUTPUT = os.path.abspath(os.path.join(os.path.dirname(__file__), "results"))
 if args.output:
@@ -103,7 +104,7 @@ class Task():
 
     def run(self):
         self.start = time.time()
-        cmd = 'docker run --memory=5g -v %s:/home/jdbl/results --rm jdbl verify --output /home/jdbl/results -d https://github.com/%s.git --lib-commit %s -c https://github.com/%s.git --client-commit %s -v %s' % (OUTPUT, self.library['repo_name'], self.lib_commit, self.client['repo_name'], self.client['commit'], self.version)
+        cmd = 'docker run --memory=5g -v %s:/home/jdbl/results --rm jdbl verify --output /home/jdbl/results -d https://github.com/%s.git --lib-commit %s -c https://github.com/%s.git --client-commit %s -v %s >> verify.log' % (OUTPUT, self.library['repo_name'], self.lib_commit, self.client['repo_name'], self.client['commit'], self.version)
         try:
             p = subprocess.call(cmd, shell=True, timeout=timeout)
             pass

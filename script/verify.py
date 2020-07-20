@@ -32,6 +32,7 @@ if __name__ == "__main__":
     result_path = os.path.join(
         args.output, dep.repo.replace('/', '_'), args.version)
     if not os.path.exists(result_path):
+        print("exit", result_path, "does not exists")
         sys.exit(0)
 
     lib_debloat_path = os.path.join(result_path, "debloat")
@@ -48,7 +49,8 @@ if __name__ == "__main__":
 
     client_path_result = os.path.join(
         result_path, "clients", client.repo.replace('/', '_'), 'debloat')
-    path_client_test_results = os.path.join(client_path_result, "verify-test-results")
+    path_client_test_results = os.path.join(
+        client_path_result, "verify-test-results")
 
     if not os.path.exists(path_client_test_results):
         if dep.pom is None:
@@ -56,7 +58,8 @@ if __name__ == "__main__":
             dep.checkout_commit(args.lib_commit)
         client.clone(working_directory)
         client.checkout_commit(args.client_commit)
-        client.inject_debloat_library(args.output, dep, args.version, debloated=False)
+        client.inject_debloat_library(
+            args.output, dep, args.version, debloated=False)
         client.unzip_debloat(args.output, dep, args.version, debloated=False)
         client.test()
         client.copy_test_results(path_client_test_results)
