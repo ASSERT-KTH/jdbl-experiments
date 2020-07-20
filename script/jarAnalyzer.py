@@ -47,10 +47,34 @@ def get_zip_content(path):
             'size': f.file_size
         }
     return output
+
+def get_debloat_report(path):
+    output = {'bloated': [], 'preserved': []}
+    if os.path.exists(os.path.join(path, 'debloat-report.csv')):
+        with open(os.path.join(path, 'debloat-report.csv')) as fd:
+            lines = fd.readlines()
+            for l in lines:
+                if len(l.split(",")) < 2:
+                    continue
+                if len(l.split(",")) < 2:
+                    continue
+                type = l.split(",")[0]
+                class_name = l.split(",")[1].strip()
+                if ":" in class_name:
+                    class_name = class_name.split(":")[0]
+                if type == "BloatedClass":
+                    output['bloated'].append(class_name)
+                elif type == "PreservedClass":
+                    output['preserved'].append(class_name)
+    return output
+
 with open(PATH_file, 'r') as fd:
     data = json.load(fd)
 
-    content = 'lib,file.path,type,original.size,debloated.size\n'
+    original_total = 0
+    debloat_total = 0
+
+    content = 'lib,file.path,file.type,debloat.type,original.size,debloated.size\n'
     for lib_id in data:
         lib = data[lib_id]
         lib_id = lib['repo_name']
@@ -62,6 +86,8 @@ with open(PATH_file, 'r') as fd:
             original_path = os.path.join(version_path, 'original')
             debloat_path = os.path.join(version_path, 'debloat') 
             
+            debloat_report = get_debloat_report(debloat_path)
+
             original_jar_path = os.path.join(original_path, 'original.jar')
             debloat_jar_path = os.path.join(debloat_path, 'debloat.jar')
             
@@ -74,11 +100,24 @@ with open(PATH_file, 'r') as fd:
                 info = original_content[path]
                 info_debloat = None
                 debloat_size = 0
+                type = "resource"
                 if path in debloat_content:
                     debloat_size = debloat_content[path]['size']
-                content += (f"{lib_id.replace('/', '_')}_{version},{path},{info['type']},{info['size']},{debloat_size}\n")
+                if '.class' in path:
+                    type = "none"
+                    class_name = path.replace(".class", '').replace("/", '.')
+                    print(class_name)
+                    if class_name in debloat_report['bloated']:
+                        debloat_size = 0
+                        type = "bloated"
+                    if class_name in debloat_report['preserved']:
+                        type = "preserved"
+                original_total += info['size']
+                debloat_total += debloat_size
+                content += (f"{lib_id.replace('/', '_')}_{version},{path},{info['type']},{type},{info['size']},{debloat_size}\n")
     with open("../jar_analysis.csv", 'w') as fdo:
         fdo.write(content)
+    print(original_total, debloat_total, (original_total-debloat_total)*100/original_total)
             
             
 
