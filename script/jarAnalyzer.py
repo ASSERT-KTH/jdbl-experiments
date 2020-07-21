@@ -153,8 +153,9 @@ with open(PATH_file, 'r') as fd:
             if len(cl_2_remove + cl_2_method) > 0:
                 to_remove = split_list(cl_2_remove + cl_2_method)
                 for l in to_remove:
-                    cmd = ['zip', '-d', dup_jar_path] + l
-                    subprocess.check_call(" ".join(cmd).replace("$", "\$") + " > /dev/null", shell=True)
+                    if len(l) > 0:
+                        cmd = ['zip', '-d', dup_jar_path] + l
+                        subprocess.check_call(" ".join(cmd).replace("$", "\$") + " > /dev/null", shell=True)
             if len(cl_2_method) > 0:
                 with zipfile.ZipFile(debloat_jar_path) as zip:
                     with zipfile.ZipFile(dup_jar_path, 'a') as zipf:
