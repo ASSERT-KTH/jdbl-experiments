@@ -75,9 +75,15 @@ def get_debloat_report(path):
                     output['preserved'].append(class_name)
     return output
 
-def split_list(a_list):
-    half = len(a_list)//2
-    return [a_list[:half], a_list[half:]]
+def split_list(a_list, group_size = 100):
+    size = len(a_list)
+    output = []
+    group = size // group_size
+    for i in range(0, group):
+        output.append(a_list[i*group_size:i*group_size+group_size])
+    if len(a_list[group*group_size:]) > 0:
+        output.append(a_list[group*group_size:])
+    return output
 
 with open(PATH_file, 'r') as fd:
     data = json.load(fd)
