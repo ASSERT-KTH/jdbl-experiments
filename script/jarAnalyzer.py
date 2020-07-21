@@ -75,6 +75,9 @@ def get_debloat_report(path):
                     output['preserved'].append(class_name)
     return output
 
+def split_list(a_list):
+    half = len(a_list)//2
+    return [a_list[:half], a_list[half:]]
 
 with open(PATH_file, 'r') as fd:
     data = json.load(fd)
@@ -146,10 +149,12 @@ with open(PATH_file, 'r') as fd:
                 original_total += info['size']
                 content += (
                     f"{lib_id.replace('/', '_')}_{version},{path},{info['type']},{type},{info['size']},{debloat_size}\n")
-
+            
             if len(cl_2_remove + cl_2_method) > 0:
-                cmd = ['zip', '-d', dup_jar_path] + cl_2_remove + cl_2_method
-                subprocess.check_call(" ".join(cmd).replace("$", "\$") + " > /dev/null", shell=True)
+                to_remove = split_list(cl_2_remove + cl_2_method)
+                for l in to_remove:
+                    cmd = ['zip', '-d', dup_jar_path] + l
+                    subprocess.check_call(" ".join(cmd).replace("$", "\$") + " > /dev/null", shell=True)
             if len(cl_2_method) > 0:
                 with zipfile.ZipFile(debloat_jar_path) as zip:
                     with zipfile.ZipFile(dup_jar_path, 'a') as zipf:
