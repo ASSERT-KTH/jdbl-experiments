@@ -159,7 +159,9 @@ class Project:
     def unzip_debloat(self, root, library, version, debloated=True):
         # self.pom.remove_dependency(group_id, artifact_id)
         path_lib = os.path.join(root, library.repo.replace('/', '_'), version)
-        path_jar = os.path.join(path_lib, "debloat", "debloat.jar")
+        path_jar = os.path.join(path_lib, "debloat", "dup.jar")
+        if not os.path.exists(path_jar):
+            path_jar = os.path.join(path_lib, "debloat", "debloat.jar")
         if not debloated:
             path_jar = os.path.join(path_lib, "original", "original.jar")
 
@@ -173,7 +175,9 @@ class Project:
 
     def inject_debloat_library(self, root, library, version, debloated=True):
         path_lib = os.path.join(root, library.repo.replace('/', '_'), version)
-        path_jar = os.path.join(path_lib, "debloat", "debloat.jar")
+        path_jar = os.path.join(path_lib, "debloat", "dup.jar")
+        if not os.path.exists(path_jar):
+            path_jar = os.path.join(path_lib, "debloat", "debloat.jar")
         if not debloated:
             path_jar = os.path.join(path_lib, "original", "original.jar")
 
