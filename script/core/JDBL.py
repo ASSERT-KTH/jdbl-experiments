@@ -196,6 +196,7 @@ class JDBL:
                 os.mkdir(original_client_results_path)
             
             self.client.inject_jacoco_plugin()
+            current_status['success'] = self.client.unzip_debloat(OUTPUT_dir, self.library, self.version, debloated=False) and current_status['success']
 
             current_status['success'] = self.client.test(stdout=original_client_results_path + "/execution.log")
             

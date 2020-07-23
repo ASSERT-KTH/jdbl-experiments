@@ -319,7 +319,7 @@ with open(PATH_file, 'r') as fd:
                     client_results['static_use'] = False
                     with open(path_usage) as usage_fd:
                         content = usage_fd.read()
-                        for cl in jarClasses:
+                        for cl in dep_classes:
                             if cl in content:
                                 client_results['static_use'] = True 
                                 break
@@ -362,10 +362,11 @@ with open(PATH_file, 'r') as fd:
                 exclude = []
                 if current_lib['coverage'] is not None and 'classes' in current_lib['coverage']:
                     exclude = current_lib['coverage']['classes']
+                client_results['coverage_original'] = parseCoverage(original_client_path, exclude)
                 client_results['coverage_debloat'] = parseCoverage(debloat_client_path, exclude)
                 client_results['test_cover_lib'] = False
-                if client_results['coverage_debloat'] is not None and current_lib['coverage'] is not None:
-                    for cl in client_results['coverage_debloat']['covered_classes']:
+                if client_results['coverage_original'] is not None and current_lib['coverage'] is not None:
+                    for cl in client_results['coverage_original']['covered_classes']:
                         if cl in current_lib['coverage']['classes']:
                             client_results['test_cover_lib'] = True
                             break
