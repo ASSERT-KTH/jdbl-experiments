@@ -233,6 +233,32 @@ class Project:
                 }
             ]
         }])
+        (includes, excludes) = self.pom.get_included_excluded_tests()
+        exclude_config = []
+        for exclude in excludes:
+            exclude_config.append({
+                "name": "exclude",
+                "text": exclude
+            })
+        include_config = []
+        for include in includes:
+            include_config.append({
+                "name": "include",
+                "text": include
+            })
+        self.pom.add_plugin("org.apache.maven.plugins", "maven-surefire-plugin", "2.19.1", [{
+            "name": "configuration",
+            "children": [
+                {
+                    "name": "excludes",
+                    "children": exclude_config
+                },
+                {
+                    "name": "includes",
+                    "children": include_config
+                }
+            ]
+        }])
         self.pom.write_pom()
         return True
 
