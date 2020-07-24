@@ -6,11 +6,13 @@ import time
 import json
 
 from core.Debloat import Debloat
+from core.Project import Project
 
-OUTPUT_dir = 'results' 
+OUTPUT_dir = 'results'
+
 
 class JDBL:
-    def __init__(self, library, client, version=None, working_directory=None, commit=None, client_commit=None, output=None):
+    def __init__(self, library: Project, client: Project, version: str = None, working_directory: str = None, commit: str = None, client_commit: str = None, output: str = None):
         global OUTPUT_dir
         self.library = library
         self.lib_commit = commit
@@ -30,7 +32,7 @@ class JDBL:
             "start": time.time(),
             "steps": []
         }
-        try:        
+        try:
             print("1. Clone library...", flush=True)
             current_status = {
                 "name": 'clone Library',
@@ -38,7 +40,8 @@ class JDBL:
                 "seccess": False
             }
             results['steps'].append(current_status)
-            current_status['success'] = self.library.clone(self.working_directory)
+            current_status['success'] = self.library.clone(
+                self.working_directory)
             previous_time = time.time()
             current_status['end'] = previous_time
 
@@ -53,7 +56,8 @@ class JDBL:
                 "success": False
             }
             results['steps'].append(current_status)
-            current_status['success'] = self.client.clone(self.working_directory)
+            current_status['success'] = self.client.clone(
+                self.working_directory)
             if self.client_commit is not None:
                 self.client.checkout_commit(self.client_commit)
             current_status['commit'] = self.client.get_commit()
@@ -69,7 +73,7 @@ class JDBL:
 
             if self.version is None and self.lib_library is None:
                 print("3. Extract library version", flush=True)
-                
+
                 current_status = {
                     "name": 'extract library version',
                     "start": previous_time,
@@ -77,17 +81,18 @@ class JDBL:
                 }
                 results['steps'].append(current_status)
 
-                self.version = self.client.pom.get_version_dependency(group_id=dep_group, artifact_id=dep_artifact)
-                
+                self.version = self.client.pom.get_version_dependency(
+                    group_id=dep_group, artifact_id=dep_artifact)
+
                 current_status['success'] = self.version is not None
-                
+
                 previous_time = time.time()
                 current_status['end'] = previous_time
                 if not current_status['success']:
-                    print("[exit] The library version has not been found", flush=True)
+                    print(
+                        "[exit] The library version has not been found", flush=True)
                     return
 
-            
             print("4. Checkout library version", flush=True)
 
             current_status = {
@@ -98,22 +103,26 @@ class JDBL:
             results['steps'].append(current_status)
             if self.lib_commit is not None:
                 print("COMMIT %s" % self.lib_commit, flush=True)
-                current_status['success'] = self.library.checkout_commit(self.lib_commit)
+                current_status['success'] = self.library.checkout_commit(
+                    self.lib_commit)
                 current_status['commit'] = self.lib_commit
             else:
-                current_status['success'] = self.library.checkout_version(self.version)
+                current_status['success'] = self.library.checkout_version(
+                    self.version)
                 current_status['commit'] = self.library.get_commit()
-            
+
             previous_time = time.time()
             current_status['end'] = previous_time
             if not current_status['success']:
-                print("[exit] Unable to checkout commit %s" % (self.version), flush=True)
+                print("[exit] Unable to checkout commit %s" %
+                      (self.version), flush=True)
                 return
-            
-            result_path = os.path.join(OUTPUT_dir, self.library.repo.replace('/', '_'), self.version)
+
+            result_path = os.path.join(
+                OUTPUT_dir, self.library.repo.replace('/', '_'), self.version)
             if not os.path.exists(result_path):
                 os.makedirs(result_path)
-            
+
             lib_original_path = os.path.join(result_path, "original")
             if not os.path.exists(os.path.join(lib_original_path, "original.jar")):
                 print("5. Create unmodified jar", flush=True)
@@ -127,14 +136,18 @@ class JDBL:
                 self.library.inject_assembly_plugin()
                 if not os.path.exists(lib_original_path):
                     os.mkdir(lib_original_path)
-                
-                current_status['success'] = self.library.copy_pom(lib_original_path + "/pom.xml")
 
-                current_status['success'] = self.library.package(stdout=lib_original_path + "/execution.log") and current_status['success']
+                current_status['success'] = self.library.copy_pom(
+                    lib_original_path + "/pom.xml")
 
-                current_status['success'] = self.library.copy_jar(lib_original_path + "/original.jar") and current_status['success'] 
-                current_status['success'] = self.library.copy_test_results(lib_original_path + "/test-results") and current_status['success']
-                
+                current_status['success'] = self.library.package(
+                    stdout=lib_original_path + "/execution.log") and current_status['success']
+
+                current_status['success'] = self.library.copy_jar(
+                    lib_original_path + "/original.jar") and current_status['success']
+                current_status['success'] = self.library.copy_test_results(
+                    lib_original_path + "/test-results") and current_status['success']
+
                 previous_time = time.time()
                 current_status['end'] = previous_time
                 if not current_status['success']:
@@ -142,7 +155,8 @@ class JDBL:
                     return
             else:
                 self.library.inject_assembly_plugin()
-                print("Library %s:%s with version %s already compiled" % (dep_group, dep_artifact, self.version), flush=True)
+                print("Library %s:%s with version %s already compiled" %
+                      (dep_group, dep_artifact, self.version), flush=True)
 
             lib_debloat_path = os.path.join(result_path, "debloat")
             if not os.path.exists(os.path.join(lib_debloat_path, "debloat.jar")):
@@ -155,14 +169,20 @@ class JDBL:
                 }
                 results['steps'].append(current_status)
 
-                shutil.copyfile(os.path.join(os.path.dirname(__file__), '..', 'coverageAgent.jar'), os.path.join(self.library.path, 'coverageAgent.jar' ))
+                shutil.copyfile(os.path.join(os.path.dirname(
+                    __file__), '..', 'coverageAgent.jar'), os.path.join(self.library.path, 'coverageAgent.jar'))
                 if not os.path.exists(lib_debloat_path):
                     os.mkdir(lib_debloat_path)
-                current_status['success'] = Debloat(self.library).run(stdout=lib_debloat_path + "/execution.log")
-                current_status['success'] = self.library.copy_pom(lib_debloat_path + "/pom.xml") and current_status['success']
-                current_status['success'] = self.library.copy_jar(lib_debloat_path + "/debloat.jar") and current_status['success']
-                current_status['success'] = self.library.copy_test_results(lib_debloat_path + "/test-results") and current_status['success']
-                current_status['success'] = self.library.copy_report(lib_debloat_path) and current_status['success']
+                current_status['success'] = Debloat(self.library).run(
+                    stdout=lib_debloat_path + "/execution.log")
+                current_status['success'] = self.library.copy_pom(
+                    lib_debloat_path + "/pom.xml") and current_status['success']
+                current_status['success'] = self.library.copy_jar(
+                    lib_debloat_path + "/debloat.jar") and current_status['success']
+                current_status['success'] = self.library.copy_test_results(
+                    lib_debloat_path + "/test-results") and current_status['success']
+                current_status['success'] = self.library.copy_report(
+                    lib_debloat_path) and current_status['success']
 
                 previous_time = time.time()
                 current_status['end'] = previous_time
@@ -170,16 +190,19 @@ class JDBL:
                     print("[exit] Unable to create the debloated jar", flush=True)
                     return
             else:
-                print("Library %s:%s with version %s already debloated" % (dep_group, dep_artifact, self.version), flush=True)
+                print("Library %s:%s with version %s already debloated" %
+                      (dep_group, dep_artifact, self.version), flush=True)
 
             print("7. Execute test library debloat", flush=True)
-            # TODO        
+            # TODO
 
-            client_results_path = os.path.join(result_path, "clients",self.client.repo.replace('/', '_'))
+            client_results_path = os.path.join(
+                result_path, "clients", self.client.repo.replace('/', '_'))
             if not os.path.exists(client_results_path):
                 os.makedirs(client_results_path)
             elif os.path.exists(os.path.join(client_results_path, "/test-results")):
-                print("[Exit] client result already present %s" % client_results_path, flush=True)
+                print("[Exit] client result already present %s" %
+                      client_results_path, flush=True)
                 return
 
             print("8. Execute client tests", flush=True)
@@ -191,21 +214,26 @@ class JDBL:
             }
             results['steps'].append(current_status)
 
-            original_client_results_path = os.path.join(client_results_path, "original")
+            original_client_results_path = os.path.join(
+                client_results_path, "original")
             if not os.path.exists(original_client_results_path):
                 os.mkdir(original_client_results_path)
-            
-            self.client.inject_jacoco_plugin()
-            current_status['success'] = self.client.unzip_debloat(OUTPUT_dir, self.library, self.version, debloated=False) and current_status['success']
 
-            current_status['success'] = self.client.test(stdout=original_client_results_path + "/execution.log")
-            
+            self.client.inject_jacoco_plugin()
+            current_status['success'] = self.client.unzip_debloat(
+                OUTPUT_dir, self.library, self.version, debloated=False)
+
+            current_status['success'] = self.client.test(clean=False,
+                                                         stdout=original_client_results_path + "/execution.log") and current_status['success']
             previous_time = time.time()
             current_status['end'] = previous_time
 
-            current_status['success'] = self.client.copy_jacoco(original_client_results_path) and current_status['success']
-            current_status['success'] = self.client.copy_pom(original_client_results_path + "/pom.xml") and current_status['success']
-            current_status['success'] = self.client.copy_test_results(original_client_results_path + "/test-results") and current_status['success']
+            current_status['success'] = self.client.copy_jacoco(
+                original_client_results_path) and current_status['success']
+            current_status['success'] = self.client.copy_pom(
+                original_client_results_path + "/pom.xml") and current_status['success']
+            current_status['success'] = self.client.copy_test_results(
+                original_client_results_path + "/test-results") and current_status['success']
 
             if not current_status['success']:
                 print("[exit] Unable to execute client tests", flush=True)
@@ -220,14 +248,17 @@ class JDBL:
             }
             results['steps'].append(current_status)
             self.client.clean()
-            current_status['success'] = self.client.inject_debloat_library(OUTPUT_dir, self.library, self.version)
-            current_status['success'] = self.client.unzip_debloat(OUTPUT_dir, self.library, self.version) and current_status['success']
+            current_status['success'] = self.client.inject_debloat_library(
+                OUTPUT_dir, self.library, self.version)
+            current_status['success'] = self.client.unzip_debloat(
+                OUTPUT_dir, self.library, self.version) and current_status['success']
 
             previous_time = time.time()
             current_status['end'] = previous_time
 
             if not current_status['success']:
-                print("[exit] Unable to inject debloated library in client", flush=True)
+                print(
+                    "[exit] Unable to inject debloated library in client", flush=True)
                 return
 
             print("10. Execute client tests with debloated library", flush=True)
@@ -239,14 +270,19 @@ class JDBL:
             }
             results['steps'].append(current_status)
 
-            debloat_client_results_path = os.path.join(client_results_path, "debloat")
+            debloat_client_results_path = os.path.join(
+                client_results_path, "debloat")
             if not os.path.exists(debloat_client_results_path):
                 os.mkdir(debloat_client_results_path)
-            
-            current_status['success'] = self.client.copy_pom(debloat_client_results_path + "/pom.xml")
-            current_status['success'] =  self.client.test(clean=False,stdout=debloat_client_results_path + "/execution.log") and current_status['success']
-            current_status['success'] = self.client.copy_jacoco(debloat_client_results_path) and current_status['success']
-            current_status['success'] = self.client.copy_test_results(debloat_client_results_path + "/test-results") and current_status['success']
+
+            current_status['success'] = self.client.copy_pom(
+                debloat_client_results_path + "/pom.xml")
+            current_status['success'] = self.client.test(
+                clean=False, stdout=debloat_client_results_path + "/execution.log") and current_status['success']
+            current_status['success'] = self.client.copy_jacoco(
+                debloat_client_results_path) and current_status['success']
+            current_status['success'] = self.client.copy_test_results(
+                debloat_client_results_path + "/test-results") and current_status['success']
 
             previous_time = time.time()
             current_status['end'] = previous_time
@@ -259,4 +295,4 @@ class JDBL:
             with open(os.path.join(path_result, "%s_%s.json" % (self.library.repo.replace('/', '_'), self.client.repo.replace('/', '_'))), 'w') as fd:
                 json.dump(results, fd)
             print(self.working_directory)
-            #shutil.rmtree(self.working_directory)
+            # shutil.rmtree(self.working_directory)

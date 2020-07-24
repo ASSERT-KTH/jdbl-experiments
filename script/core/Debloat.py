@@ -2,10 +2,11 @@ import os
 import subprocess
 
 from core.PomExtractor import PomExtractor
+from core.Project import Project
 
 
 class Debloat:
-    def __init__(self, project):
+    def __init__(self, project:Project):
         self.project = project
 
     def inject_library(self):
@@ -59,6 +60,6 @@ class Debloat:
         self.project.pom.write_pom()
         pass
 
-    def run(self, stdout=None):
+    def run(self, stdout:str=None):
         self.inject_library()
         return self.project.package(stdout=stdout)

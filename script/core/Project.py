@@ -12,18 +12,18 @@ if 'GITHUB_OAUTH' in os.environ and len(os.environ['GITHUB_OAUTH']) > 0:
 g = Github(token)
 
 class Project:
-    def __init__(self, url):
+    def __init__(self, url:str):
         self.url = url
         self.name = os.path.basename(url).replace(".git", '')
         self.repo = url.replace("https://github.com/", '').replace(".git", '')
         if self.repo[-1] == '/':
             self.repo = self.repo[:-1]
-        self.path = None
-        self.original_path = None
-        self.pom = None
+        self.path:str = None
+        self.original_path:str = None
+        self.pom:PomExtractor = None
         self.releases = []
     
-    def clone(self, path):
+    def clone(self, path:str):
         try:
             cmd = "cd %s;git clone -q --depth=1 %s;" % (path, self.url)
             subprocess.check_call(cmd, shell=True)
@@ -36,7 +36,7 @@ class Project:
             traceback.print_exc()
             return False
 
-    def checkout_version(self, version):
+    def checkout_version(self, version:str):
         version = version.lower().replace('v.', '').replace('v', '').replace('_', '.').replace('-', '.')
         releases = self.get_releases()
         for r in releases:
@@ -56,7 +56,7 @@ class Project:
                 continue
         return False
 
-    def checkout_commit(self, commit):
+    def checkout_commit(self, commit:str):
         try:
             cmd = 'cd %s; git fetch -q origin %s; git checkout -q %s' %(self.path, commit, commit)
             subprocess.check_call(cmd, shell=True)
@@ -85,7 +85,18 @@ class Project:
         except:
             return False
 
-    def test(self, clean=True, stdout=None):
+    def compile(self, clean:bool=True):
+        clean_cmd = 'mvn clean -B -q > /dev/null; '
+        if clean is False:
+            clean_cmd = ''
+        cmd = 'cd %s;%smvn compile -e --fail-never -ntp -Dmaven.test.failure.ignore=true -B -Dmaven.javadoc.skip=true -Drat.skip=true -Danimal.sniffer.skip=true -Dmaven.javadoc.skip=true -Dlicense.skip=true -Dsource.skip=true' % (self.path, clean_cmd)
+        try:
+            subprocess.check_call(cmd, shell=True)
+            return True
+        except:
+            return False
+    
+    def test(self, clean:bool=True, stdout:str=None):
         clean_cmd = 'mvn clean -B -q > /dev/null ;'
         if clean is False:
             clean_cmd = ''
@@ -98,7 +109,7 @@ class Project:
         except:
             return False
 
-    def package(self, stdout=None):
+    def package(self, stdout:str=None) -> bool:
         cmd = 'cd %s; mvn clean -q -B; mvn package -e --fail-never -ntp -Dmaven.test.error.ignore=true -Dmaven.test.failure.ignore=true -B -Dmaven.javadoc.skip=true -Drat.skip=true -Danimal.sniffer.skip=true -Dmaven.javadoc.skip=true -Dlicense.skip=true -Dsource.skip=true' % (self.path)
         if stdout is not None:
             cmd += ' > %s 2>&1' % (stdout)
@@ -108,7 +119,7 @@ class Project:
         except:
             return False
     
-    def copy_jar(self, dst):
+    def copy_jar(self, dst:str) -> bool:
         dst = os.path.abspath(dst)
         cmd = 'cd %s/target; cp *jar-with-dependencies.jar %s;' % (self.path, dst)
         try:
@@ -117,7 +128,7 @@ class Project:
         except:
             return False
     
-    def copy_test_results(self, dst):
+    def copy_test_results(self, dst:str):
         dst = os.path.abspath(dst)
         if not os.path.exists(os.path.join(self.path, "target", "surefire-reports")):
             return False
@@ -129,7 +140,7 @@ class Project:
         except:
             return False
     
-    def copy_jacoco(self, dst):
+    def copy_jacoco(self, dst:str):
         dst = os.path.abspath(dst)
         cmd = 'cd %s/target/; cp -r site/jacoco/jacoco.xml %s; cp -r site/jacoco/jacoco.csv %s' % (self.path, dst, dst)
         try:
@@ -138,7 +149,7 @@ class Project:
         except:
             return False
     
-    def copy_pom(self, dst):
+    def copy_pom(self, dst:str):
         dst = os.path.abspath(dst)
         cmd = 'cd %s; cp -r %s %s' % (self.path, self.pom.poms[0]['path'], dst)
         try:
@@ -147,7 +158,7 @@ class Project:
         except:
             return False
 
-    def copy_report(self, dst):
+    def copy_report(self, dst:str):
         dst = os.path.abspath(dst)
         cmd = 'cd %s; cp -r .jdbl/* %s;' % (self.path, dst)
         try:
@@ -156,7 +167,7 @@ class Project:
         except:
             return False
 
-    def unzip_debloat(self, root, library, version, debloated=True):
+    def unzip_debloat(self, root:str, library:str, version:str, debloated:bool=True):
         # self.pom.remove_dependency(group_id, artifact_id)
         path_lib = os.path.join(root, library.repo.replace('/', '_'), version)
         path_jar = os.path.join(path_lib, "debloat", "dup.jar")
@@ -173,7 +184,7 @@ class Project:
             traceback.print_stack()
             return False
 
-    def inject_debloat_library(self, root, library, version, debloated=True):
+    def inject_debloat_library(self, root:str, library:str, version:str, debloated:bool=True):
         path_lib = os.path.join(root, library.repo.replace('/', '_'), version)
         path_jar = os.path.join(path_lib, "debloat", "dup.jar")
         if not os.path.exists(path_jar):

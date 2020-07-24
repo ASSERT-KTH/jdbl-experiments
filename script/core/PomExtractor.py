@@ -18,10 +18,10 @@ def stripNs(el):
   for child in el:
     stripNs(child)
 
-def clean_value(text):
+def clean_value(text:str):
     return text.replace("\n", "").replace("\t", "").replace(" ", "")
 
-def indent(elem, level=0, more_sibs=False):
+def indent(elem:Element, level=0, more_sibs=False):
     i = "\n"
     if level:
         i += (level-1) * '  '
@@ -46,7 +46,7 @@ def indent(elem, level=0, more_sibs=False):
                 elem.tail += '  '
 
 class PomExtractor:
-    def __init__(self, path):
+    def __init__(self, path:str):
         self.namespaces = {'xmlns' : 'http://maven.apache.org/POM/4.0.0'}
         self.path = path
         self.poms = []
@@ -65,7 +65,7 @@ class PomExtractor:
             with open(pom["path"], 'w') as fd:
                 fd.write(rough_string)
 
-    def get_artifact(self):
+    def get_artifact(self) -> str:
         r = self.poms[0]["root"].find('artifactId')
         if r is not None:
             return clean_value(r.text)
@@ -76,7 +76,7 @@ class PomExtractor:
                 return clean_value(r.text)
         return ''
 
-    def get_group(self):
+    def get_group(self) -> str:
         r = self.poms[0]["root"].find('groupId')
         if r is not None:
             return clean_value(r.text)
@@ -87,7 +87,7 @@ class PomExtractor:
                 return clean_value(r.text)
         return ''
 
-    def get_version(self):
+    def get_version(self) -> str:
         r = self.poms[0]["root"].find("version")
         if r is not None:
             return clean_value(r.text)
@@ -96,7 +96,7 @@ class PomExtractor:
             return clean_value(r.text)
         return ''
 
-    def remove_dependency(self, group_id, artifact_id):
+    def remove_dependency(self, group_id:str, artifact_id:str) -> str:
         for pom in self.poms:
             prop_parents = self.poms[0]["root"].findall('*//dependency/..')
             for parent in prop_parents:
@@ -115,7 +115,7 @@ class PomExtractor:
                     return dep
         return None
 
-    def get_version_dependency(self, group_id, artifact_id):
+    def get_version_dependency(self, group_id:str, artifact_id:str) -> str:
         for pom in self.poms:
             deps = pom["root"].findall('*//dependency')
             for dep in deps:
@@ -128,7 +128,7 @@ class PomExtractor:
                     return version
         return None
 
-    def change_depency_path(self, group_id, artifact_id, path):
+    def change_depency_path(self, group_id:str, artifact_id:str, path:str) -> bool:
         for pom in self.poms:
             deps = pom["root"].findall('*//dependency')
             for dep in deps:
@@ -143,7 +143,7 @@ class PomExtractor:
                     return True
         return False
 
-    def get_included_excluded_tests(self):
+    def get_included_excluded_tests(self) -> (str, str):
         excludes = []
         includes = []
         prop_parents = self.poms[0]["root"].findall('*//plugin/..')
@@ -166,9 +166,8 @@ class PomExtractor:
                 for include in declared_plugin.findall('*//include'):
                     includes.append(include.text)
         return (includes, excludes)
-        pass
 
-    def remove_plugin(self, group_id, artifact_id):
+    def remove_plugin(self, group_id:str, artifact_id:str):
         prop_parents = self.poms[0]["root"].findall('*//plugin/..')
         for parent in prop_parents:
             for declared_plugin in parent:
@@ -185,7 +184,7 @@ class PomExtractor:
                 # the plugin is the same remove it
                 parent.remove(declared_plugin)
 
-    def add_dependency(self, group_id, artifact_id, version, scope=None):
+    def add_dependency(self, group_id:str, artifact_id:str, version:str, scope:str=None):
         # check if plugin is already defined if yes, remove it
         self.remove_dependency(group_id, artifact_id)
 
@@ -203,7 +202,7 @@ class PomExtractor:
         if scope is not None:
             SubElement(new_dependency, 'scope').text = scope
 
-    def add_plugin(self, group_id, artifact_id, version, config):
+    def add_plugin(self, group_id:str, artifact_id:str, version:str, config:[]) -> {}:
         # check if plugin is already defined if yes, remove it
         self.remove_plugin(group_id, artifact_id)
 
