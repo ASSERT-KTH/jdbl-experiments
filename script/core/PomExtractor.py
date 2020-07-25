@@ -146,7 +146,9 @@ class PomExtractor:
     def get_included_excluded_tests(self) -> (str, str):
         excludes = []
         includes = []
-        prop_parents = self.poms[0]["root"].findall('*//plugin/..')
+        configuration = {}
+        x:Element = self.poms[0]["root"]
+        prop_parents = x.findall('*//plugin/..')
         group_id = 'org.apache.maven.plugins'
         artifact_id = 'maven-surefire-plugin'
         for parent in prop_parents:
@@ -165,7 +167,11 @@ class PomExtractor:
                     excludes.append(exclude.text)
                 for include in declared_plugin.findall('*//include'):
                     includes.append(include.text)
-        return (includes, excludes)
+                conf:Element = declared_plugin.find('configuration')
+                if conf is not None:
+                    for a in conf.getchildren():
+                        configuration[a.tag] = a.text
+        return (includes, excludes, configuration)
 
     def remove_plugin(self, group_id:str, artifact_id:str):
         prop_parents = self.poms[0]["root"].findall('*//plugin/..')

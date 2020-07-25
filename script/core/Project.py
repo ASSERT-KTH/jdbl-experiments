@@ -11,19 +11,20 @@ if 'GITHUB_OAUTH' in os.environ and len(os.environ['GITHUB_OAUTH']) > 0:
     token = os.environ['GITHUB_OAUTH']
 g = Github(token)
 
+
 class Project:
-    def __init__(self, url:str):
+    def __init__(self, url: str):
         self.url = url
         self.name = os.path.basename(url).replace(".git", '')
         self.repo = url.replace("https://github.com/", '').replace(".git", '')
         if self.repo[-1] == '/':
             self.repo = self.repo[:-1]
-        self.path:str = None
-        self.original_path:str = None
-        self.pom:PomExtractor = None
+        self.path: str = None
+        self.original_path: str = None
+        self.pom: PomExtractor = None
         self.releases = []
-    
-    def clone(self, path:str):
+
+    def clone(self, path: str):
         try:
             cmd = "cd %s;git clone -q --depth=1 %s;" % (path, self.url)
             subprocess.check_call(cmd, shell=True)
@@ -36,11 +37,13 @@ class Project:
             traceback.print_exc()
             return False
 
-    def checkout_version(self, version:str):
-        version = version.lower().replace('v.', '').replace('v', '').replace('_', '.').replace('-', '.')
+    def checkout_version(self, version: str):
+        version = version.lower().replace('v.', '').replace(
+            'v', '').replace('_', '.').replace('-', '.')
         releases = self.get_releases()
         for r in releases:
-            v = r.name.lower().replace('v.', '').replace('v', '').replace('_', '.').replace('-', '.')
+            v = r.name.lower().replace('v.', '').replace(
+                'v', '').replace('_', '.').replace('-', '.')
             try:
                 index = v.index(version)
                 v = v[index:]
@@ -56,9 +59,10 @@ class Project:
                 continue
         return False
 
-    def checkout_commit(self, commit:str):
+    def checkout_commit(self, commit: str):
         try:
-            cmd = 'cd %s; git fetch -q origin %s; git checkout -q %s' %(self.path, commit, commit)
+            cmd = 'cd %s; git fetch -q origin %s; git checkout -q %s' % (
+                self.path, commit, commit)
             subprocess.check_call(cmd, shell=True)
             self.pom = PomExtractor(self.original_path)
             self.path = os.path.dirname(self.pom.poms[0]['path'])
@@ -72,7 +76,7 @@ class Project:
         repo = g.get_repo(self.repo, lazy=True)
         self.releases = repo.get_tags()
         return self.releases
-    
+
     def get_commit(self):
         cmd = 'cd %s; git rev-parse HEAD' % (self.path)
         return subprocess.check_output(cmd, shell=True).decode('UTF-8').strip()
@@ -85,22 +89,24 @@ class Project:
         except:
             return False
 
-    def compile(self, clean:bool=True):
+    def compile(self, clean: bool = True):
         clean_cmd = 'mvn clean -B -q > /dev/null; '
         if clean is False:
             clean_cmd = ''
-        cmd = 'cd %s;%smvn compile -e --fail-never -ntp -Dmaven.test.failure.ignore=true -B -Dmaven.javadoc.skip=true -Drat.skip=true -Danimal.sniffer.skip=true -Dmaven.javadoc.skip=true -Dlicense.skip=true -Dsource.skip=true' % (self.path, clean_cmd)
+        cmd = 'cd %s;%smvn compile -e --fail-never -ntp -Dmaven.test.failure.ignore=true -B -Dmaven.javadoc.skip=true -Drat.skip=true -Danimal.sniffer.skip=true -Dmaven.javadoc.skip=true -Dlicense.skip=true -Dsource.skip=true' % (
+            self.path, clean_cmd)
         try:
             subprocess.check_call(cmd, shell=True)
             return True
         except:
             return False
-    
-    def test(self, clean:bool=True, stdout:str=None):
+
+    def test(self, clean: bool = True, stdout: str = None):
         clean_cmd = 'mvn clean -B -q > /dev/null ;'
         if clean is False:
             clean_cmd = ''
-        cmd = 'cd %s;%s mvn test -e --fail-never -ntp -Dmaven.test.failure.ignore=true -B -Dmaven.javadoc.skip=true -Drat.skip=true -Danimal.sniffer.skip=true -Dmaven.javadoc.skip=true -Dlicense.skip=true -Dsource.skip=true' % (self.path, clean_cmd)
+        cmd = 'cd %s;%s mvn test -e --fail-never -ntp -Dmaven.test.failure.ignore=true -B -Dmaven.javadoc.skip=true -Drat.skip=true -Danimal.sniffer.skip=true -Dmaven.javadoc.skip=true -Dlicense.skip=true -Dsource.skip=true' % (
+            self.path, clean_cmd)
         if stdout is not None:
             cmd += ' > %s 2>&1' % (stdout)
         try:
@@ -109,8 +115,9 @@ class Project:
         except:
             return False
 
-    def package(self, stdout:str=None) -> bool:
-        cmd = 'cd %s; mvn clean -q -B; mvn package -e --fail-never -ntp -Dmaven.test.error.ignore=true -Dmaven.test.failure.ignore=true -B -Dmaven.javadoc.skip=true -Drat.skip=true -Danimal.sniffer.skip=true -Dmaven.javadoc.skip=true -Dlicense.skip=true -Dsource.skip=true' % (self.path)
+    def package(self, stdout: str = None) -> bool:
+        cmd = 'cd %s; mvn clean -q -B; mvn package -e --fail-never -ntp -Dmaven.test.error.ignore=true -Dmaven.test.failure.ignore=true -B -Dmaven.javadoc.skip=true -Drat.skip=true -Danimal.sniffer.skip=true -Dmaven.javadoc.skip=true -Dlicense.skip=true -Dsource.skip=true' % (
+            self.path)
         if stdout is not None:
             cmd += ' > %s 2>&1' % (stdout)
         try:
@@ -118,17 +125,18 @@ class Project:
             return True
         except:
             return False
-    
-    def copy_jar(self, dst:str) -> bool:
+
+    def copy_jar(self, dst: str) -> bool:
         dst = os.path.abspath(dst)
-        cmd = 'cd %s/target; cp *jar-with-dependencies.jar %s;' % (self.path, dst)
+        cmd = 'cd %s/target; cp *jar-with-dependencies.jar %s;' % (
+            self.path, dst)
         try:
             subprocess.check_call(cmd, shell=True)
             return True
         except:
             return False
-    
-    def copy_test_results(self, dst:str):
+
+    def copy_test_results(self, dst: str):
         dst = os.path.abspath(dst)
         if not os.path.exists(os.path.join(self.path, "target", "surefire-reports")):
             return False
@@ -139,17 +147,18 @@ class Project:
             return True
         except:
             return False
-    
-    def copy_jacoco(self, dst:str):
+
+    def copy_jacoco(self, dst: str):
         dst = os.path.abspath(dst)
-        cmd = 'cd %s/target/; cp -r site/jacoco/jacoco.xml %s; cp -r site/jacoco/jacoco.csv %s' % (self.path, dst, dst)
+        cmd = 'cd %s/target/; cp -r site/jacoco/jacoco.xml %s; cp -r site/jacoco/jacoco.csv %s' % (
+            self.path, dst, dst)
         try:
             subprocess.check_call(cmd, shell=True)
             return True
         except:
             return False
-    
-    def copy_pom(self, dst:str):
+
+    def copy_pom(self, dst: str):
         dst = os.path.abspath(dst)
         cmd = 'cd %s; cp -r %s %s' % (self.path, self.pom.poms[0]['path'], dst)
         try:
@@ -158,7 +167,7 @@ class Project:
         except:
             return False
 
-    def copy_report(self, dst:str):
+    def copy_report(self, dst: str):
         dst = os.path.abspath(dst)
         cmd = 'cd %s; cp -r .jdbl/* %s;' % (self.path, dst)
         try:
@@ -167,7 +176,7 @@ class Project:
         except:
             return False
 
-    def unzip_debloat(self, root:str, library:str, version:str, debloated:bool=True):
+    def unzip_debloat(self, root: str, library: str, version: str, debloated: bool = True):
         # self.pom.remove_dependency(group_id, artifact_id)
         path_lib = os.path.join(root, library.repo.replace('/', '_'), version)
         path_jar = os.path.join(path_lib, "debloat", "dup.jar")
@@ -176,7 +185,8 @@ class Project:
         if not debloated:
             path_jar = os.path.join(path_lib, "original", "original.jar")
 
-        cmd = "mkdir -p %s/target/classes/; cd %s/target/classes/; jar xf %s;" % (self.path, self.path, path_jar)
+        cmd = "mkdir -p %s/target/classes/; cd %s/target/classes/; jar xf %s;" % (
+            self.path, self.path, path_jar)
         try:
             subprocess.check_call(cmd, shell=True)
             return True
@@ -184,7 +194,7 @@ class Project:
             traceback.print_stack()
             return False
 
-    def inject_debloat_library(self, root:str, library:str, version:str, debloated:bool=True):
+    def inject_debloat_library(self, root: str, library: str, version: str, debloated: bool = True):
         path_lib = os.path.join(root, library.repo.replace('/', '_'), version)
         path_jar = os.path.join(path_lib, "debloat", "dup.jar")
         if not os.path.exists(path_jar):
@@ -194,7 +204,8 @@ class Project:
 
         artifact_id = library.pom.get_artifact()
         group_id = library.pom.get_group()
-        cmd = "cd %s; mvn install:install-file -Dfile=%s -DgroupId=%s -DartifactId=%s -Dversion=%s -Dpackaging=jar -B -Dmaven.javadoc.skip=true;" % (self.path, path_jar, group_id, artifact_id, version)
+        cmd = "cd %s; mvn install:install-file -Dfile=%s -DgroupId=%s -DartifactId=%s -Dversion=%s -Dpackaging=jar -B -Dmaven.javadoc.skip=true;" % (
+            self.path, path_jar, group_id, artifact_id, version)
         try:
             subprocess.check_call(cmd, shell=True)
             return True
@@ -203,53 +214,21 @@ class Project:
 
         # self.pom.change_depency_path(group_id, artifact_id, path_jar)
         # self.pom.write_pom()
-    
 
-    def inject_jacoco_plugin(self):
-        self.pom.add_plugin("org.jacoco", "jacoco-maven-plugin", "0.8.5", [ 
-            {
-            "name": "executions",
-            "children": [
-                {
-                    "name": "execution",
-                    "children": [
-                        {
-                            "name": "goals",
-                            "children": [
-                                {
-                                    "name": "goal",
-                                    "text": "prepare-agent"
-                                }
-                            ]
-                        }
-                    ]
-                },
-                {
-                    "name": "execution",
-                    "children": [
-                        {
-                            "name": "id",
-                            "text": "report"
-                        },{
-                            "name": "phase",
-                            "text": "test"
-                        },{
-                            "name": "goals",
-                            "children": [{
-                                "name": "goal",
-                                "text": "report"
-                            }]
-                        }
-                    ]
-                }
-            ]
-        }])
-        (includes, excludes) = self.pom.get_included_excluded_tests()
+    def reset_surefire_plugin(self):
+        (includes, excludes, configuration) = self.pom.get_included_excluded_tests()
+        print(configuration)
+        conf = []
         exclude_config = []
         for exclude in excludes:
             exclude_config.append({
                 "name": "exclude",
                 "text": exclude
+            })
+        if len(exclude_config) > 0:
+            conf.append({
+                "name": "excludes",
+                "children": exclude_config
             })
         include_config = []
         for include in includes:
@@ -257,19 +236,82 @@ class Project:
                 "name": "include",
                 "text": include
             })
+        if len(include_config) > 0:
+            conf.append({
+                "name": "includes",
+                "children": include_config
+            })
+        if "testSourceDirectory" in configuration:
+            conf.append({
+                "name": "testSourceDirectory",
+                "children": configuration["testSourceDirectory"]
+            })
+        if "testClassesDirectory" in configuration:
+            conf.append({
+                "name": "testClassesDirectory",
+                "children": configuration["testClassesDirectory"]
+            })
+        if "test" in configuration:
+            conf.append({
+                "name": "test",
+                "children": configuration["test"]
+            })
+        if "parallel" in configuration:
+            conf.append({
+                "name": "parallel",
+                "children": configuration["parallel"]
+            })
+        if "forkMode" in configuration:
+            conf.append({
+                "name": "forkMode",
+                "children": configuration["forkMode"]
+            })
         self.pom.add_plugin("org.apache.maven.plugins", "maven-surefire-plugin", "2.19.1", [{
             "name": "configuration",
-            "children": [
-                {
-                    "name": "excludes",
-                    "children": exclude_config
-                },
-                {
-                    "name": "includes",
-                    "children": include_config
-                }
-            ]
+            "children": conf
         }])
+        self.pom.write_pom()
+
+    def inject_jacoco_plugin(self):
+        self.reset_surefire_plugin()
+        self.pom.add_plugin("org.jacoco", "jacoco-maven-plugin", "0.8.5", [
+            {
+                "name": "executions",
+                "children": [
+                    {
+                        "name": "execution",
+                        "children": [
+                            {
+                                "name": "goals",
+                                "children": [
+                                    {
+                                        "name": "goal",
+                                        "text": "prepare-agent"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "name": "execution",
+                        "children": [
+                            {
+                                "name": "id",
+                                "text": "report"
+                            }, {
+                                "name": "phase",
+                                "text": "test"
+                            }, {
+                                "name": "goals",
+                                "children": [{
+                                    "name": "goal",
+                                    "text": "report"
+                                }]
+                            }
+                        ]
+                    }
+                ]
+            }])
         self.pom.write_pom()
         return True
 
@@ -295,9 +337,9 @@ class Project:
                         }
                     ]
                 }]
-            }, {
-                "name": "configuration",
-                "children": [
+        }, {
+            "name": "configuration",
+            "children": [
                     {
                         "name": "descriptorRefs",
                         "children": [
@@ -307,8 +349,8 @@ class Project:
                             }
                         ]
                     }
-                ]
-            }
+            ]
+        }
         ])
         self.pom.write_pom()
         return True
