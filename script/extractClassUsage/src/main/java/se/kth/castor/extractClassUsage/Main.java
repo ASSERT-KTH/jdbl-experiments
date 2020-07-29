@@ -19,8 +19,12 @@ public class Main {
         launcher.addProcessor(new AbstractProcessor<CtTypeReference>() {
             @Override
             public void process(CtTypeReference element) {
-                if (element instanceof CtArrayTypeReference) {
-                    element = ((CtArrayTypeReference) element).getComponentType();
+                try {
+                    if (element instanceof CtArrayTypeReference) {
+                        element = ((CtArrayTypeReference) element).getComponentType();
+                    }
+                } catch (Exception e) {
+                    // ignore
                 }
                 try {
                     CtType declaration = element.getDeclaration();
@@ -29,13 +33,15 @@ public class Main {
                             return;
                         }
                     }
-
                 } catch (Exception e) {
                     // ignore
                 }
-
-                String name = element.getQualifiedName();
-                output.add(name);
+                try {
+                    String name = element.getQualifiedName();
+                    output.add(name);
+                } catch (Exception e) {
+                    // ignore
+                }
             }
         });
         launcher.run();
