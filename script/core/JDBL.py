@@ -11,6 +11,10 @@ from core.Project import Project
 OUTPUT_dir = 'results'
 
 
+def write_time(time:float, dir_path:str):
+    with open(os.path.join(dir_path, "execution-time.log"), 'w') as fd:
+        fd.write(str(time))
+
 class JDBL:
     def __init__(self, library: Project, client: Project, version: str = None, working_directory: str = None, commit: str = None, client_commit: str = None, output: str = None):
         global OUTPUT_dir
@@ -150,6 +154,8 @@ class JDBL:
 
                 previous_time = time.time()
                 current_status['end'] = previous_time
+
+                write_time(previous_time - current_status['start'], lib_original_path)
                 if not current_status['success']:
                     print("[exit] Unable to compile the library", flush=True)
                     return
@@ -186,6 +192,8 @@ class JDBL:
 
                 previous_time = time.time()
                 current_status['end'] = previous_time
+
+                write_time(previous_time - current_status['start'], lib_debloat_path)
                 if not current_status['success']:
                     print("[exit] Unable to create the debloated jar", flush=True)
                     return
@@ -227,6 +235,8 @@ class JDBL:
                                                          stdout=original_client_results_path + "/execution.log") and current_status['success']
             previous_time = time.time()
             current_status['end'] = previous_time
+
+            write_time(previous_time - current_status['start'], original_client_results_path)
 
             current_status['success'] = self.client.copy_jacoco(
                 original_client_results_path) and current_status['success']
@@ -286,6 +296,7 @@ class JDBL:
 
             previous_time = time.time()
             current_status['end'] = previous_time
+            write_time(previous_time - current_status['start'], debloat_client_results_path)
 
         finally:
             results['end'] = time.time()

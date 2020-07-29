@@ -10,7 +10,7 @@ def stripNs(el):
   '''Recursively search this element tree, removing namespaces.'''
   if el.tag.startswith("{"):
     el.tag = el.tag.split('}', 1)[1]  # strip namespace
-  for k in el.attrib.keys():
+  for k in list(el.attrib):
     if k.startswith("{"):
       k2 = k.split('}', 1)[1]
       el.attrib[k2] = el.attrib[k]
