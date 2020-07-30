@@ -244,28 +244,19 @@ class Project:
         if "testSourceDirectory" in configuration:
             conf.append({
                 "name": "testSourceDirectory",
-                "children": configuration["testSourceDirectory"]
+                "text": configuration["testSourceDirectory"]
             })
         if "testClassesDirectory" in configuration:
             conf.append({
                 "name": "testClassesDirectory",
-                "children": configuration["testClassesDirectory"]
+                "text": configuration["testClassesDirectory"]
             })
         if "test" in configuration:
             conf.append({
                 "name": "test",
-                "children": configuration["test"]
+                "text": configuration["test"]
             })
-        if "parallel" in configuration:
-            conf.append({
-                "name": "parallel",
-                "children": configuration["parallel"]
-            })
-        if "forkMode" in configuration:
-            conf.append({
-                "name": "forkMode",
-                "children": configuration["forkMode"]
-            })
+        print(conf)
         self.pom.add_plugin("org.apache.maven.plugins", "maven-surefire-plugin", "2.19.1", [{
             "name": "configuration",
             "children": conf
