@@ -169,7 +169,7 @@ class Project:
 
     def copy_report(self, dst: str):
         dst = os.path.abspath(dst)
-        cmd = 'cd %s; cp -r .jdbl/* %s;' % (self.path, dst)
+        cmd = f'cd {self.path}; mv .jdbl/*-debloated.jar .jdbl/debloat.jar; mv .jdbl/*-original.jar .jdbl/original.jar; cp -r .jdbl/* {dst};'
         try:
             subprocess.check_call(cmd, shell=True)
             return True

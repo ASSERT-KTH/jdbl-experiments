@@ -183,8 +183,6 @@ class JDBL:
                     stdout=lib_debloat_path + "/execution.log")
                 current_status['success'] = self.library.copy_pom(
                     lib_debloat_path + "/pom.xml") and current_status['success']
-                current_status['success'] = self.library.copy_jar(
-                    lib_debloat_path + "/debloat.jar") and current_status['success']
                 current_status['success'] = self.library.copy_test_results(
                     lib_debloat_path + "/test-results") and current_status['success']
                 current_status['success'] = self.library.copy_report(
