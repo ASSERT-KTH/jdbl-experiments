@@ -41,12 +41,8 @@ if args.output:
 if not os.path.exists(OUTPUT):
     os.makedirs(OUTPUT)
 
-os.chmod(OUTPUT, 0o777)
-
 if not os.path.exists(os.path.join(OUTPUT, 'executions')):
     os.makedirs(os.path.join(OUTPUT, 'executions'))
-
-os.chmod(os.path.join(OUTPUT, 'executions'), 0o777)
 
 timeout = args.timeout
 

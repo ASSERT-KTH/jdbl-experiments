@@ -3,7 +3,11 @@ FROM maven:3-jdk-8
 RUN apt-get update
 RUN apt-get install -y python3 python3-pip git
 
-RUN useradd -rm -d /home/jdbl -s /bin/bash -G sudo -u 8877 jdbl
+ARG USER_ID
+ARG GROUP_ID
+
+RUN groupadd -r --gid $GROUP_ID jdbl; exit 0
+RUN useradd -rm -d /home/jdbl -s /bin/bash -G sudo --uid $USER_ID --gid $GROUP_ID jdbl
 USER jdbl
 
 WORKDIR /home/jdbl
