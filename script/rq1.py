@@ -44,7 +44,7 @@ for lib in results.libs:
         count('debloat', version.debloat)
         count('error', version.compiled and not version.debloat)
         
-        if version.compiled and not version.debloat:
+        if version.compiled and not version.debloat and os.path.exists(debloat_log):
             last_step = "Initial tests"
             with open(debloat_log, 'r', encoding="utf-8") as fd:
                 content = fd.read()
