@@ -173,6 +173,7 @@ class Worker(Thread):
             try:
                 task.run()
             except Exception as e:
+                print(e)
                 task.status = "ERROR"
             finally:
                 if callback is not None:
