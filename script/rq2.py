@@ -15,7 +15,7 @@ def macro(name, value):
 
 
 def clean_exception(name):
-    name = name.replace(":", "")
+    name = name.replace(":", "").strip()
     if "junit" in name or "Assertion" in name:
         return "Assert"
     return os.path.basename(name.replace(".", "/"))
@@ -25,17 +25,18 @@ def extract_error_type(e):
     exception = clean_exception(e.attrib['type'])
     if 'message' not in e.attrib:
         return exception
-    if "java.lang.UnsupportedOperationException" in e.attrib['message']:
+    message = e.attrib['message'].strip()
+    if "java.lang.UnsupportedOperationException" in message:
         exception = clean_exception("java.lang.UnsupportedOperationException")
-    elif " not found" in e.attrib['message']:
+    elif " not found" in message:
         exception = clean_exception("NoClassDefFoundError")
-    elif "NoClassDefFoundError" in e.attrib['message']:
+    elif "NoClassDefFoundError" in message:
         exception = clean_exception("NoClassDefFoundError")
-    elif "timed out" in e.attrib['message']:
+    elif "timed out" in message:
         exception = "TimeoutException"
-    elif "org.springframework.beans.factory.BeanCreationException:" in e.attrib['message']:
+    elif "org.springframework.beans.factory.BeanCreationException:" in message:
         exception = "BeanCreationException"
-    elif "but was<java.lang.AssertionError>" in e.attrib['message']:
+    elif "but was<java.lang.AssertionError>" in message:
         exception = "AssertionError"
     else:
         #print(e.attrib, exception)
