@@ -248,4 +248,4 @@ with open(os.path.join(os.path.dirname(__file__), '..', 'raw_results.json'), 'r'
                     c['coverage_original'])
                 client.coverage_debloat = _extract_coverage(
                     c['coverage_debloat'])
-                client.execution_time = client_results['execution_time']
+                client.execution_time = c['execution_time']
