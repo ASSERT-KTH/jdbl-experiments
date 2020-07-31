@@ -120,7 +120,7 @@ with open(PATH_file, 'r') as fd:
             original_content = get_zip_content(original_jar_path)
             debloat_content = get_zip_content(debloat_jar_path)
 
-            shutil.copyfile(original_jar_path, dup_jar_path)
+            # shutil.copyfile(original_jar_path, dup_jar_path)
             cl_2_remove = []
             cl_2_method = []
 
@@ -134,7 +134,8 @@ with open(PATH_file, 'r') as fd:
                 if '.class' in path:
                     type = "none"
                     class_name = path.replace(".class", '').replace("/", '.')
-                    if class_name in debloat_report['bloated']:
+                    #if class_name in debloat_report['bloated']:
+                    if path not in debloat_content:
                         debloat_total += info['size']
                         debloat_size = 0
                         type = "bloated"
@@ -156,18 +157,18 @@ with open(PATH_file, 'r') as fd:
                 content += (
                     f"{lib_id.replace('/', '_')}_{version},{path},{info['type']},{type},{info['size']},{debloat_size}\n")
             
-            if len(cl_2_remove + cl_2_method) > 0:
-                to_remove = split_list(cl_2_remove + cl_2_method)
-                for l in to_remove:
-                    if len(l) > 0:
-                        cmd = ['zip', '-d', dup_jar_path] + l
-                        subprocess.check_call(" ".join(cmd).replace("$", "\$") + " > /dev/null", shell=True)
-            if len(cl_2_method) > 0:
-                with zipfile.ZipFile(debloat_jar_path) as zip:
-                    with zipfile.ZipFile(dup_jar_path, 'a') as zipf:
-                        for p in cl_2_method:
-                            p = p.replace('"', '')
-                            zipf.writestr(p, zip.read(p))
+            # if len(cl_2_remove + cl_2_method) > 0:
+            #     to_remove = split_list(cl_2_remove + cl_2_method)
+            #     for l in to_remove:
+            #         if len(l) > 0:
+            #             cmd = ['zip', '-d', dup_jar_path] + l
+            #             subprocess.check_call(" ".join(cmd).replace("$", "\$") + " > /dev/null", shell=True)
+            # if len(cl_2_method) > 0:
+            #     with zipfile.ZipFile(debloat_jar_path) as zip:
+            #         with zipfile.ZipFile(dup_jar_path, 'a') as zipf:
+            #             for p in cl_2_method:
+            #                 p = p.replace('"', '')
+            #                 zipf.writestr(p, zip.read(p))
     with open("../jar_analysis.csv", 'w') as fdo:
         fdo.write(content)
 
