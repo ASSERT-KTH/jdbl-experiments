@@ -41,18 +41,17 @@ for lib in results.libs:
             nb_lib_debloat += 1
             if len(version.clients) == 0:
                 nb_no_clients += 1
-        if version.debloat_test:
-            debloat_time += version.debloat_test
+        if version.debloat_time:
+            debloat_time += version.debloat_time
         if version.coverage is not None:
             nb_line_lib += version.coverage.nb_lines
             coverage_lib.append(version.coverage.coverage)
         if version.original_test is not None:
             nb_test += version.original_test.nb_test()
-        
-        execution_time += version.debloat_time
 
         for c in version.clients:
             nb_all_client += 1
+            execution_time += c.execution_time
             if c.original_test is not None:
                 nb_client += 1
                 nb_test_client += c.original_test.nb_test()

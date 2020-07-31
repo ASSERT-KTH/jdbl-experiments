@@ -86,6 +86,7 @@ class Client:
         self.debloat_test: TestResults
         self.coverage_original: Coverage
         self.coverage_debloat: Coverage
+        self.execution_time: float
 
     def id(self):
         return self.repo.replace("/", "_")
@@ -247,3 +248,4 @@ with open(os.path.join(os.path.dirname(__file__), '..', 'raw_results.json'), 'r'
                     c['coverage_original'])
                 client.coverage_debloat = _extract_coverage(
                     c['coverage_debloat'])
+                client.execution_time = client_results['execution_time']
