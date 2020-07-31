@@ -92,6 +92,6 @@ print(counts)
 
 macro("nbLibDebSuccessNum", counts['debloat'][True])
 macro("nbLibNotCompile", counts['compile'][False])
-macro("nbLibCrash", counts['crash'][True])
+macro("nbLibCrash", counts['crash'][True] if True in counts['crash'] else 0)
 macro("nbLibTimeout", counts['crash'][False] - counts['last_step']['Done'])
 macro("nbLibValidation", counts['last_step']['Done'])
