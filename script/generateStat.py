@@ -122,6 +122,14 @@ def get_jar_content(path):
         }
     return output
 
+def read_execution_time_log(path):
+    if os.path.exists(path):
+        with open(path) as fd:
+            # Total debloat time: 33.458 s
+            content = fd.read().strip()
+            if len(content) > 0:
+                return float(content.replace("Total debloat time: ", '').replace(" s", ''))
+    return 0
 def readTestResults(path):
     output = {
         'error': 0,
@@ -337,7 +345,13 @@ with open(PATH_file, 'r') as fd:
                         fd.write(line)
             current_lib['coverage'] = parseCoverage(debloat_path, deps=dep_classes, debloated_class=debloated_class, classes_dep_map=classes_dep_map, current_lib=current_lib, include=jarClasses)
 
-            current_lib['debloatTime'] = ''
+            current_lib['original_execution_time'] = read_execution_time_log(os.path.join(original_path, 'execution-time.log'))
+            current_lib['debloat_execution_time'] = read_execution_time_log(os.path.join(debloat_path, 'execution-time.log'))
+            current_lib['debloat_time'] = read_execution_time_log(os.path.join(debloat_path, 'debloat-execution-time.log'))
+
+            total_time += current_lib['original_execution_time']
+            total_time += current_lib['debloat_execution_time']
+
             if os.path.exists(os.path.join(debloat_path, 'debloat-execution-time.log')):
                 with open(os.path.join(debloat_path, 'debloat-execution-time.log')) as fd:
                     # Total debloat time: 33.458 s
@@ -375,6 +389,12 @@ with open(PATH_file, 'r') as fd:
                     'artifactId': c['artifactId'],
                     'static_use': 'unknown'
                 }
+                client_results['original_execution_time'] = read_execution_time_log(os.path.join(original_client_path, 'execution-time.log'))
+                client_results['debloat_execution_time'] = read_execution_time_log(os.path.join(debloat_client_path, 'execution-time.log'))
+
+                total_time += client_results['debloat_execution_time']
+                total_time += client_results['original_execution_time']
+
                 path_usage = os.path.join(os.path.dirname(__file__), 'usageAnalysis', c['repo_name'].replace("/", '_') + '.csv')
                 if os.path.exists(path_usage):
                     client_results['static_use'] = False
@@ -394,17 +414,7 @@ with open(PATH_file, 'r') as fd:
                     else:
                         build_errors['client'] += 1
                 current_lib['clients'][c['repo_name']] = client_results
-                
-                filename = "%s_%s.json" % (lib['repo_name'].replace('/', '_'), c['repo_name'].replace('/', '_'))
-                path_execution_log = os.path.join(PATH_results, 'executions', filename)
-                if os.path.exists(path_execution_log):
-                    with open(path_execution_log) as fd:
-                        try:
-                            execution_data = json.load(fd)
-                            client_results['execution_time'] = execution_data['end'] - execution_data['start']
-                            total_time += execution_data['end'] - execution_data['start']
-                        except:
-                            print("%s is not a valid json" % path_execution_log)
+
 
                 if lib_id not in considered_cases:
                     considered_cases[lib_id] = {
@@ -445,7 +455,7 @@ with open(PATH_file, 'r') as fd:
                 out.append(version)
                 out.append(str(current_lib['compiled']))
                 out.append(str(current_lib['debloat']))
-                out.append(str(current_lib['debloatTime']))
+                out.append(str(current_lib['debloat_time']))
 
                 if current_lib['original_test'] is not None:
                     out.append(str(current_lib['original_test']['error']))

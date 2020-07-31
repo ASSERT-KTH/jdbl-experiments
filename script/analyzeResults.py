@@ -49,11 +49,17 @@ for lib in results.libs:
         if version.original_test is not None:
             nb_test += version.original_test.nb_test()
 
+        execution_time += version.debloat_execution_time
+        execution_time += version.original_execution_time
+
         for c in version.clients:
             nb_all_client += 1
-            execution_time += c.execution_time
             if c.original_test is not None:
                 nb_client += 1
+                
+                execution_time += c.debloat_execution_time
+                execution_time += c.original_execution_time
+
                 nb_test_client += c.original_test.nb_test()
                 if c.debloat_test is not None:
                     if c.original_test.passing == c.debloat_test.passing:

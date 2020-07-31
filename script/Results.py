@@ -57,6 +57,9 @@ class Version:
         self.type_nb_unknown: int
 
         self.debloat_time: float
+        self.original_execution_time: float
+        self.debloat_execution_time: float
+        
         self.original_jar_size: int
         self.debloat_jar_size: int
         self.workaround_jar_size: int
@@ -86,7 +89,8 @@ class Client:
         self.debloat_test: TestResults
         self.coverage_original: Coverage
         self.coverage_debloat: Coverage
-        self.execution_time: float
+        self.original_execution_time: float
+        self.debloat_execution_time: float
 
     def id(self):
         return self.repo.replace("/", "_")
@@ -217,7 +221,9 @@ with open(os.path.join(os.path.dirname(__file__), '..', 'raw_results.json'), 'r'
             version.nb_debloat_class = l['nb_debloat_class']
             version.nb_preserved_class = l['nb_preserved_class']
             version.nb_debloat_method = l['nb_debloat_method']
-            version.debloat_time = l['debloatTime']
+            version.debloat_time = l['debloat_time']
+            version.original_execution_time = l['original_execution_time']
+            version.debloat_execution_time = l['debloat_execution_time']
             version.original_jar_size = l['original_jar_size']
             version.debloat_jar_size = l['debloat_jar_size']
             version.workaround_jar_size = l['workaround_jar_size']
@@ -248,7 +254,5 @@ with open(os.path.join(os.path.dirname(__file__), '..', 'raw_results.json'), 'r'
                     c['coverage_original'])
                 client.coverage_debloat = _extract_coverage(
                     c['coverage_debloat'])
-                if 'execution_time' in c:
-                    client.execution_time = c['execution_time']
-                else:
-                    client.execution_time = 0
+                client.original_execution_time = c['original_execution_time']
+                client.debloat_execution_time = c['debloat_execution_time']
