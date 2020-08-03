@@ -12,9 +12,11 @@ USER jdbl
 
 WORKDIR /home/jdbl
 
-ARG LIB_VER=unknown
+ARG LIB_VER
 RUN git clone https://github.com/castor-software/jdbl.git
-RUN cd jdbl; mvn install -Dmaven.test.skip;
+RUN cd jdbl; 
+RUN git checkout $LIB_VER;
+RUN mvn install -Dmaven.test.skip;
 RUN cd ..;
 
 COPY requirements.txt requirements.txt
