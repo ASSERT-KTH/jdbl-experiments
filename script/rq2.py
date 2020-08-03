@@ -168,7 +168,6 @@ if __name__ == "__main__":
             else:
                 other += 1
                 total_other += 1
-                print(e)
 
         if taf == 0:
             taf = ' '
