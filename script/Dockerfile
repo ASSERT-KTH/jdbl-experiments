@@ -14,10 +14,8 @@ WORKDIR /home/jdbl
 
 ARG LIB_VER
 RUN git clone https://github.com/castor-software/jdbl.git
-RUN cd jdbl; 
-RUN git checkout $LIB_VER;
-RUN mvn install -Dmaven.test.skip;
-RUN cd ..;
+RUN cd jdbl;  git checkout $LIB_VER;
+RUN cd jdbl;  mvn install -Dmaven.test.skip;
 
 COPY requirements.txt requirements.txt
 RUN pip3 install --requirement requirements.txt 
