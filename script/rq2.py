@@ -132,6 +132,7 @@ if __name__ == "__main__":
     total_tt = 0
     total_NCDF = 0
     total_IE = 0
+    total_other = 0
 
     total_test = 0
     for (version, messages) in sorted(failing_libs, key=lambda x: (x[0].debloat_test.error + x[0].debloat_test.failing)/x[0].debloat_test.nb_test(), reverse=True):
@@ -143,6 +144,7 @@ if __name__ == "__main__":
         tt = 0
         NCDF = 0
         IE = 0
+        other = 0
 
         for e in messages:
             if e not in errors:
@@ -164,6 +166,8 @@ if __name__ == "__main__":
                 NCDF += 1
                 total_NCDF += 1
             else:
+                other += 1
+                total_other += 1
                 print(e)
 
         if taf == 0:
@@ -178,10 +182,12 @@ if __name__ == "__main__":
             NCDF = ' '
         if IE == 0:
             IE = ' '
+        if other == 0:
+            other = ' '
 
         total_test += version.debloat_test.nb_test()
         name = version.library.repo.split("/")[1]
         print(
-            f"{name}:{version.version} & {taf} & {uoe} & {npe} & {tt} & {NCDF} & \ChartSmall[r]{{{len(messages)}}}{{{version.debloat_test.nb_test()}}} \\\\")
+            f"{name}:{version.version} & {taf} & {uoe} & {npe} & {tt} & {NCDF} & {other} & \ChartSmall[r]{{{len(messages)}}}{{{version.debloat_test.nb_test()}}} \\\\")
     print("\midrule")
-    print(f"Total & {total_taf} & {total_uoe} & {total_npe} & {total_tt} & {total_NCDF} & \ChartSmall{{\\nbFailingTest}}{{{total_test}}} \\\\")
+    print(f"Total & {total_taf} & {total_uoe} & {total_npe} & {total_tt} & {total_NCDF} & {total_other} & \ChartSmall{{\\nbFailingTest}}{{{total_test}}} \\\\")
