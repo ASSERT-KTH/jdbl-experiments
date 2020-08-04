@@ -3,6 +3,8 @@
 import os
 import json
 import argparse
+import subprocess
+import re
 import xml.etree.ElementTree as xml
 
 from Results import results
@@ -17,8 +19,25 @@ if args.output:
     PATH_results = os.path.abspath(args.output)
 
 
+def analyze_jar(jar_path):
+    class_output = subprocess.check_output(
+        ['jar', 'tf', jar_path]).decode("utf-8")
+    classes = [c.replace('/', '.')
+               for c in re.findall(r'(.*)\.class', class_output)]
+    methods = []
+    if classes:
+        def_out = subprocess.check_output(
+            ['javap', '-classpath', jar_path] + classes).decode("utf-8")
+        # This is pretty hacky: look for parentheses in the declaration line.
+        num_methods = sum(1 for line in def_out if '(' in line)
+    else:
+        num_methods = 0
+    return (len(classes), num_methods)
+
+
 def macro(name, value):
     print("\\def\\%s{%s}" % (name, value))
+
 
 total = 0
 nb_lib_with_dependencies = 0
@@ -52,16 +71,24 @@ for lib in results.libs:
             continue
         if nb_test != nb_debloat_test or version.debloat_test.passing != nb_debloat_test:
             continue
-        
+
         total += 1
 
         dep_classes = 0
+
+        original_path = os.path.join(version_path, 'original')
+        debloat_path = os.path.join(version_path, 'debloat')
+        original_jar_path = os.path.join(original_path, 'original.jar')
+        debloat_jar_path = os.path.join(debloat_path, 'debloat.jar')
+
+        original_stat = analyze_jar(original_jar_path)
+        debloat_stat = analyze_jar(debloat_jar_path)
 
         if len(version.dependencies) > 0:
             nb_lib_with_dependencies += 1
         for dependency in version.dependencies:
             nb_dependencies += 1
-            
+
             if dependency.nb_class == dependency.nb_debloat_class + dependency.nb_preserved_class:
                 nb_bloated_dependencies += 1
             dep_classes += dependency.nb_class
@@ -71,14 +98,12 @@ for lib in results.libs:
             count_method_dependencies += dependency.nb_method
             count_bloated_method_dependencies += dependency.nb_debloat_method
 
-        
-        print(version.nb_class, dep_classes)
-        nb_classes += version.nb_class
-        nb_method += version.nb_method
+        nb_classes += original_stat[0]
+        nb_method += original_stat[1]
 
-        nb_bloated_classes += version.nb_debloat_class
-        nb_bloated_method += version.nb_debloat_method
-        
+        nb_bloated_classes += original_stat[0] - debloat_stat[0]
+        nb_bloated_method += original_stat[1] - debloat_stat[1]
+
 
 macro("Total", total)
 macro("nbLibWithDependencies", nb_lib_with_dependencies)
