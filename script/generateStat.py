@@ -6,6 +6,8 @@ import datetime
 import argparse
 import zipfile
 import sys
+import subprocess
+import re
 import xml.etree.ElementTree as xml
 
 parser = argparse.ArgumentParser()
@@ -67,13 +69,6 @@ def parseCoverage(path, exclude=[], deps=[], debloated_class=[], classes_dep_map
                 else:
                     o['lib_classes'].append(class_name)
             methods = cl.findall("method")
-            if current_lib is not None:
-                if class_name in classes_dep_map:
-                    current_lib['dependencies'][classes_dep_map[class_name]]['nb_method'] += len(methods)
-                    if class_name in debloated_class:
-                        current_lib['dependencies'][classes_dep_map[class_name]]['nb_debloat_method'] += len(methods)
-                        current_lib['nb_debloat_method'] += len(methods)
-                current_lib['nb_method'] += len(methods)
             for method in methods:
                 method_name = method.attrib['name'].replace("/", ".")
                 for counter in method:
@@ -109,8 +104,56 @@ def parseCoverage(path, exclude=[], deps=[], debloated_class=[], classes_dep_map
         o['dep_coverage'] = 0
     return o
 
+def analyze_jar(jar_path):
+    class_output = subprocess.check_output(
+        ['jar', 'tf', jar_path]).decode("utf-8")
+    classes = [c.replace('/', '.')
+               for c in re.findall(r'(.*)\.class', class_output)]
+    methods = {}
+    if len(classes) > 0:
+        def_out = subprocess.check_output(
+            ['javap', '-classpath', jar_path] + classes).decode("utf-8")
+        current_cl = None
+        is_interface = False
+        for line in def_out.split("\n"):
+            if '{' in line and '{}' not in line:
+                line = re.sub(r" extends .+", " ", line)
+                line = re.sub(r" implements .+", " ", line)
+                line = re.sub(r"<.+", " ", line)
+                if " interface " in line:
+                    is_interface = True
+                # new lass
+                for cl in classes:
+                    if cl + " " in line:
+                        current_cl = cl
+                        methods[cl] = []
+                        break
+            elif '}' in line and '{}' not in line:
+                current_cl = None
+                is_interface = False
+            elif '(' in line:
+                if is_interface:
+                    continue
+                if current_cl+"(" in line:
+                    #print("contructor", current_cl, line)
+                    pass
+                else:
+                    index = line.index(")")
+                    line = line[:index + 1]
+                    index = line.index("(")
+                    index = line.rindex(" ", 0, index)
+                    line = line[index:]
+                    methods[current_cl].append(line)
+                    pass
+        #
+        # for line in def_out.split("\n"):
+        #     if '(' in line:
+        #         methods[cl].append(line)
+    return (classes, methods)
+
 def get_jar_content(path):
     output = {}
+    stat = analyze_jar(path)
     zip = zipfile.ZipFile(path)
     for f in zip.filelist:
         if '.class' not in f.filename:
@@ -118,7 +161,8 @@ def get_jar_content(path):
         cl = f.filename.replace(".class", "").replace("/", '.')
         output[cl] = {
             "from": "unknown",
-            "bloat_type": "unknown"
+            "bloat_type": "unknown",
+            "methods": stat[1][cl]
         }
     return output
 
@@ -183,11 +227,12 @@ with open(PATH_file, 'r') as fd:
             original_path = os.path.join(version_path, 'original')
             debloat_path = os.path.join(version_path, 'debloat')
             original_jar_path = os.path.join(original_path, 'original.jar')   
+            debloat_jar_path = os.path.join(debloat_path, 'debloat.jar')
             
             current_lib = {
                 'repo_name': lib['repo_name'],
                 'compiled': os.path.exists(original_jar_path),
-                'debloat': os.path.exists(os.path.join(debloat_path, 'debloat.jar')),
+                'debloat': os.path.exists(debloat_jar_path),
                 'clients': {}
             }
             current_lib['original_test'] = readTestResults(original_path)
@@ -203,7 +248,11 @@ with open(PATH_file, 'r') as fd:
             if os.path.exists(original_jar_path):
                 jarClasses = get_jar_content(original_jar_path)
             
-            if not os.path.exists(os.path.join(debloat_path, 'debloat.jar')) and os.path.exists(debloat_path):
+            debloat_jar_classes = {}
+            if os.path.exists(debloat_jar_path):
+                debloat_jar_classes = get_jar_content(debloat_jar_path)
+            
+            if not os.path.exists(debloat_jar_path) and os.path.exists(debloat_path):
                 build_errors['debloat'] += 1
                 invalid_debloat.add("%s:%s" % (lib_id, version))
 
@@ -304,7 +353,8 @@ with open(PATH_file, 'r') as fd:
                 if cl in dep_classes:
                     current_lib['missing_lib_classes'] += 1
                 current_lib['nb_class'] += 1
-
+                current_lib['nb_method'] += len(jarClasses[cl]['methods'])                
+                
                 if jarClasses[cl]['from'] != "source":
                     dep = jarClasses[cl]['from']
                     if dep not in current_lib['dependencies']:
@@ -315,14 +365,18 @@ with open(PATH_file, 'r') as fd:
                             'nb_method': 0,
                             'nb_debloat_method': 0,
                         }
+                    current_lib['dependencies'][dep]['nb_method'] += len(jarClasses[cl]['methods'])
+                        
                     current_lib['dependencies'][dep]['nb_class'] += 1
                     if jarClasses[cl]['bloat_type'] == "bloated":
                         current_lib['dependencies'][dep]['nb_debloat_class'] += 1
+                        current_lib['dependencies'][dep]['nb_debloat_method'] += len(jarClasses[cl]['methods'])
                     elif jarClasses[cl]['bloat_type'] == "preserved":
                         current_lib['dependencies'][dep]['nb_preserved_class'] += 1
                     
                 if jarClasses[cl]['bloat_type'] == "bloated":
                     current_lib['nb_debloat_class'] += 1
+                    current_lib['nb_debloat_method'] += len(jarClasses[cl]['methods'])
                     debloated_class.append(class_name)
                 elif jarClasses[cl]['bloat_type'] == "preserved":
                     current_lib['nb_preserved_class'] += 1
@@ -363,8 +417,8 @@ with open(PATH_file, 'r') as fd:
                 current_lib['original_jar_size'] = os.stat(original_jar_path).st_size
             else:
                 current_lib['original_jar_size'] = 0
-            if os.path.exists(os.path.join(debloat_path, 'debloat.jar')):
-                current_lib['debloat_jar_size'] = os.stat(os.path.join(debloat_path, 'debloat.jar')).st_size
+            if os.path.exists(debloat_jar_path):
+                current_lib['debloat_jar_size'] = os.stat(debloat_jar_path).st_size
             else:
                 current_lib['debloat_jar_size'] = 0
             
