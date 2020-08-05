@@ -100,11 +100,11 @@ for lib in results.libs:
             count_method_dependencies += dependency.nb_method
             count_bloated_method_dependencies += dependency.nb_debloat_method
 
-        nb_classes += version.nb_classes
+        nb_classes += version.nb_class
         nb_method += version.nb_method
 
-        nb_bloated_classes += version.nb_bloated_classes
-        nb_bloated_method += version.nb_bloated_method
+        nb_bloated_classes += version.nb_debloat_class
+        nb_bloated_method += version.nb_debloat_method
 
 
 macro("Total", total)

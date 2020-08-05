@@ -368,16 +368,16 @@ with open(PATH_file, 'r') as fd:
                     current_lib['dependencies'][dep]['nb_method'] += len(jarClasses[cl]['methods'])
                         
                     current_lib['dependencies'][dep]['nb_class'] += 1
-                    if jarClasses[cl]['bloat_type'] == "bloated":
+                    if cl not in debloat_jar_classes:
                         current_lib['dependencies'][dep]['nb_debloat_class'] += 1
                         current_lib['dependencies'][dep]['nb_debloat_method'] += len(jarClasses[cl]['methods'])
                     elif jarClasses[cl]['bloat_type'] == "preserved":
                         current_lib['dependencies'][dep]['nb_preserved_class'] += 1
                     
-                if jarClasses[cl]['bloat_type'] == "bloated":
+                if cl not in debloat_jar_classes:
                     current_lib['nb_debloat_class'] += 1
                     current_lib['nb_debloat_method'] += len(jarClasses[cl]['methods'])
-                    debloated_class.append(class_name)
+                    debloated_class.append(cl)
                 elif jarClasses[cl]['bloat_type'] == "preserved":
                     current_lib['nb_preserved_class'] += 1
             cov_tools = ["JCov", "JaCoCo", "JVM", "Yajta"]
