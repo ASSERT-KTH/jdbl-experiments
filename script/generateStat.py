@@ -155,9 +155,9 @@ def get_jar_content(path):
         if '.class' not in f.filename:
             continue
         cl = f.filename.replace(".class", "").replace("/", '.')
-        if 'module-info' == cl:
+        if 'module-info' in cl:
             continue
-        elif 'package-info' == cl:
+        elif 'package-info' in cl:
             continue
         output[cl] = {
             "from": "unknown",
