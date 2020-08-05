@@ -135,7 +135,7 @@ def analyze_jar(jar_path):
                 if is_interface:
                     continue
                 if current_cl+"(" in line:
-                    #print("contructor", current_cl, line)
+                    is_constructor = True
                     pass
                 else:
                     index = line.index(")")
@@ -145,10 +145,6 @@ def analyze_jar(jar_path):
                     line = line[index:]
                     methods[current_cl].append(line)
                     pass
-        #
-        # for line in def_out.split("\n"):
-        #     if '(' in line:
-        #         methods[cl].append(line)
     return (classes, methods)
 
 def get_jar_content(path):
@@ -159,6 +155,10 @@ def get_jar_content(path):
         if '.class' not in f.filename:
             continue
         cl = f.filename.replace(".class", "").replace("/", '.')
+        if 'module-info' == cl:
+            continue
+        elif 'package-info' == cl:
+            continue
         output[cl] = {
             "from": "unknown",
             "bloat_type": "unknown",
