@@ -24,15 +24,17 @@ def analyze_jar(jar_path):
         ['jar', 'tf', jar_path]).decode("utf-8")
     classes = [c.replace('/', '.')
                for c in re.findall(r'(.*)\.class', class_output)]
-    methods = []
-    if classes:
+    methods = {}
+    for cl in classes:
+        print(cl)
+        methods[cl] = []
         def_out = subprocess.check_output(
-            ['javap', '-classpath', jar_path] + classes).decode("utf-8")
+            ['javap', '-classpath', jar_path, cl]).decode("utf-8")
         # This is pretty hacky: look for parentheses in the declaration line.
-        num_methods = sum(1 for line in def_out if '(' in line)
-    else:
-        num_methods = 0
-    return (len(classes), num_methods)
+        for line in def_out.split("\n"):
+            if '(' in line:
+                methods[cl].append(line)
+    return (classes, methods)
 
 
 def macro(name, value):
@@ -81,8 +83,8 @@ for lib in results.libs:
         original_jar_path = os.path.join(original_path, 'original.jar')
         debloat_jar_path = os.path.join(debloat_path, 'debloat.jar')
 
-        original_stat = analyze_jar(original_jar_path)
-        debloat_stat = analyze_jar(debloat_jar_path)
+        # original_stat = analyze_jar(original_jar_path)
+        # debloat_stat = analyze_jar(debloat_jar_path)
 
         if len(version.dependencies) > 0:
             nb_lib_with_dependencies += 1
@@ -98,11 +100,11 @@ for lib in results.libs:
             count_method_dependencies += dependency.nb_method
             count_bloated_method_dependencies += dependency.nb_debloat_method
 
-        nb_classes += original_stat[0]
-        nb_method += original_stat[1]
+        nb_classes += version.nb_classes
+        nb_method += version.nb_method
 
-        nb_bloated_classes += original_stat[0] - debloat_stat[0]
-        nb_bloated_method += original_stat[1] - debloat_stat[1]
+        nb_bloated_classes += version.nb_bloated_classes
+        nb_bloated_method += version.nb_bloated_method
 
 
 macro("Total", total)

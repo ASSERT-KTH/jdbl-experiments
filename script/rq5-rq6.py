@@ -94,7 +94,10 @@ def extract_compilation_errors(debloat_log_path):
                     pass
                 elif "Some Enforcer rules have failed." in content:
                     output.append("Plugin verification")
-            #print(content)
+                elif "Bad service configuration file, or exception thrown while constructing Processor object:":
+                    output.append("Processor error")
+                else:
+                    print(content)
         except Exception as e:
             print(debloat_log_path, e)
     return output

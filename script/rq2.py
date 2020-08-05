@@ -187,6 +187,6 @@ if __name__ == "__main__":
         total_test += version.debloat_test.nb_test()
         name = version.library.repo.split("/")[1]
         print(
-            f"{name}:{version.version} & {taf} & {uoe} & {npe} & {tt} & {NCDF} & {other} & \ChartSmall[r]{{{len(messages)}}}{{{version.debloat_test.nb_test()}}} \\\\")
+            f"{name}:{version.version} & {taf} & {uoe} & {npe} & {NCDF} & {other} & \ChartSmall[r]{{{len(messages)}}}{{{version.debloat_test.nb_test()}}} \\\\")
     print("\midrule")
-    print(f"Total & {total_taf} & {total_uoe} & {total_npe} & {total_tt} & {total_NCDF} & {total_other} & \ChartSmall{{\\nbFailingTest}}{{{total_test}}} \\\\")
+    print(f"Total & {total_taf} & {total_uoe} & {total_npe} & {total_NCDF} & {total_other} & \ChartSmall{{\\nbFailingTest}}{{{total_test}}} \\\\")
