@@ -162,7 +162,7 @@ def get_jar_content(path):
         output[cl] = {
             "from": "unknown",
             "bloat_type": "unknown",
-            "methods": stat[1][cl]
+            "methods": stat[1][cl] if cl in stat[1] else []
         }
     return output
 
