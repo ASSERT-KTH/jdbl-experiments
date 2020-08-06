@@ -83,6 +83,7 @@ if __name__ == "__main__":
     nb_failing_test = 0
     nb_passing_test = 0
     total_test = 0
+    total_test_for_passing = 0
     nb_failing = 0
     nb_error = 0
     errors = {}
@@ -117,12 +118,14 @@ if __name__ == "__main__":
                 failing_libs.append((version, get_error_message(debloat_path)))
             else:
                 nb_lib_pass_test += 1
+                total_test_for_passing += nb_test
 
     macro("nbLibDebSuccessNum", total)
     macro("nbLibPassTestNum", nb_lib_pass_test)
     macro("nbLibExcludedForTest", nb_different_number_test + not_executed)
     macro("nbLibTestFailing", nb_failing)
     macro("nbUniqueTestNum", total_test)
+    macro("nbTestForPassingNum", total_test_for_passing)
     macro("nbFailingTest", nb_failing_test)
     macro("nbErrorTest", nb_error)
 
