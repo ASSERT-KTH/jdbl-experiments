@@ -42,11 +42,11 @@ for lib in results.libs:
             nb_lib_compiling += 1
         if version.debloat_time:
             debloat_time.append(version.debloat_time)
-        if version.coverage is not None:
-            nb_line_lib.append(version.coverage.nb_lines)
-            coverage_lib.append(version.coverage.coverage)
         if version.original_test is not None:
             nb_test.append(version.original_test.nb_test())
+            if version.coverage is not None and version.original_test.nb_test() > 0:
+                nb_line_lib.append(version.coverage.nb_lines)
+                coverage_lib.append(version.coverage.coverage)
 
         execution_time_lib.append(version.debloat_execution_time + version.original_execution_time)
 
@@ -56,9 +56,9 @@ for lib in results.libs:
                 nb_client += 1
                 execution_time_client.append(c.debloat_execution_time + c.original_execution_time)
                 nb_test_client.append(c.original_test.nb_test())
-            if c.coverage_original is not None:
-                nb_line_client.append(c.coverage_original.nb_lines)
-                coverage_client.append(c.coverage_original.coverage)
+                if c.coverage_original is not None and c.original_test.nb_test() > 0:
+                    nb_line_client.append(c.coverage_original.nb_lines)
+                    coverage_client.append(c.coverage_original.coverage)
 
 macro("nbLib", len(results.libs))
 macro("nbLibVersion", nb_lib_version)
@@ -87,15 +87,15 @@ nb_test_quantiles = statistics.quantiles(nb_test, n=4)
 nb_line_lib_quantiles= statistics.quantiles(nb_line_lib, n=4)
 coverage_lib_quantiles= statistics.quantiles(coverage_lib, n=4)
 
-print(f"\# Tests & {str_num(min(nb_test))} & {str_num(nb_test_quantiles[0])} & {str_num(nb_test_quantiles[1])} & {str_num(nb_test_quantiles[2])} & {str_num(max(nb_test))} & {str_num(statistics.mean(nb_test))} & \\nbTestStr \\\\")
-print(f"\# Loc   & {str_num(min(nb_line_lib))} & {str_num(nb_line_lib_quantiles[0])} & {str_num(nb_line_lib_quantiles[1])} & {str_num(nb_line_lib_quantiles[2])} & {str_num(max(nb_line_lib))} & {str_num(statistics.mean(nb_line_lib))} & \\nbLineLibStr \\\\")
-print(f"Coverage & {str_num(min(coverage_lib), unit='%')} & {str_num(coverage_lib_quantiles[0], unit='%')} & {str_num(coverage_lib_quantiles[1], unit='%')} & {str_num(coverage_lib_quantiles[2], unit='%')} & {str_num(max(coverage_lib), unit='%')} & {str_num(statistics.mean(coverage_lib), unit='%')} & N.A \\\\")
+print(f"& \# Tests & {str_num(min(nb_test))} & {str_num(nb_test_quantiles[0])} & {str_num(nb_test_quantiles[1])} & {str_num(nb_test_quantiles[2])} & {str_num(max(nb_test))} & {str_num(statistics.mean(nb_test))} & \\nbTestStr \\\\")
+print(f"& \# Loc   & {str_num(min(nb_line_lib))} & {str_num(nb_line_lib_quantiles[0])} & {str_num(nb_line_lib_quantiles[1])} & {str_num(nb_line_lib_quantiles[2])} & {str_num(max(nb_line_lib))} & {str_num(statistics.mean(nb_line_lib))} & \\nbLineLibStr \\\\")
+print(f"& Coverage & {str_num(min(coverage_lib), unit='%')} & {str_num(coverage_lib_quantiles[0], unit='%')} & {str_num(coverage_lib_quantiles[1], unit='%')} & {str_num(coverage_lib_quantiles[2], unit='%')} & {str_num(max(coverage_lib), unit='%')} & {str_num(statistics.mean(coverage_lib), unit='%')} & N.A \\\\")
 
 
 nb_test_client_quantiles = statistics.quantiles(nb_test_client, n=4)
 nb_line_client_quantiles= statistics.quantiles(nb_line_client, n=4)
 coverage_client_quantiles= statistics.quantiles(coverage_client, n=4)
 
-print(f"\# Tests & {str_num(min(nb_test_client))} & {str_num(nb_test_client_quantiles[0])} & {str_num(nb_test_client_quantiles[1])} & {str_num(nb_test_client_quantiles[2])} & {str_num(max(nb_test_client))} & {str_num(statistics.mean(nb_test_client))} & \\nbTestStr \\\\")
-print(f"\# Loc   & {str_num(min(nb_line_client))} & {str_num(nb_line_client_quantiles[0])} & {str_num(nb_line_client_quantiles[1])} & {str_num(nb_line_client_quantiles[2])} & {str_num(max(nb_line_client))} & {str_num(statistics.mean(nb_line_client))} & \\nbLineLibStr \\\\")
-print(f"Coverage & {str_num(min(coverage_client), unit='%')} & {str_num(coverage_client_quantiles[0], unit='%')} & {str_num(coverage_client_quantiles[1], unit='%')} & {str_num(coverage_client_quantiles[2], unit='%')} & {str_num(max(coverage_client), unit='%')} & {str_num(statistics.mean(coverage_client), unit='%')} & N.A \\\\")
+print(f"& \# Tests & {str_num(min(nb_test_client))} & {str_num(nb_test_client_quantiles[0])} & {str_num(nb_test_client_quantiles[1])} & {str_num(nb_test_client_quantiles[2])} & {str_num(max(nb_test_client))} & {str_num(statistics.mean(nb_test_client))} & \\nbTestClientStr \\\\")
+print(f"& \# Loc   & {str_num(min(nb_line_client))} & {str_num(nb_line_client_quantiles[0])} & {str_num(nb_line_client_quantiles[1])} & {str_num(nb_line_client_quantiles[2])} & {str_num(max(nb_line_client))} & {str_num(statistics.mean(nb_line_client))} & \\nbLineClientStr \\\\")
+print(f"& Coverage & {str_num(min(coverage_client), unit='%')} & {str_num(coverage_client_quantiles[0], unit='%')} & {str_num(coverage_client_quantiles[1], unit='%')} & {str_num(coverage_client_quantiles[2], unit='%')} & {str_num(max(coverage_client), unit='%')} & {str_num(statistics.mean(coverage_client), unit='%')} & N.A \\\\")
