@@ -7,6 +7,11 @@ import statistics
 
 from Results import results
 
+def str_num(num, unit=None):
+    if unit is None:
+        return f"\\np{{{num}}}"
+    elif unit == "%":
+        return f"\\np[\%]{{{round(num*100, 1)}}}"
 def macro(name, value, unit=None):
     print("\\def\\%s{%s}" % (name, value))
     if not isinstance(value, str):
@@ -82,15 +87,15 @@ nb_test_quantiles = statistics.quantiles(nb_test, n=4)
 nb_line_lib_quantiles= statistics.quantiles(nb_line_lib, n=4)
 coverage_lib_quantiles= statistics.quantiles(coverage_lib, n=4)
 
-print(f"\# Tests & {min(nb_test)} & {nb_test_quantiles[0]} & {nb_test_quantiles[1]} & {nb_test_quantiles[2]} & {max(nb_test)} & {statistics.mean(nb_test)} & \\nbTest \\\\")
-print(f"\# Loc   & {min(nb_line_lib)} & {nb_line_lib_quantiles[0]} & {nb_line_lib_quantiles[1]} & {nb_line_lib_quantiles[2]} & {max(nb_line_lib)} & {statistics.mean(nb_line_lib)} & \\nbLineLib \\\\")
-print(f"Coverage & {min(coverage_lib)} & {coverage_lib_quantiles[0]} & {coverage_lib_quantiles[1]} & {coverage_lib_quantiles[2]} & {max(coverage_lib)} & {statistics.mean(coverage_lib)} & N.A \\\\")
+print(f"\# Tests & {str_num(min(nb_test))} & {str_num(nb_test_quantiles[0])} & {str_num(nb_test_quantiles[1])} & {str_num(nb_test_quantiles[2])} & {str_num(max(nb_test))} & {str_num(statistics.mean(nb_test))} & \\nbTestStr \\\\")
+print(f"\# Loc   & {str_num(min(nb_line_lib))} & {str_num(nb_line_lib_quantiles[0])} & {str_num(nb_line_lib_quantiles[1])} & {str_num(nb_line_lib_quantiles[2])} & {str_num(max(nb_line_lib))} & {str_num(statistics.mean(nb_line_lib))} & \\nbLineLibStr \\\\")
+print(f"Coverage & {str_num(min(coverage_lib), unit='%')} & {str_num(coverage_lib_quantiles[0], unit='%')} & {str_num(coverage_lib_quantiles[1], unit='%')} & {str_num(coverage_lib_quantiles[2], unit='%')} & {str_num(max(coverage_lib), unit='%')} & {str_num(statistics.mean(coverage_lib), unit='%')} & N.A \\\\")
 
 
 nb_test_client_quantiles = statistics.quantiles(nb_test_client, n=4)
 nb_line_client_quantiles= statistics.quantiles(nb_line_client, n=4)
 coverage_client_quantiles= statistics.quantiles(coverage_client, n=4)
 
-print(f"\# Tests & {min(nb_test_client)} & {nb_test_client_quantiles[0]} & {nb_test_client_quantiles[1]} & {nb_test_client_quantiles[2]} & {max(nb_test_client)} & {statistics.mean(nb_test_client)} & \\nbTestClient \\\\")
-print(f"\# Loc   & {min(nb_line_client)} & {nb_line_client_quantiles[0]} & {nb_line_client_quantiles[1]} & {nb_line_client_quantiles[2]} & {max(nb_line_client)} & {statistics.mean(nb_line_client)} & \\nbLineClient \\\\")
-print(f"Coverage & {min(coverage_client)} & {coverage_client_quantiles[0]} & {coverage_client_quantiles[1]} & {coverage_client_quantiles[2]} & {max(coverage_client)} & {statistics.mean(coverage_client)} & N.A \\\\")
+print(f"\# Tests & {str_num(min(nb_test_client))} & {str_num(nb_test_client_quantiles[0])} & {str_num(nb_test_client_quantiles[1])} & {str_num(nb_test_client_quantiles[2])} & {str_num(max(nb_test_client))} & {str_num(statistics.mean(nb_test_client))} & \\nbTestStr \\\\")
+print(f"\# Loc   & {str_num(min(nb_line_client))} & {str_num(nb_line_client_quantiles[0])} & {str_num(nb_line_client_quantiles[1])} & {str_num(nb_line_client_quantiles[2])} & {str_num(max(nb_line_client))} & {str_num(statistics.mean(nb_line_client))} & \\nbLineLibStr \\\\")
+print(f"Coverage & {str_num(min(coverage_client), unit='%')} & {str_num(coverage_client_quantiles[0], unit='%')} & {str_num(coverage_client_quantiles[1], unit='%')} & {str_num(coverage_client_quantiles[2], unit='%')} & {str_num(max(coverage_client), unit='%')} & {str_num(statistics.mean(coverage_client), unit='%')} & N.A \\\\")
