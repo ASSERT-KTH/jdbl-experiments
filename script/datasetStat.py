@@ -59,7 +59,7 @@ macro("nbLib", len(results.libs))
 macro("nbLibVersion", nb_lib_version)
 macro("nbLibCompiling", nb_lib_compiling)
 macro("nbTest", sum(nb_test))
-macro("nbTestClient", nb_test_client)
+macro("nbTestClient", sum(nb_test_client))
 macro("nbClientAll", nb_all_client)
 
 if len(coverage_lib) > 0:
