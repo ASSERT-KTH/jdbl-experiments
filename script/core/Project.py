@@ -1,8 +1,8 @@
-from pathlib import Path
 import subprocess
 import traceback
 import os
 from github import Github
+import xml.etree.ElementTree as xml
 
 from core.PomExtractor import PomExtractor
 
@@ -70,13 +70,6 @@ class Project:
         except:
             return False
 
-    def get_releases(self):
-        if len(self.releases) != 0:
-            return self.releases
-        repo = g.get_repo(self.repo, lazy=True)
-        self.releases = repo.get_tags()
-        return self.releases
-
     def get_commit(self):
         cmd = 'cd %s; git rev-parse HEAD' % (self.path)
         return subprocess.check_output(cmd, shell=True).decode('UTF-8').strip()
@@ -89,24 +82,38 @@ class Project:
         except:
             return False
 
-    def compile(self, clean: bool = True):
+    def classpath(self):
+        cmd = "cd %s; mvn dependency:build-classpath -Dscope=test;" % (
+            self.path)
+        try:
+            cp = []
+            output = subprocess.check_output(cmd, shell=True).decode("utf-8")
+            lines = output.split("\n")
+            for line in lines:
+                if len(line) == 0:
+                    continue
+                if line[0] != "/":
+                    continue
+                cp.append(line)
+            return cp
+        except Exception as e:
+            print(e)
+            return None
+
+    def compile(self, clean: bool = True, stdout: str = None, timeout: str = None):
         clean_cmd = 'mvn clean -B -q > /dev/null; '
         if clean is False:
             clean_cmd = ''
-        cmd = 'cd %s;%smvn compile -e --fail-never -ntp -Dmaven.test.failure.ignore=true -B -Dmaven.javadoc.skip=true -Drat.skip=true -Danimal.sniffer.skip=true -Dmaven.javadoc.skip=true -Dlicense.skip=true -Dsource.skip=true' % (
-            self.path, clean_cmd)
-        try:
-            subprocess.check_call(cmd, shell=True)
-            return True
-        except:
-            return False
-
-    def test(self, clean: bool = True, stdout: str = None):
-        clean_cmd = 'mvn clean -B -q > /dev/null ;'
-        if clean is False:
-            clean_cmd = ''
-        cmd = 'cd %s;%s mvn test -e --fail-never -ntp -Dmaven.test.failure.ignore=true -B -Dmaven.javadoc.skip=true -Drat.skip=true -Danimal.sniffer.skip=true -Dmaven.javadoc.skip=true -Dlicense.skip=true -Dsource.skip=true' % (
-            self.path, clean_cmd)
+        timeout_cmd = ''
+        if timeout is not None:
+            timeout_cmd = 'timeout -k 1m -s SIGKILL %s' % timeout
+        maven_proxy = ''
+        maven_proxy_path = os.path.join(os.path.dirname(
+            os.path.realpath(__file__)), "maven-proxy.xml")
+        if os.path.exists(maven_proxy_path):
+            maven_proxy = '-gs %s' % (maven_proxy_path)
+        cmd = 'cd %s;%s%s mvn %s compile -e --fail-never -ntp -Dmaven.test.failure.ignore=true -B -Dmaven.javadoc.skip=true -Drat.skip=true -Danimal.sniffer.skip=true -Dmaven.javadoc.skip=true -Dlicense.skip=true -Dsource.skip=true' % (
+            self.path, clean_cmd, timeout_cmd, maven_proxy)
         if stdout is not None:
             cmd += ' > %s 2>&1' % (stdout)
         try:
@@ -115,9 +122,131 @@ class Project:
         except:
             return False
 
-    def package(self, stdout: str = None) -> bool:
-        cmd = 'cd %s; mvn clean -q -B; mvn package -e --fail-never -ntp -Dmaven.test.error.ignore=true -Dmaven.test.failure.ignore=true -B -Dmaven.javadoc.skip=true -Drat.skip=true -Danimal.sniffer.skip=true -Dmaven.javadoc.skip=true -Dlicense.skip=true -Dsource.skip=true' % (
-            self.path)
+    def test(self, clean: bool = True, stdout: str = None, timeout: str = None):
+        clean_cmd = 'mvn clean -B -q > /dev/null ;'
+        if clean is False:
+            clean_cmd = ''
+        timeout_cmd = ''
+        if timeout is not None:
+            timeout_cmd = 'timeout -k 1m -s SIGKILL %s' % timeout
+        maven_proxy = ''
+        maven_proxy_path = os.path.join(os.path.dirname(
+            os.path.realpath(__file__)), "maven-proxy.xml")
+        if os.path.exists(maven_proxy_path):
+            maven_proxy = '-gs %s' % (maven_proxy_path)
+        cmd = 'cd %s;%s%s mvn %s test -DtrimStackTrace=false -e --fail-never -ntp -Dmaven.test.failure.ignore=true -B -Dmaven.javadoc.skip=true -Drat.skip=true -Danimal.sniffer.skip=true -Dmaven.javadoc.skip=true -Dlicense.skip=true -Dsource.skip=true' % (
+            self.path, clean_cmd, timeout_cmd, maven_proxy)
+        if stdout is not None:
+            cmd += ' > %s 2>&1' % (stdout)
+        try:
+            subprocess.check_call(cmd, shell=True)
+            return True
+        except:
+            return False
+
+    def get_test_results(self):
+        output = {}
+
+        for root, dirs, files in os.walk(self.path):
+            for dir in dirs:
+                if dir != "surefire-reports":
+                    continue
+                test_results_path = os.path.join(root, dir)
+                for test in os.listdir(test_results_path):
+                    if ".xml" not in test:
+                        continue
+                    test_path = os.path.join(test_results_path, test)
+                    try:
+                        test_results = xml.parse(test_path).getroot()
+                        test_cases = test_results.findall("testcase")
+                        for e in test_cases:
+                            cl = e.get("classname")
+                            if cl not in output:
+                                cl_test = {
+                                    'name': cl,
+                                    'test_cases': []
+                                }
+                                if test_results.get('time') is not None:
+                                    cl_test['execution_time'] = float(
+                                        test_results.get('time'))
+                                if test_results.get('errors') is not None:
+                                    cl_test['error'] = int(
+                                        test_results.get('errors'))
+                                if test_results.get('failures') is not None:
+                                    cl_test['failing'] = int(
+                                        test_results.get('failures'))
+                                if test_results.get('failed') is not None:
+                                    cl_test['failing'] = int(
+                                        test_results.get('failed'))
+                                if test_results.get('tests') is not None:
+                                    cl_test['passing'] = int(test_results.get(
+                                        'tests')) - int(test_results.get('errors')) - int(test_results.get('failures'))
+                                if test_results.get('passed') is not None:
+                                    cl_test['passing'] = int(
+                                        test_results.get('passed'))
+
+                                output[cl] = cl_test
+                            test_case = {
+                                'name': e.get("name"),
+                                'execution_time': float(e.get('time'))
+                            }
+                            error = e.find("error")
+                            if error is not None:
+                                test_case['error'] = {
+                                    "message": error.get("message"),
+                                    "type": error.get("type"),
+                                    "error": error.text
+                                }
+                                pass
+
+                            error = e.find("failure")
+                            if error is not None:
+                                test_case['failure'] = {
+                                    "message": error.get("message"),
+                                    "type": error.get("type"),
+                                    "error": error.text
+                                }
+
+                            output[cl]['test_cases'].append(test_case)
+                    except Exception as e:
+                        print(e)
+                        pass
+        return output
+
+    def install(self, stdout: str = None, timeout: str = None) -> bool:
+        timeout_cmd = ''
+        if timeout is not None:
+            timeout_cmd = 'timeout -k 1m -s SIGKILL %s' % timeout
+        maven_proxy = ''
+        maven_proxy_path = os.path.join(os.path.dirname(
+            os.path.realpath(__file__)), "maven-proxy.xml")
+        if os.path.exists(maven_proxy_path):
+            maven_proxy = '-gs %s' % (maven_proxy_path)
+        cmd = 'cd %s; %s mvn %s install -DskipTests -ntp -Dmaven.test.error.ignore=true -Dmaven.test.failure.ignore=true -B -Dmaven.javadoc.skip=true -Drat.skip=true -Danimal.sniffer.skip=true -Dmaven.javadoc.skip=true -Dlicense.skip=true -Dsource.skip=true' % (
+            self.path,
+            timeout_cmd,
+            maven_proxy)
+        if stdout is not None:
+            cmd += ' > %s 2>&1' % (stdout)
+        try:
+            subprocess.check_call(cmd, shell=True)
+            return True
+        except:
+            return False
+
+    def package(self, stdout: str = None, timeout: str = None) -> bool:
+        timeout_cmd = ''
+        if timeout is not None:
+            timeout_cmd = 'timeout -k 1m -s SIGKILL %s' % timeout
+        maven_proxy = ''
+        maven_proxy_path = os.path.join(os.path.dirname(
+            os.path.realpath(__file__)), "maven-proxy.xml")
+        if os.path.exists(maven_proxy_path):
+            maven_proxy = '-gs %s' % (maven_proxy_path)
+        cmd = 'cd %s; mvn clean -q -B;%s mvn %s package -e --fail-never -ntp -Dmaven.test.error.ignore=true -Dmaven.test.failure.ignore=true -B -Dmaven.javadoc.skip=true -Drat.skip=true -Danimal.sniffer.skip=true -Dmaven.javadoc.skip=true -Dlicense.skip=true -Dsource.skip=true' % (
+            self.path,
+            timeout_cmd,
+            maven_proxy)
         if stdout is not None:
             cmd += ' > %s 2>&1' % (stdout)
         try:

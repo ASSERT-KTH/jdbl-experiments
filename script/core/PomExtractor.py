@@ -1,7 +1,5 @@
 import xml.etree.ElementTree as xml
-from xml.etree.ElementTree import Element, SubElement, Comment, tostring
-from xml.dom import minidom
-import re
+from xml.etree.ElementTree import Element, SubElement, tostring
 
 from pathlib import Path
 
@@ -18,10 +16,12 @@ def stripNs(el):
   for child in el:
     stripNs(child)
 
-def clean_value(text:str):
+
+def clean_value(text: str):
     return text.replace("\n", "").replace("\t", "").replace(" ", "")
 
-def indent(elem:Element, level=0, more_sibs=False):
+
+def indent(elem: Element, level=0, more_sibs=False):
     i = "\n"
     if level:
         i += (level-1) * '  '
@@ -45,9 +45,10 @@ def indent(elem:Element, level=0, more_sibs=False):
             if more_sibs:
                 elem.tail += '  '
 
+
 class PomExtractor:
-    def __init__(self, path:str):
-        self.namespaces = {'xmlns' : 'http://maven.apache.org/POM/4.0.0'}
+    def __init__(self, path: str):
+        self.namespaces = {'xmlns': 'http://maven.apache.org/POM/4.0.0'}
         self.path = path
         self.poms = []
         for p in Path(path).rglob('pom.xml'):
@@ -57,11 +58,12 @@ class PomExtractor:
             if root.attrib.get('schemaLocation') is not None:
                 root.attrib.pop('schemaLocation')
             self.poms.append({"path": p, "root": root})
-    
+
     def write_pom(self):
         for pom in self.poms:
             indent(pom["root"])
-            rough_string = tostring(pom["root"], encoding="UTF-8").decode().replace("ns0:", '')
+            rough_string = tostring(
+                pom["root"], encoding="UTF-8").decode().replace("ns0:", '')
             with open(pom["path"], 'w') as fd:
                 fd.write(rough_string)
 
@@ -96,7 +98,7 @@ class PomExtractor:
             return clean_value(r.text)
         return ''
 
-    def remove_dependency(self, group_id:str, artifact_id:str) -> str:
+    def remove_dependency(self, group_id: str, artifact_id: str) -> str:
         for pom in self.poms:
             prop_parents = self.poms[0]["root"].findall('*//dependency/..')
             for parent in prop_parents:
@@ -115,7 +117,7 @@ class PomExtractor:
                     return dep
         return None
 
-    def get_version_dependency(self, group_id:str, artifact_id:str) -> str:
+    def get_version_dependency(self, group_id: str, artifact_id: str) -> str:
         for pom in self.poms:
             deps = pom["root"].findall('*//dependency')
             for dep in deps:
@@ -128,7 +130,7 @@ class PomExtractor:
                     return version
         return None
 
-    def change_depency_path(self, group_id:str, artifact_id:str, path:str) -> bool:
+    def change_depency_path(self, group_id: str, artifact_id: str, path: str) -> bool:
         for pom in self.poms:
             deps = pom["root"].findall('*//dependency')
             for dep in deps:
@@ -147,7 +149,7 @@ class PomExtractor:
         excludes = []
         includes = []
         configuration = {}
-        x:Element = self.poms[0]["root"]
+        x: Element = self.poms[0]["root"]
         prop_parents = x.findall('*//plugin/..')
         group_id = 'org.apache.maven.plugins'
         artifact_id = 'maven-surefire-plugin'
@@ -167,13 +169,13 @@ class PomExtractor:
                     excludes.append(exclude.text)
                 for include in declared_plugin.findall('*//include'):
                     includes.append(include.text)
-                conf:Element = declared_plugin.find('configuration')
+                conf: Element = declared_plugin.find('configuration')
                 if conf is not None:
                     for a in conf.getchildren():
                         configuration[a.tag] = a.text
         return (includes, excludes, configuration)
 
-    def remove_plugin(self, group_id:str, artifact_id:str):
+    def remove_plugin(self, group_id: str, artifact_id: str):
         prop_parents = self.poms[0]["root"].findall('*//plugin/..')
         for parent in prop_parents:
             for declared_plugin in parent:
@@ -190,7 +192,7 @@ class PomExtractor:
                 # the plugin is the same remove it
                 parent.remove(declared_plugin)
 
-    def add_dependency(self, group_id:str, artifact_id:str, version:str, scope:str=None):
+    def add_dependency(self, group_id: str, artifact_id: str, version: str, scope: str = None):
         # check if plugin is already defined if yes, remove it
         self.remove_dependency(group_id, artifact_id)
 
@@ -198,7 +200,8 @@ class PomExtractor:
         dependencies_section = self.poms[0]["root"].find('dependencies')
         if dependencies_section is None:
             # create build section
-            dependencies_section = SubElement(self.poms[0]["root"], 'dependencies')
+            dependencies_section = SubElement(
+                self.poms[0]["root"], 'dependencies')
 
         new_dependency = SubElement(dependencies_section, 'dependency')
         if group_id is not None:
@@ -208,7 +211,7 @@ class PomExtractor:
         if scope is not None:
             SubElement(new_dependency, 'scope').text = scope
 
-    def add_plugin(self, group_id:str, artifact_id:str, version:str, config:[]) -> {}:
+    def add_plugin(self, group_id: str, artifact_id: str, version: str, config: []) -> {}:
         # check if plugin is already defined if yes, remove it
         self.remove_plugin(group_id, artifact_id)
 
@@ -223,9 +226,9 @@ class PomExtractor:
             plugins_section = SubElement(build_section, 'plugins')
         else:
             build_section = build[0]
-            plugins_section =  build_section.find('plugins')
+            plugins_section = build_section.find('plugins')
             if plugins_section is None:
-                plugins_section = SubElement(build_section, 'plugins')  
+                plugins_section = SubElement(build_section, 'plugins')
 
         new_plugin = SubElement(plugins_section, 'plugin')
         if group_id is not None:
@@ -242,6 +245,5 @@ class PomExtractor:
                     insert_config(n, c)
         for e in config:
             insert_config(new_plugin, e)
-            
 
         return self.poms[0]
