@@ -102,3 +102,31 @@ vignettes/*.pdf
 *.html
 
 .Rproj.user
+
+
+# Avoid listing external projects as git submodules
+/revision/benchmark/projects_debloated_with_jdbl/Algorithms/
+/revision/benchmark/projects_debloated_with_jdbl/AutoLoadCache/
+/revision/benchmark/projects_debloated_with_jdbl/Bukkit/
+/revision/benchmark/projects_debloated_with_jdbl/DiskLruCache/
+/revision/benchmark/projects_debloated_with_jdbl/dubbokeeper/
+/revision/benchmark/projects_debloated_with_jdbl/fragmentargs/
+/revision/benchmark/projects_debloated_with_jdbl/frontend-maven-plugin/
+/revision/benchmark/projects_debloated_with_jdbl/gson/
+/revision/benchmark/projects_debloated_with_jdbl/http-request/
+/revision/benchmark/projects_debloated_with_jdbl/java-apns/
+/revision/benchmark/projects_debloated_with_jdbl/Java-Chronicle/
+/revision/benchmark/projects_debloated_with_jdbl/jboss-logmanager/
+/revision/benchmark/projects_debloated_with_jdbl/junit4/
+/revision/benchmark/projects_debloated_with_jdbl/jvm-tools/
+/revision/benchmark/projects_debloated_with_jdbl/lanterna/
+/revision/benchmark/projects_debloated_with_jdbl/maven-config-processor-plugin/
+/revision/benchmark/projects_debloated_with_jdbl/moshi/
+/revision/benchmark/projects_debloated_with_jdbl/Mybatis-PageHelper/
+/revision/benchmark/projects_debloated_with_jdbl/qart4j/
+/revision/benchmark/projects_debloated_with_jdbl/retrofit1-okhttp3-client/
+/revision/benchmark/projects_debloated_with_jdbl/RxRelay/
+/revision/benchmark/projects_debloated_with_jdbl/RxReplayingShare/
+/revision/benchmark/projects_debloated_with_jdbl/tomighty/
+/revision/benchmark/projects_debloated_with_jdbl/TProfiler/
+/revision/benchmark/projects_debloated_with_jdbl/zt-zip/
