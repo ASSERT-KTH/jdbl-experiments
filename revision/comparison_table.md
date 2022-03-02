@@ -1,4 +1,4 @@
-# Results of debloating the benchmark projects of Bruce et al. (Table 3 of their paper)
+# Results of debloating the benchmark projects of [Bruce et al.](https://dl.acm.org/doi/pdf/10.1145/3368089.3409738) 
 
 We successfully debloated 16/25 projects with JDBL.
 
@@ -6,6 +6,8 @@ From the 9 projects that we didn't debloated with JDBL:
 - 6 projects are multi-module 
 - 2 projects didn't build due to test errors
 - 1 project we didn't find the original project repository
+
+# Benchmark results (Table 3 of their paper)
 
 | **Project**                                                                                  | **Commit SHA** | **JShrink Reduction** | **JDBL Reduction**          | **JShrink Test Failures** | **JDBL Test Failures** | **JDBL Execution Time (s)** | **Compile Scope Dependencies** | **JDBL Removed Classes** | **JDBL Removed Methods in Used Classes** | **JDBL Debloating Result**                          |
 |----------------------------------------------------------------------------------------------|----------------|-----------------------|-----------------------------|---------------------------|------------------------|-----------------------------|--------------------------------|--------------------------|------------------------------------------|-----------------------------------------------------|
@@ -35,12 +37,12 @@ From the 9 projects that we didn't debloated with JDBL:
 | [jboss-logmanager](https://github.com/jboss-logging/jboss-logmanager.git)                    | `e574b1b`      | --                    | --                          | --                        | --                     | --                          | --                             | --                       | --                                       | Unable to build original project due to test errors |
 | [AutoLoadCache](https://github.com/qiujiayu/AutoLoadCache)                                   | `06f67543`     | 20.2%                 | 5051583/15202103 (66.78%)   | 9                         | 0                      | 347.831                     | 2                              | 5714                     | 65                                       | Success                                             |
 | [TProfiler](https://github.com/alibaba/TProfiler)                                            | `8344d1a`      | 10.2%                 | 17809/105214 (83.07%)       | 0                         | 0                      | 56.865                      | 1                              | 49                       | 13                                       | Success                                             |
-| -------------------------------------------------------------------------------------------- | ------------   | --------------------- | --------------------------- | ------------------------- | ---------------------- | -----------------------     | ---------------------------    | ---------------          | -------------------------------          | --------------------------------------------------- |
 | **TOTAL**                                                                                    | --             | --                    | --                          | 77                        | 0                      | 2400.086                    | 59                             | 20067                    | 4290                                     | --                                                  |
 | **MEAN**                                                                                     | --             | 14.99%                | 34.65%                      | --                        | --                     | 150.00                      | --                             | --                       | --                                       | --                                                  |
 | **MEDIAN**                                                                                   | --             | 11.4%                 | 17.05%                      | --                        | --                     | 79.32                       | --                             | --                       | --                                       | --                                                  |
 
 
+---
 
 # Unix commands used during the reproducibility of the benchmark
 
