@@ -18,11 +18,50 @@ data <- read.delim("Data/lib_debloat_status_per_version.csv", sep = ",", header 
 # Plot debloated versions per library
 
 ```{r}
-data %>% filter(NbDebloatedVersions == 0)
+data %>% 
+  mutate(PercentageDebloat = (100 * NbDebloatedVersions)/NbVersions) %>% 
+  mutate(PercentageRange = 
+           ifelse(PercentageDebloat <= 20, "0-20", 
+                  ifelse(PercentageDebloat > 20 & PercentageDebloat <= 40, "21-40",
+                         ifelse(PercentageDebloat > 40 & PercentageDebloat <= 60, "41-60",
+                                ifelse(PercentageDebloat > 60 & PercentageDebloat <= 80, "61-80",
+                                       "81-100")
+                                )
+                         )
+                  )
+           ) %>% 
+  ggplot(aes(x=factor(PercentageRange)))+
+  geom_bar(stat="count", width=0.7, fill="steelblue")+
+  xlab("% of versions successfuly debloated") +
+  ylab("# of unique libraries") +
+  theme_bw()
 
 
-data %>% summarise(sum(NbVersions))
+df_debloat_success <- data %>% 
+  mutate(NbNotDebloatedVersions = NbVersions - NbDebloatedVersions) %>%
+  mutate(ID = row_number()) %>% 
+  select(Library, ID, NbDebloatedVersions) %>%
+  rename(Versions = NbDebloatedVersions) %>% 
+  mutate(Debloating = "Success")
+  
+df_debloat_fail <- data %>% 
+  mutate(NbNotDebloatedVersions = NbVersions - NbDebloatedVersions) %>%
+  mutate(ID = row_number()) %>% 
+  select(Library, ID, NbNotDebloatedVersions) %>% 
+  rename(Versions = NbNotDebloatedVersions) %>% 
+  mutate(Debloating = "Fail")
 
-
+rbind(df_debloat_success, df_debloat_fail) %>% 
+  ggplot(aes(x = reorder(ID,(-Versions)), y = Versions, fill = Debloating)) + 
+  geom_bar(stat = "identity") +
+  scale_x_discrete(breaks=c(71,94),
+        labels=c(1, 95)) +
+  xlab("unique libraries") +
+  ylab("# of versions") +
+  theme_bw()
+  # theme(axis.text.x = element_text(angle = 90)) 
+  
+  
+ 
 
 ```
