@@ -1,11 +1,10 @@
 # Results of debloating the benchmark projects of [Bruce et al.](https://dl.acm.org/doi/pdf/10.1145/3368089.3409738) 
 
-We successfully debloated 16/25 projects with JDBL.
+We successfully debloated 17/25 projects with JDBL.
 
-From the 9 projects that we didn't debloated with JDBL:
+From the 8 projects that we didn't debloated with JDBL:
 - 6 projects are multi-module 
 - 2 projects didn't build due to test errors
-- 1 project we didn't find the original project repository
 
 # Benchmark results (Table 3 of their paper)
 
