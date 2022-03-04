@@ -1,0 +1,28 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+# Import libraries
+
+```{r}
+library(tidyverse)
+```
+
+# Read the data
+
+```{r}
+data <- read.delim("Data/lib_debloat_status_per_version.csv", sep = ",", header = T, stringsAsFactors = TRUE)
+```
+
+# Plot debloated versions per library
+
+```{r}
+data %>% filter(NbDebloatedVersions == 0)
+
+
+data %>% summarise(sum(NbVersions))
+
+
+
+```
