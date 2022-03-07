@@ -55,7 +55,9 @@ venn(
   ilab = TRUE,
   zcolor = "style",
   cexil = 1.5,
-  cexsn = 1.5
+  cexsn = 1.5,
+  ilcs = 2,
+  sncs = 2
 )
 dev.off() 
 
