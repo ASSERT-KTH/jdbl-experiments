@@ -1,0 +1,64 @@
+---
+title: "JDBL"
+output: html_notebook
+---
+
+```{r init}
+library(tidyverse)
+library(venn)
+library(xtable)
+```
+
+
+```{r loadata}
+
+
+
+data <- read_csv("Data/class_usage_coverage_tool.csv", col_names = T, col_types = cols())
+
+
+data$bloatType <- as.factor(data$bloatType)
+data <- data %>% mutate(id = row_number())
+```
+
+
+```{r venn1}
+
+data_bloated <- data %>% filter(bloatType == "used")
+
+data_bloated %>% select(id) %>% unique()
+
+data_bloated %>% filter(JaCoCo == 1 & JCov == 0 & JVM == 0 & Yajta == 0)
+data_bloated %>% filter(JaCoCo == 0 & JCov == 1 & JVM == 0 & Yajta == 0)
+data_bloated %>% filter(JaCoCo == 0 & JCov == 0 & JVM == 1 & Yajta == 0)
+data_bloated %>% filter(JaCoCo == 0 & JCov == 0 & JVM == 0 & Yajta == 1)
+
+data_bloated %>% filter(JaCoCo == 0 & JCov == 1 & JVM == 0 & Yajta == 0)
+
+#list of columns
+correctJaCoCo <- data_bloated %>% filter(JaCoCo == 1)
+correctJCov <- data_bloated %>% filter(JCov == 1)
+correctJVM <- data_bloated %>% filter(JVM == 1)
+correctYajta <- data_bloated %>% filter(Yajta == 1)
+
+
+errors <- data_bloated %>% filter(JaCoCo == 0 & JCov == 0 & JVM == 0 & Yajta == 0)
+
+ven_in <- list(correctJaCoCo$id, correctJCov$id, correctJVM$id, correctYajta$id)
+snames = c("JaCoCo","JCov","JVM","Yajta")
+
+
+pdf("venn_trace_tools.pdf")
+venn(
+  ven_in,
+  snames = snames,
+  ilab = TRUE,
+  zcolor = "style",
+  cexil = 1.5,
+  cexsn = 1.5
+)
+dev.off() 
+
+c(TRUE,TRUE,FALSE,FALSE) | c(TRUE, FALSE,TRUE,FALSE)
+
+```
