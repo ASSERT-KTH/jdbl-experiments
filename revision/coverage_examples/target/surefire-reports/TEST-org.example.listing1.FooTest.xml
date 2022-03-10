@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite tests="1" failures="0" name="org.example.listing1.FooTest" time="0.002" errors="0" skipped="0">
+<testsuite tests="1" failures="0" name="org.example.listing1.FooTest" time="0.003" errors="0" skipped="0">
   <properties>
     <property name="idea.version" value="2021.3.2"/>
     <property name="java.runtime.name" value="OpenJDK Runtime Environment"/>
     <property name="java.vm.version" value="14.0.2+12-46"/>
     <property name="sun.boot.library.path" value="/Users/cesarsv/Library/Java/JavaVirtualMachines/openjdk-14.0.2/Contents/Home/lib"/>
-    <property name="maven.multiModuleProjectDirectory" value="/Users/cesarsv/IdeaProjects/empty_project"/>
+    <property name="maven.multiModuleProjectDirectory" value="/Users/cesarsv/IdeaProjects/jdbl-experiments/revision/coverage_examples"/>
     <property name="java.vm.vendor" value="Oracle Corporation"/>
     <property name="java.vendor.url" value="https://java.oracle.com/"/>
     <property name="guice.disable.misplaced.annotation.check" value="true"/>
@@ -14,7 +14,7 @@
     <property name="user.country" value="GB"/>
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
-    <property name="user.dir" value="/Users/cesarsv/IdeaProjects/empty_project"/>
+    <property name="user.dir" value="/Users/cesarsv/IdeaProjects/jdbl-experiments/revision/coverage_examples"/>
     <property name="java.vm.compressedOopsMode" value="Zero based"/>
     <property name="java.runtime.version" value="14.0.2+12-46"/>
     <property name="os.arch" value="x86_64"/>
@@ -58,5 +58,5 @@
     <property name="socksNonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
     <property name="ftp.nonProxyHosts" value="local|*.local|169.254/16|*.169.254/16"/>
   </properties>
-  <testcase classname="org.example.listing1.FooTest" name="test" time="0.002"/>
+  <testcase classname="org.example.listing1.FooTest" name="test" time="0.003"/>
 </testsuite>
