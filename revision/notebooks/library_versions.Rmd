@@ -73,28 +73,16 @@ save_figure <- function(the_ggplot_object, the_name, the_with, the_height){
 data <- read.delim("Data/lib_debloat_status_per_version.csv", sep = ",", header = T, stringsAsFactors = TRUE)
 ```
 
-# Analyze the skeweness of the data
+# Statistical analysis of the skeweness of the data
 
 ```{r}
 summary(data$NbVersions)
 sd(data$NbVersions)
 
-
 skewness(data$NbDebloatedVersions/data$NbVersions)
-
 skewness(data$NbVersions)
-
 agostino.test(data$NbVersions)
-
 agostino.test(data$NbDebloatedVersions/data$NbVersions)
-
-
-data %>% 
-  ggplot(aes(x = NbVersions, y = "libraries")) +
-  geom_boxplot()
-
-
-
 ```
 
 # Plot debloated versions per library
@@ -118,32 +106,42 @@ data %>%
   ylab("# of unique libraries") +
   theme_bw()
 
-
 df_debloat_success <- data %>% 
-  mutate(NbNotDebloatedVersions = NbVersions - NbDebloatedVersions) %>%
+  mutate(NbNotDebloatedVersions = NbVersions - NbDebloatedPassVersions) %>%
   mutate(ID = row_number()) %>% 
-  select(Library, ID, NbDebloatedVersions) %>%
-  rename(Versions = NbDebloatedVersions) %>% 
-  mutate(`Debloating result` = "Success")
+  select(Library, ID, NbDebloatedPassVersions) %>%
+  rename(Versions = NbDebloatedPassVersions) %>% 
+  mutate(`Debloating result` = "Debloating success")
   
-df_debloat_fail <- data %>% 
+df_debloat_fail_jar <- data %>% 
   mutate(NbNotDebloatedVersions = NbVersions - NbDebloatedVersions) %>%
   mutate(ID = row_number()) %>% 
   select(Library, ID, NbNotDebloatedVersions) %>% 
   rename(Versions = NbNotDebloatedVersions) %>% 
-  mutate(`Debloating result` = "Fail")
+  mutate(`Debloating result` = "No debloated JAR")
 
 
-barplot_versions_debloat_per_lib <- rbind(df_debloat_success, df_debloat_fail) %>% 
+df_debloat_fail_test <- data %>% 
+  mutate(NbNotDebloatedVersions = NbVersions - NbDebloatedPassVersions) %>%
+  mutate(ID = row_number()) %>% 
+  select(Library, ID, NbNotDebloatedVersions) %>% 
+  rename(Versions = NbNotDebloatedVersions) %>% 
+  mutate(`Debloating result` = "Not all tests passs")
+
+
+
+barplot_versions_debloat_per_lib <- rbind(df_debloat_success, df_debloat_fail_jar, df_debloat_fail_test) %>% 
   ggplot(aes(x = reorder(ID,(-Versions)), y = Versions, fill = `Debloating result`)) + 
   geom_bar(stat = "identity") +
   scale_x_discrete(breaks=c(71,94),
-        labels=c(1, 95)) +
+        labels=c(1, 94)) +
   xlab("unique libraries") +
   ylab("\\# of versions") +
+  scale_fill_manual(values = c("#05CD6B", "#FF215D", "#ff6891")) +
   theme_bw() +
-  theme(legend.position = "top", legend.direction = "horizontal")
-  # theme(axis.text.x = element_text(angle = 90)) 
+  theme(legend.position = "top", legend.direction = "horizontal", legend.title = element_blank())
+  # theme(axis.text.x = element_text(angle = 90))
+barplot_versions_debloat_per_lib
 
 barplot_versions_debloat_per_lib
 save_figure(barplot_versions_debloat_per_lib, "Figures/barplot_versions_debloat_per_lib", 5.5, 3.5)

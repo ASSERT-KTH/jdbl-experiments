@@ -3,6 +3,8 @@ title: "R Notebook"
 output: html_notebook
 ---
 
+# Spearman correlation tests 
+
 ```{r}
 size_original <- c(
   18050.28,
@@ -24,10 +26,7 @@ size_original <- c(
   22.72
 )
 
-
-
-
-size_debloated <- c(66.4,
+size_debloated_jdbl <- c(66.4,
                     66.8,
                     42.2,
                     73,
@@ -46,7 +45,28 @@ size_debloated <- c(66.4,
                     2.9)
 
 
-cor.test(size_original, size_debloated, method = "spearman")
+
+size_debloated_jshrink <- c(2.0,
+                    20.2,
+                    17.5,
+                    29.8,
+                    18.5,
+                    23.9,
+                    17.5,
+                    22.1,
+                    46.8,
+                    11.5,
+                    6.8,
+                    5.5,
+                    11.3,
+                    10.2,
+                    5.5,
+                    6.6,
+                    1.7)
+
+
+cor.test(size_original, size_debloated_jdbl, method = "spearman")
+cor.test(size_original, size_debloated_jshrink, method = "spearman")
 
 ```
 

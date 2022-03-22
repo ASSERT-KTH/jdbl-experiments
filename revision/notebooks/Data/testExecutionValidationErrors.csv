@@ -1,0 +1,11 @@
+"Library","Version","original","JCov","JaCoCo","JVM","Yajta","validation"
+"apache/sling-org-apache-sling-api","2.16.0",119,0,0,0,0,0
+"jline/jline2","2.6",43,43,43,0,43,0
+"joel-costigliola/assertj-core","3.0.0",6530,6531,6531,0,6531,6531
+"liudongdong0909/mybatis-generator-core-fix","1.3.2",26,26,26,0,26,0
+"logstash/logstash-logback-encoder","4.8",208,208,208,0,0,0
+"logstash/logstash-logback-encoder","4.11",242,205,242,0,0,0
+"logstash/logstash-logback-encoder","5.2",277,236,277,0,0,0
+"vert-x3/vertx-unit","3.7.0",282,282,246,0,282,0
+"vert-x3/vertx-unit","3.6.3",282,282,282,0,0,0
+"vert-x3/vertx-unit","3.8.3",282,282,282,0,246,0

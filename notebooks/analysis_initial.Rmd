@@ -20,15 +20,16 @@ source("header.R")
 rm(list=ls())
 ```
 
-# Prepare the Dataset 
+# Prepare the Dataset
 
 ```{r echo=FALSE}
 # Read the data
-raw_results <- read.delim("Data/raw_results_final_3.csv", sep = ",", header = T, stringsAsFactors = TRUE)
+# raw_results <- read.delim("Data/raw_results_final_3.csv", sep = ",", header = T, stringsAsFactors = TRUE)
+raw_results <- read.delim("Data/final_results_revision.csv", sep = ",", header = T, stringsAsFactors = TRUE)
 
 # Prepare the data
 results <- raw_results %>%
-  filter(ID != "False") %>% 
+  filter(ID != "False") %>%  
   # Create Lib, Lib.gav, and Client variables
   mutate(Lib = paste(Lib.groupId, Lib.artifactId, sep = ":")) %>% 
   mutate(Lib.av = paste(Lib.artifactId, Lib.version, sep = ":")) %>% 
@@ -47,6 +48,38 @@ colnames(results)
 # raw_results %>% filter(Nb.Dependenies == 1) %>% select(ID) %>% distinct()
 # raw_results %>% filter(Nb.Dependenies > 1) %>% select(ID) %>% distinct()
 ```
+
+
+```{r}
+'%!in%' <- function(x,y)!('%in%'(x,y))
+results <- results %>% filter(ID %!in% c("apache_sling-org-apache-sling-api_2.16.0", 
+                             "jline_jline2_2.6", 
+                             "liudongdong0909_mybatis-generator-core-fix_1.3.2",
+                             "logstash_logstash-logback-encoder_4.8",
+                             "logstash_logstash-logback-encoder_4.11",
+                             "logstash_logstash-logback-encoder_5.3",
+                             "vert-x3_vertx-unit_3.7.0",
+                             "vert-x3_vertx-unit_3.6.3",
+                             "vert-x3_vertx-unit_3.8.3"))
+
+results <- results %>% distinct()
+View(results)
+```
+
+
+## Coverage
+
+```{r}
+class_coverage <- results %>% 
+  select(ID, Nb.class.original, Nb.debloated.classes) %>% 
+  mutate(Lib.classes.coverage = (Nb.class.original - Nb.debloated.classes)*100/Nb.class.original) %>% 
+  distinct()
+
+summary(class_coverage$Lib.classes.coverage)
+```
+
+
+
 
 ## Total unique Lib GAVs:
 
@@ -94,8 +127,7 @@ debloat_effectiveness_stacked_barplot
 save_figure(debloat_effectiveness_stacked_barplot, "Figures/debloat_effectiveness_stacked_barplot", 6, 2)
 ```
 
-For the rest of the analysis, we exclude the libs for which the debloat fail.
-The current number of Libs, Versions, and Clients in the dataset are:
+For the rest of the analysis, we exclude the libs for which the debloat fail. The current number of Libs, Versions, and Clients in the dataset are:
 
 ```{r echo=FALSE, warning=FALSE}
 
@@ -106,6 +138,7 @@ results %>% select(Lib) %>% distinct() %>% count()
 results %>% select(Lib.gav) %>% distinct() %>% count()
 results %>% select(Client) %>% distinct() %>% count()
 ```
+
 # Distribution of versions per library
 
 ```{r echo=FALSE}
@@ -154,11 +187,9 @@ results %>%
   arrange(desc(Nb.Clients))
 ```
 
-
 # Libs test results (global)
 
-
-## Percentage of tests with errors 
+## Percentage of tests with errors
 
 ```{r}
 results_debloat_errors <- results %>% 
@@ -174,6 +205,7 @@ perc_errors <- (sum_errors) * 100/sum_passing
 perc_errors
 
 ```
+
 ## Number of tests with failures
 
 ```{r}
@@ -209,7 +241,6 @@ debloat_nb_test_errors_failures_barplot
 save_figure(debloat_nb_test_errors_failures_barplot, "Figures/debloat_nb_test_errors_failures_stacked_barplot", 6, 2)
 ```
 
-
 ```{r}
 df <- data.frame( `Test result`= c("Not all pass", "All pass"), n = c(26, 226))
 
@@ -239,9 +270,6 @@ debloat_nb_test_errors_failures_barplot <-
 debloat_nb_test_errors_failures_barplot
 save_figure(debloat_nb_test_errors_failures_barplot, "Figures/debloat_nb_test_errors_failures_stacked_barplot", 6, 2)
 ```
-
-
-
 
 ## Libraries with Debloat Errors or Failures
 
@@ -375,6 +403,7 @@ lib_classes_beanplot <- beanplot(
 legend("topright", bty="n", c("\\#Classes original", "\\#Classes debloated"),
        fill = c("#ffc61e", "#a6761d"))
 ```
+
 ## Dependency methods beanplot
 
 ```{r}
@@ -422,6 +451,8 @@ data <- results %>%
   gather(PercBloatClassesLib, PercBloatClassesDeps, -ID) %>% 
   rename(Type = PercBloatClassesLib, Perc = PercBloatClassesDeps)
 
+summary(data$Perc)
+
 tikz(file = "Figures/bloat_libs_deps_bean.tex", width = 4.25, height = 2.75)
 
 bloat_libs_deps_bean <- beanplot(
@@ -449,9 +480,6 @@ dev.off()
   
 ```
 
-
-
-
 ## Library classes area
 
 ```{r}
@@ -478,7 +506,8 @@ data_used$NumID <- c(1:(nrow(data)/2))
 data_bloated <- data %>% filter(`Usage status` == "Bloated")
 data_bloated$NumID <- c((nrow(data)/2):1)
 
-data <- bind_rows(data_used, data_bloated)
+data <- bind_rows(data_bloated, data_used)
+data$`Usage status` <- factor(data$`Usage status`, levels = c("Used", "Bloated"))
 
 lib_classes_area <- data %>% 
   ggplot(aes(x = NumID, y = Perc, fill = `Usage status`)) +
@@ -486,12 +515,12 @@ lib_classes_area <- data %>%
   xlab(NULL) +
   ylab("\\% Classes") +
   # scale_y_continuous(labels = scales::percent) +
-  # theme( legend.title = element_blank()) +
+  theme( legend.title = element_blank()) +
   scale_y_continuous(labels = function(x) paste0(x*100, "\\%")) +
-  scale_x_continuous(limits = c(0, 119), 
-                     breaks=c(1, 25 , 50, 75, 100, (nrow(data)/2)),
-                     labels=c("1", "25", "50", "75", "100", "119")) +
-  scale_fill_manual(values = c("#a6761d", "#ffc61e")) +
+  scale_x_continuous(limits = c(0, 141), 
+                     breaks=c(1, 25 , 50, 75, 100, 122, (nrow(data)/2)),
+                     labels=c("1", "25", "50", "75", "100", "125", "141")) +
+  scale_fill_manual(values = c("#03E888", "#FF2E3A")) +
   theme(
         # panel.grid.major.y = element_blank()
         # panel.grid.major.x = element_blank(),
@@ -500,9 +529,12 @@ lib_classes_area <- data %>%
         )
 lib_classes_area
 save_figure(lib_classes_area, "Figures/lib_classes_area", 6, 2)
+
+#03E888
+#FF2E3A
 ```
 
-## Library methods barplot 
+## Library methods barplot
 
 ```{r}
 data2 <- results %>% 
@@ -577,8 +609,7 @@ save_figure(lib_methods_area, "Figures/lib_methods_area", 6, 1.5)
 
 ```
 
-
-## Dependency classes area 
+## Dependency classes area
 
 ```{r}
 data <- results %>% 
@@ -625,8 +656,7 @@ deps_classes_area
 save_figure(deps_classes_area, "Figures/deps_classes_area", 6, 2)
 ```
 
-
-## Dependency methods barplot 
+## Dependency methods barplot
 
 ```{r}
 data2 <- results %>% 
@@ -705,7 +735,7 @@ results %>%
 
 ```
 
-## Dependency methods area 
+## Dependency methods area
 
 ```{r}
 data <- results %>% 
@@ -800,8 +830,6 @@ sum(data$Nb.debloated.methods)*100/sum(data$Nb.method.original)
 
 ```
 
-
-
 # Lib coverage
 
 ```{r echo=FALSE}
@@ -836,8 +864,6 @@ c <- data %>% select(ID, Perc.bloated.classes, Lib.coverage) %>% mutate(Type = "
 classes_coverage + methods_coverage + plot_layout(ncol = 1)
 ```
 
-
-
 # Size of the JAR
 
 ```{r echo=FALSE}
@@ -870,62 +896,110 @@ save_figure(lib_size_violinplot, "Figures/lib_size_violinplot", 6, 2)
 
 ```
 
-
 <!-- ```{r echo=FALSE} -->
+
 <!-- boxplot_libs_classes_used <- results %>% -->
+
 <!--   select(Lib_gav, nbLibUsedClasses) %>%  -->
+
 <!--   distinct() %>% -->
+
 <!--   ggplot(aes(x = "Libs", y = nbLibUsedClasses)) + -->
+
 <!--   geom_violin(fill="dodgerblue3") + -->
+
 <!--   geom_boxplot(width = 0.05) + -->
+
 <!--   ylab("#Classes used") + -->
+
 <!--   xlab(NULL) + -->
+
 <!--   scale_y_continuous( -->
+
 <!--     breaks = c(0, 1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000), -->
+
 <!--     trans = "log1p" -->
+
 <!--   ) + -->
+
 <!--   coord_flip() -->
 
 <!-- boxplot_libs_classes_bloated <- results %>%  -->
+
 <!--   select(Lib_gav, nbLibBloatedClasses) %>%  -->
+
 <!--   distinct() %>% -->
+
 <!--   ggplot(aes(x = "Libs", y = nbLibBloatedClasses)) + -->
+
 <!--   geom_violin(fill="dodgerblue3") + -->
+
 <!--   geom_boxplot(width = 0.05) + -->
+
 <!--   ylab("#Classes bloated") + -->
+
 <!--   xlab(NULL) + -->
+
 <!--   scale_y_continuous( -->
+
 <!--     breaks = c(0, 1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000), -->
+
 <!--     trans = "log1p" -->
+
 <!--   ) + -->
+
 <!--   coord_flip() -->
 
 <!-- boxplot_libs_methods_used <- results %>%  -->
+
 <!--   select(Lib_gav, nbLibUsedMethods) %>%  -->
+
 <!--   distinct() %>%  -->
+
 <!--   ggplot(aes(x = "Libs", y = nbLibUsedMethods)) + -->
+
 <!--   geom_violin(fill="goldenrod") + -->
+
 <!--   geom_boxplot(width = 0.05) + -->
+
 <!--   ylab("#Methods used") + -->
+
 <!--   xlab(NULL) + -->
+
 <!--   scale_y_continuous( -->
+
 <!--     breaks = c(0, 1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000), -->
+
 <!--     trans = "log1p" -->
+
 <!--   ) + -->
+
 <!--   coord_flip() -->
 
 <!-- boxplot_libs_methods_bloated <- results %>%  -->
+
 <!--   select(Lib_gav, nbLibBloatedMethods) %>%  -->
+
 <!--   distinct() %>%  -->
+
 <!--   ggplot(aes(x = "Libs", y = nbLibBloatedMethods)) + -->
+
 <!--   geom_violin(fill="goldenrod") + -->
+
 <!--   geom_boxplot(width = 0.05) + -->
+
 <!--   ylab("#Methods bloated") + -->
+
 <!--   xlab(NULL) + -->
+
 <!--   scale_y_continuous( -->
+
 <!--     breaks = c(0, 1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000), -->
+
 <!--     trans = "log1p" -->
+
 <!--   ) + -->
+
 <!--   coord_flip() -->
 
 <!-- debloat_classes_methods_libs <- boxplot_libs_classes_used + boxplot_libs_methods_used + boxplot_libs_classes_bloated + boxplot_libs_methods_bloated -->
@@ -933,6 +1007,7 @@ save_figure(lib_size_violinplot, "Figures/lib_size_violinplot", 6, 2)
 <!-- debloat_classes_methods_libs -->
 
 <!-- ggsave(filename = "Figures/analysis_initial/debloat_classes_methods_libs.pdf", plot = debloat_classes_methods_libs,  -->
+
 <!--        height = 4, width = 7,  units = c("in"), device=cairo_pdf) -->
 
 <!-- ``` -->
@@ -940,60 +1015,109 @@ save_figure(lib_size_violinplot, "Figures/lib_size_violinplot", 6, 2)
 <!-- ## Dependencies -->
 
 <!-- ```{r echo=FALSE} -->
+
 <!-- boxplot_deps_classes_used <- results %>%  -->
+
 <!--   select(Lib_gav, nbDepsUsedClasses) %>%  -->
+
 <!--   distinct() %>%  -->
+
 <!--   ggplot(aes(x = "Deps", y = nbDepsUsedClasses)) + -->
+
 <!--   geom_violin(fill="dodgerblue3") + -->
+
 <!--   geom_boxplot(width = 0.05) + -->
+
 <!--   ylab("#Classes used") + -->
+
 <!--   xlab(NULL) + -->
+
 <!--   scale_y_continuous( -->
+
 <!--     breaks = c(0, 1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000), -->
+
 <!--     trans = "log1p" -->
+
 <!--   ) + -->
+
 <!--   coord_flip() -->
 
 <!-- boxplot_deps_classes_bloated <- results %>%  -->
+
 <!--   select(Lib_gav, nbDepsBloatedClasses) %>%  -->
+
 <!--   distinct() %>%  -->
+
 <!--   ggplot(aes(x = "Deps", y = nbDepsBloatedClasses)) + -->
+
 <!--   geom_violin(fill="dodgerblue3") + -->
+
 <!--   geom_boxplot(width = 0.05) + -->
+
 <!--   ylab("#Classes bloated") + -->
+
 <!--   xlab(NULL) + -->
+
 <!--   scale_y_continuous( -->
+
 <!--     breaks = c(0, 1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000), -->
+
 <!--     trans = "log1p" -->
+
 <!--   ) + -->
+
 <!--   coord_flip() -->
 
 <!-- boxplot_deps_methods_used <- results %>%  -->
+
 <!--   select(Lib_gav, nbDepsUsedMethods) %>%  -->
+
 <!--   distinct() %>%  -->
+
 <!--   ggplot(aes(x = "Deps", y = nbDepsUsedMethods)) + -->
+
 <!--   geom_violin(fill="goldenrod") + -->
+
 <!--   geom_boxplot(width = 0.05) + -->
+
 <!--   ylab("#Methods used") + -->
+
 <!--   xlab(NULL) + -->
+
 <!--   scale_y_continuous( -->
+
 <!--     breaks = c(0, 1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000), -->
+
 <!--     trans = "log1p" -->
+
 <!--   ) + -->
+
 <!--   coord_flip() -->
 
 <!-- boxplot_deps_methods_bloated <- results %>%  -->
+
 <!--   select(Lib_gav, nbDepsBloatedMethods) %>%  -->
+
 <!--   distinct() %>%  -->
+
 <!--   ggplot(aes(x = "Deps", y = nbDepsBloatedMethods)) + -->
+
 <!--    geom_violin(fill="goldenrod") + -->
+
 <!--   geom_boxplot(width = 0.05) + -->
+
 <!--   ylab("#Methods bloated") + -->
+
 <!--   xlab(NULL) + -->
+
 <!--   scale_y_continuous( -->
+
 <!--     breaks = c(0, 1, 10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000, 1000000000), -->
+
 <!--     trans = "log1p" -->
+
 <!--   ) + -->
+
 <!--   coord_flip() -->
 
 <!-- debloat_classes_methods_deps <- boxplot_deps_classes_used + boxplot_deps_methods_used + boxplot_deps_classes_bloated + boxplot_deps_methods_bloated  -->
@@ -1001,6 +1125,7 @@ save_figure(lib_size_violinplot, "Figures/lib_size_violinplot", 6, 2)
 <!-- debloat_classes_methods_deps -->
 
 <!-- ggsave(filename = "Figures/analysis_initial/debloat_classes_methods_deps.pdf", plot = debloat_classes_methods_deps,  -->
+
 <!--        height = 4, width = 7,  units = c("in"), device=cairo_pdf) -->
 
 <!-- ``` -->
@@ -1036,7 +1161,6 @@ summary(b)
 ggsave(filename = "Figures/analysis_initial/violinplot_classes.pdf", plot = violinplot_classes,
        height = 5, width = 7,  units = c("in"), device=cairo_pdf)
 ```
-
 
 ```{r echo=FALSE}
 
@@ -1087,7 +1211,6 @@ barplot_perc_reduction_classes <- perc_reduction_classes %>%
 
 barplot_perc_reduction_classes
 ```
-
 
 # Libs methods
 
@@ -1142,7 +1265,6 @@ ggsave(filename = "Figures/analysis_initial/barplot_methods.pdf", plot = barplot
 
 Percentage of methods reduced per library.
 
-
 ```{r echo=FALSE}
 perc_reduction_methods <- results %>% 
     mutate(Nb_methods_debloated = Nb_methods_original - Nb_debloated_methods) %>% 
@@ -1167,8 +1289,7 @@ barplot_perc_reduction_methods <- perc_reduction_methods %>%
 barplot_perc_reduction_methods
 ```
 
-
-There are some libs, such as DiUS_java-faker, for which the #Methods is equal zero. These are those libraries:
+There are some libs, such as DiUS_java-faker, for which the \#Methods is equal zero. These are those libraries:
 
 ```{r echo=FALSE, warning=FALSE}
 results %>% 
@@ -1176,7 +1297,6 @@ results %>%
   filter(Nb_methods_original == 0) %>% 
   distinct(Lib_gav)
 ```
-
 
 # Client plots
 
@@ -1219,7 +1339,6 @@ print("#Clients debloated wigh zero test fail and at least one debloated test fa
 results %>% filter(Client_debloat_test_failing != 0 && Client_debloat_test_failing != 0) %>% nrow()
 ```
 
-
 ```{r echo=FALSE}
 print("#Clients original with at least one test pass: ")
 results %>% filter(Client_original_test_passing > 0) %>% nrow()
@@ -1238,7 +1357,7 @@ results %>% filter(Client_original_test_passing != 0 && Client_debloat_test_pass
 
 ```
 
-## Violin plots 
+## Violin plots
 
 ```{r echo=FALSE}
 results_errors <- results %>% 
@@ -1309,7 +1428,6 @@ violinplot_passs <- results_passs %>%
 ggsave(filename = "Figures/analysis_initial/violinplot_passs.pdf", plot = violinplot_passs,
        height = 5, width = 7,  units = c("in"), device=cairo_pdf)
 ```
-
 
 ```{r echo=FALSE}
 violinplot_errors + violinplot_fails + violinplot_passs + plot_layout(ncol = 1)
@@ -1389,7 +1507,6 @@ barplot_passs <- results_passs %>%
 ggsave(filename = "Figures/analysis_initial/barplot_passs.pdf", plot = barplot_passs, 
        height = 12, width = 10,  units = c("in"), device=cairo_pdf)
 ```
-
 
 ```{r echo=FALSE}
 barplot_errors + barplot_fails + barplot_passs + plot_layout(ncol = 1)

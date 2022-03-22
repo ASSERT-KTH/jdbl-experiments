@@ -1,0 +1,1293 @@
+@inproceedings{Quach2017,
+ author = {Quach, Anh and Erinfolami, Rukayat and Demicco, David and Prakash, Aravind},
+ title = {A Multi-OS Cross-Layer Study of Bloating in User Programs, Kernel and Managed Execution Environments},
+ booktitle = {Proceedings of the 2017 Workshop on Forming an Ecosystem Around Software Transformation},
+ series = {FEAST '17},
+ year = {2017},
+ isbn = {978-1-4503-5395-3},
+ location = {Dallas, Texas, USA},
+ pages = {65--70},
+ numpages = {6},
+ url = {http://doi.acm.org/10.1145/3141235.3141242},
+ doi = {10.1145/3141235.3141242},
+ acmid = {3141242},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+}
+
+@article{Holzmann2015,
+author={G. J. {Holzmann}},
+journal={IEEE Software},
+title={{Code Inflation}},
+year={2015},
+volume={32},
+number={2},
+pages={10-13},
+keywords={software engineering;Unix;code inflation;software applications;Unix /bin/true command;Encoding;Software development;Unix;Codes;software development;true command;code size;Unix},
+doi={10.1109/MS.2015.40},
+ISSN={0740-7459},
+month={Mar},}
+
+@article{Schulte2014,
+author = {Schulte, Eric and Fry, Zachary P. and Fast, Ethan and Weimer, Westley and Forrest, Stephanie},
+title = {Software Mutational Robustness},
+year = {2014},
+issue_date = {September 2014},
+publisher = {Kluwer Academic Publishers},
+address = {USA},
+volume = {15},
+number = {3},
+issn = {1389-2576},
+url = {https://doi-org.focus.lib.kth.se/10.1007/s10710-013-9195-8},
+doi = {10.1007/s10710-013-9195-8},
+journal = {Genetic Programming and Evolvable Machines},
+month = sep,
+pages = {281–312},
+numpages = {32},
+keywords = {Proactive diversity, Genetic programming, Mutational robustness, Mutation testing, N-version programming, Neutral landscapes}
+}
+
+
+
+@inproceedings{Douskos2011,
+author = {Sidiroglou-Douskos, Stelios and Misailovic, Sasa and Hoffmann, Henry and Rinard, Martin},
+title = {Managing Performance vs. Accuracy Trade-Offs with Loop Perforation},
+year = {2011},
+isbn = {9781450304436},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi-org.focus.lib.kth.se/10.1145/2025113.2025133},
+doi = {10.1145/2025113.2025133},
+booktitle = {Proceedings of the 19th ACM SIGSOFT Symposium and the 13th European Conference on Foundations of Software Engineering},
+pages = {124–134},
+numpages = {11},
+keywords = {quality of service, loop perforation, profiling},
+location = {Szeged, Hungary},
+series = {ESEC/FSE ’11}
+}
+
+@inproceedings{Oberheide2008,
+author = {Oberheide, Jon and Cooke, Evan and Jahanian, Farnam},
+title = {CloudAV: N-Version Antivirus in the Network Cloud},
+year = {2008},
+publisher = {USENIX Association},
+address = {USA},
+booktitle = {Proceedings of the 17th Conference on Security Symposium},
+pages = {91–106},
+numpages = {16},
+location = {San Jose, CA},
+series = {SS’08}
+}
+
+@article{Mitchell2009,
+  title={Four trends leading to Java runtime bloat},
+  author={Mitchell, Nick and Schonberg, Edith and Sevitsky, Gary},
+  journal={IEEE software},
+  volume={27},
+  number={1},
+  pages={56--63},
+  year={2009},
+  publisher={IEEE}
+}
+
+@article{Baudry2015,
+author = {Baudry, Benoit and Monperrus, Martin},
+title = {The Multiple Facets of Software Diversity: Recent Developments in Year 2000 and Beyond},
+year = {2015},
+issue_date = {September 2015},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {48},
+number = {1},
+issn = {0360-0300},
+url = {https://doi-org.focus.lib.kth.se/10.1145/2807593},
+doi = {10.1145/2807593},
+journal = {ACM Comput. Surv.},
+month = sep,
+articleno = {Article 16},
+numpages = {26},
+keywords = {program transformation, Software diversity, design principles}
+}
+
+@article{Mitchell2010, author={N. {Mitchell} and E. {Schonberg} and G. {Sevitsky}}, journal={IEEE Software}, title={Four Trends Leading to Java Runtime Bloat}, year={2010}, volume={27}, number={1}, pages={56-63},}
+
+
+@InProceedings{Guoqing2013,
+author="Xu, Guoqing",
+editor="Castagna, Giuseppe",
+title="CoCo: Sound and Adaptive Replacement of Java Collections",
+booktitle="ECOOP 2013 -- Object-Oriented Programming",
+year="2013",
+publisher="Springer Berlin Heidelberg",
+address="Berlin, Heidelberg",
+pages="1--26",
+abstract="Inefficient use of Java containers is an important source of run-time inefficiencies in large applications. This paper presents an application-level dynamic optimization technique called CoCo, that exploits algorithmic advantages of Java collections to improve performance. CoCo dynamically identifies optimal Java collection objects and safely performs run-time collection replacement, both using pure Java code. At the heart of this technique is a framework that abstracts container elements to achieve efficiency and that concretizes abstractions to achieve soundness. We have implemented part of the Java collection framework as instances of this framework, and developed a static CoCo compiler to generate Java code that performs optimizations. This work is the first step towards achieving the ultimate goal of automatically optimizing away semantic inefficiencies.",
+isbn="978-3-642-39038-8"
+}
+
+
+@inproceedings{Basios2018,
+author = {Basios, Michail and Li, Lingbo and Wu, Fan and Kanthan, Leslie and Barr, Earl T.},
+title = {Darwinian Data Structure Selection},
+year = {2018},
+isbn = {9781450355735},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi-org.focus.lib.kth.se/10.1145/3236024.3236043},
+doi = {10.1145/3236024.3236043},
+booktitle = {Proceedings of the 2018 26th ACM Joint Meeting on European Software Engineering Conference and Symposium on the Foundations of Software Engineering},
+pages = {118–128},
+numpages = {11},
+keywords = {Software Analysis and Optimisation, Search-based Software Engineering, Genetic Improvement, Data Structure Optimisation},
+location = {Lake Buena Vista, FL, USA},
+series = {ESEC/FSE 2018}
+}
+
+
+
+
+@inproceedings{Sharif2018,
+ author = {Sharif, Hashim and Abubakar, Muhammad and Gehani, Ashish and Zaffar, Fareed},
+ title = {TRIMMER: Application Specialization for Code Debloating},
+ booktitle = {Proceedings of the 33rd ACM/IEEE International Conference on Automated Software Engineering},
+ series = {ASE 2018},
+ year = {2018},
+ isbn = {978-1-4503-5937-5},
+ location = {Montpellier, France},
+ pages = {329--339},
+ numpages = {11},
+ url = {http://doi.acm.org/10.1145/3238147.3238160},
+ doi = {10.1145/3238147.3238160},
+ acmid = {3238160},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+ keywords = {Code debloating, LLVM, Program specialization, Static analysis},
+}
+
+@article{Foo2019,
+  title={The Dynamics of Software Composition Analysis},
+  author={Foo, Darius and Yeo, Jason and Xiao, Hao and Sharma, Asankhaya},
+  series = {ASE 2019},
+  journal={Poster at the 34th ACM/IEEE International Conference on Automated Software Engineering},
+  year={2019}
+}
+
+
+@article{Vazquez2019,
+title = "Slimming Javascript Applications: An Approach for Removing Unused Functions From Javascript Libraries",
+journal = "Information and Software Technology",
+volume = "107",
+pages = "18--29",
+year = "2019",
+issn = "0950-5849",
+doi = "https://doi.org/10.1016/j.infsof.2018.10.009",
+url = "http://www.sciencedirect.com/science/article/pii/S0950584918302210",
+author = "H.C. V\'{a}zquez and A. Bergel and S. Vidal and J.A. D\'{i}az Pace and C. Marcos",
+keywords = "Javascript, Unused functions, Library dependencies, Software maintenance, Performance overhead"
+}
+
+@article{Lafortune2004,
+  title={ProGuard},
+  author={Lafortune, Eric},
+  journal={\url{http://proguard.sourceforget.net}},
+  year={2004},
+  volume={},
+  number={},
+  pages={}
+}
+
+@inproceedings{Kalhauge2019,
+  title={Binary Reduction of Dependency Graphs},
+  author={Kalhauge, Christian Gram and Palsberg, Jens},
+  booktitle={Proceedings of the 2019 27th ACM Joint Meeting on European Software Engineering Conference and Symposium on the Foundations of Software Engineering},
+  pages={556--566},
+  publisher={},
+      address={},
+  year={2019}
+}
+
+
+@inproceedings{Ramanathan2020,
+  title={Piranha: Reducing Feature Flag Debt at Uber},
+  author={Ramanathan, Murali Krishna and Clapp, Lazaro and Barik, Rajkishore and Sridharan, Manu},
+  booktitle={Proceedings of the ACM/IEEE 42nd International Conference on Software Engineering: Software Engineering in Practice},
+  pages={221--230},
+  year={2020}
+}
+
+
+@INPROCEEDINGS{Jiang2016,
+author={Y. {Jiang} and D. {Wu} and P. {Liu}},
+booktitle={2016 IEEE 40th Annual Computer Software and Applications Conference (COMPSAC)},
+title={"JRed: Program Customization and Bloatware Mitigation Based on Static Analysis"},
+year={2016},
+volume={1},
+number={},
+pages={12-21},
+keywords={Java;program diagnostics;security of data;software maintenance;software reliability;source code (software);JRE 6 update 45;garbage collection time;memory footprint;code complexity;Soot framework;Java Runtime Environment;interconnected software security;interconnected software reliability;software system maintenance;redundant code;software engineering;static analysis;bloatware mitigation;program customization;JRed;Java;Libraries;Software;Security;Complexity theory;Runtime;Software reliability;Software Analysis;Static Analysis;Bloatware;Program Customization;Java Runtime Environment},
+doi={10.1109/COMPSAC.2016.146},
+ISSN={0730-3157},
+month={June}
+}
+
+
+@ARTICLE{Heath2019,
+       author = {{Heath}, Brian and {Velingker}, Neelay and {Bastani}, Osbert and {Naik}, Mayur},
+        title = "{PolyDroid: Learning-Driven Specialization of Mobile Applications}",
+      journal = {arXiv e-prints},
+     keywords = {Computer Science - Software Engineering},
+         year = 2019,
+        month = feb,
+          eid = {arXiv:1902.09589},
+        pages = {arXiv:1902.09589},
+archivePrefix = {arXiv},
+       eprint = {1902.09589},
+ primaryClass = {cs.SE},
+       adsurl = {https://ui.adsabs.harvard.edu/abs/2019arXiv190209589H},
+      adsnote = {Provided by the SAO/NASA Astrophysics Data System}
+}
+
+
+@inproceedings{Bruce2020,
+  title={JShrink: In-Depth Investigation into Debloating Modern Java Applications},
+  author={Bruce, Bobby R and Zhang, Tianyi and Arora, Jaspreet and Xu, Guoqing Harry and Kim, Miryung},
+  booktitle={Proceedings of the 28th ACM Joint Meeting on European Software Engineering Conference and Symposium on the Foundations of Software Engineering},
+  pages={135--146},
+  publisher={ACM New York, NY, USA},
+  address = {New York, NY, USA},
+  year={2020}
+}
+
+
+
+@article{Haas2020,
+author = {Haas, Roman and Niedermayr, Rainer and Roehm, Tobias and Apel, Sven},
+title = {Is Static Analysis Able to Identify Unnecessary Source Code?},
+year = {2020},
+issue_date = {February 2020},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {29},
+number = {1},
+issn = {1049-331X},
+url = {https://doi-org.focus.lib.kth.se/10.1145/3368267},
+doi = {10.1145/3368267},
+journal = {ACM Trans. Softw. Eng. Methodol.},
+month = jan,
+articleno = {Article 6},
+numpages = {23},
+keywords = {code stability, Unnecessary code, code centrality}
+}
+
+
+
+@INPROCEEDINGS{Jiang2018,
+author={Y. {Jiang} and Q. {Bao} and S. {Wang} and X. {Liu} and D. {Wu}},
+booktitle={2018 IEEE 29th International Symposium on Software Reliability Engineering (ISSRE)},
+title={RedDroid: Android Application Redundancy Customization Based on Static Analysis},
+year={2018},
+volume={},
+number={},
+pages={189-199},
+keywords={Android (operating system);mobile computing;program diagnostics;smart phones;software engineering;RedDroid;Android application redundancy customization;smartphone users;apk file;compile-time redundancy;install-time redundancy;static analysis based approach;software bloat;Redundancy;Smart phones;Software;Libraries;Java;Computer architecture;Static analysis;Lean Software;Software Analysis;Smartphone;Bloatware;Static Analysis;Software Customization;Android},
+publisher = {ACM},
+address = {New York, NY, USA},
+doi={10.1109/ISSRE.2018.00029},
+ISSN={2332-6549},
+month={Oct}}
+
+@inproceedings{Chen2017,
+ author = {Chen, Yurong and Lan, Tian and Venkataramani, Guru},
+ title = {DamGate: Dynamic Adaptive Multi-feature Gating in Program Binaries},
+ booktitle = {Proceedings of the 2017 Workshop on Forming an Ecosystem Around Software Transformation},
+ series = {FEAST '17},
+ year = {2017},
+ isbn = {978-1-4503-5395-3},
+ location = {Dallas, Texas, USA},
+ pages = {23--29},
+ numpages = {7},
+ url = {http://doi.acm.org/10.1145/3141235.3141243},
+ doi = {10.1145/3141235.3141243},
+ acmid = {3141243},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+ keywords = {binary rewriting, de-bloating, feature customization},
+}
+
+
+@inproceedings{Qian2019,
+  title={RAZOR: A Framework for Post-deployment Software Debloating},
+  author={Qian, Chenxiong and Hu, Hong and Alharthi, Mansour and Chung, Pak Ho and Kim, Taesoo and Lee, Wenke},
+  publisher={},
+  address={},
+  booktitle={28th Security Symposium (USENIX)},
+  pages={1733--1750},
+  year={2019}
+}
+
+@inproceedings{Landman2017,
+author = {Landman, Davy and Serebrenik, Alexander and Vinju, Jurgen J.},
+title = {Challenges for Static Analysis of Java Reflection: Literature Review and Empirical Study},
+year = {2017},
+isbn = {9781538638682},
+publisher = {IEEE Press},
+url = {https://doi-org.focus.lib.kth.se/10.1109/ICSE.2017.53},
+doi = {10.1109/ICSE.2017.53},
+booktitle = {Proceedings of the 39th International Conference on Software Engineering},
+pages = {507–518},
+numpages = {12},
+keywords = {static analysis, Java, systematic literature review, empirical study, reflection},
+location = {Buenos Aires, Argentina},
+series = {ICSE'17}
+}
+
+@book{Lindholm2014,
+  title={The Java Virtual Machine Specification},
+  author={Lindholm, Tim and Yellin, Frank and Bracha, Gilad and Buckley, Alex},
+  year={2014},
+  publisher={Pearson Education}
+}
+
+
+@book{Hibbs2009,
+  title={The Art of Lean Software Development: A Practical and Incremental Approach},
+  author={Hibbs, Curt and Jewett, Steve and Sullivan, Mike},
+  year={2009},
+  publisher={"O'Reilly Media, Inc."}
+}
+
+@inproceedings{Bhattacharya2011,
+ author = {Bhattacharya, Suparna and Rajamani, Karthick and Gopinath, K. and Gupta, Manish},
+ title = {The Interplay of Software Bloat, Hardware Energy Proportionality and System Bottlenecks},
+ booktitle = {Proceedings of the 4th Workshop on Power-Aware Computing and Systems},
+ series = {HotPower '11},
+ year = {2011},
+ isbn = {978-1-4503-0981-3},
+ location = {Cascais, Portugal},
+ pages = {1:1--1:5},
+ articleno = {1},
+ numpages = {5},
+ url = {http://doi.acm.org/10.1145/2039252.2039253},
+ doi = {10.1145/2039252.2039253},
+ acmid = {2039253},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+}
+
+
+@inproceedings{Xu2010,
+ author = {Xu, Guoqing and Mitchell, Nick and Arnold, Matthew and Rountev, Atanas and Sevitsky, Gary},
+ title = {Software Bloat Analysis: Finding, Removing, and Preventing Performance Problems in Modern Large-scale Object-oriented Applications},
+ booktitle = {Proceedings of the FSE/SDP Workshop on Future of Software Engineering Research},
+ series = {FoSER'10},
+ year = {2010},
+ isbn = {978-1-4503-0427-6},
+ location = {Santa Fe, New Mexico, USA},
+ pages = {421--426},
+ numpages = {6},
+ url = {http://doi.acm.org/10.1145/1882362.1882448},
+ doi = {10.1145/1882362.1882448},
+ acmid = {1882448},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+ keywords = {performance analysis, performance optimization, runtime bloat},
+}
+
+
+@ARTICLE{Cornelissen2009,
+author={B. {Cornelissen} and A. {Zaidman} and A. {van Deursen} and L. {Moonen} and R. {Koschke}},
+journal={IEEE Transactions on Software Engineering},
+title={A Systematic Survey of Program Comprehension through Dynamic Analysis},
+year={2009},
+volume={35},
+number={5},
+pages={684-702},
+keywords={reverse engineering;software maintenance;system monitoring;program comprehension;dynamic analysis;software maintenance;systematic literature survey;Computer Society;Software maintenance;Software systems;Documentation;Software engineering;Data analysis;Information analysis;Availability;Runtime;Virtual machining;Survey;program comprehension;dynamic analysis.},
+doi={10.1109/TSE.2009.28},
+ISSN={0098-5589},
+month={Sep.},}
+
+@inproceedings{Chen2018,
+ author = {Chen, Boyuan and Song, Jian and Xu, Peng and Hu, Xing and Jiang, Zhen Ming (Jack)},
+ title = {An Automated Approach to Estimating Code Coverage Measures via Execution Logs},
+ booktitle = {Proceedings of the 33rd ACM/IEEE International Conference on Automated Software Engineering},
+ series = {ASE 2018},
+ year = {2018},
+ isbn = {978-1-4503-5937-5},
+ location = {Montpellier, France},
+ pages = {305--316},
+ numpages = {12},
+ url = {http://doi.acm.org/10.1145/3238147.3238214},
+ doi = {10.1145/3238147.3238214},
+ acmid = {3238214},
+ publisher = {ACM},
+ address = {New York, NY, USA},
+ keywords = {empirical studies, logging code, software maintenance, software testing, test coverage},
+}
+
+
+@inproceedings{Han2012,
+ author = {Han, Shi and Dang, Yingnong and Ge, Song and Zhang, Dongmei and Xie, Tao},
+ title = {Performance Debugging in the Large via Mining Millions of Stack Traces},
+ booktitle = {Proceedings of the 34th International Conference on Software Engineering},
+ series = {ICSE '12},
+ year = {2012},
+ isbn = {978-1-4673-1067-3},
+ location = {Zurich, Switzerland},
+ pages = {145--155},
+ numpages = {11},
+ url = {http://dl.acm.org/citation.cfm?id=2337223.2337241},
+ acmid = {2337241},
+ publisher = {IEEE Press},
+ address = {Piscataway, NJ, USA},
+}
+
+
+@InProceedings{Okanovi2016,
+author="Okanovi{\'{c}}, Du{\v{s}}an
+and van Hoorn, Andr{\'e}
+and Heger, Christoph
+and Wert, Alexander
+and Siegl, Stefan",
+editor="Fiems, Dieter
+and Paolieri, Marco
+and Platis, Agapios N.",
+title="Towards Performance Tooling Interoperability: An Open Format for Representing Execution Traces",
+booktitle="Computer Performance Engineering",
+year="2016",
+publisher="Springer International Publishing",
+address="Cham",
+pages="94--108",
+abstract="Execution traces capture information on a software system's runtime behavior, including data on system-internal software control flows, performance, as well as request parameters and values. In research and industrial practice, execution traces serve as an important basis for model-based and measurement-based performance evaluation, e.g., for application performance monitoring (APM), extraction of descriptive and prescriptive models, as well as problem detection and diagnosis. A number of commercial and open-source APM tools that allow the capturing of execution traces within distributed software systems is available. However, each of the tools uses its own (proprietary) format, which means that each approach building on execution trace data is tool-specific.",
+isbn="978-3-319-46433-6"
+}
+
+
+
+@article{Tip2002,
+author = {Tip, Frank and Sweeney, Peter F. and Laffra, Chris and Eisma, Aldo and Streeter, David},
+title = {Practical Extraction Techniques for Java},
+year = {2002},
+issue_date = {November 2002},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {24},
+number = {6},
+issn = {0164-0925},
+url = {https://doi-org.focus.lib.kth.se/10.1145/586088.586090},
+doi = {10.1145/586088.586090},
+journal = {ACM Trans. Program. Lang. Syst.},
+month = nov,
+pages = {625–666},
+numpages = {42},
+keywords = {class hierarchy transformation, packaging, Application extraction, whole-program analysis, call graph construction}
+}
+
+
+@article{schultz2003automatic,
+author = {Schultz, Ulrik P. and Lawall, Julia L. and Consel, Charles},
+title = {Automatic Program Specialization for Java},
+year = {2003},
+issue_date = {July 2003},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {25},
+number = {4},
+issn = {0164-0925},
+url = {https://doi-org.focus.lib.kth.se/10.1145/778559.778561},
+doi = {10.1145/778559.778561},
+abstract = {The object-oriented style of programming facilitates program adaptation and enhances program genericness, but at the expense of efficiency. We demonstrate experimentally that state-of-the-art Java compilers fail to compensate for the use of object-oriented abstractions in the implementation of generic programs, and that program specialization can eliminate a significant portion of these overheads. We present an automatic program specializer for Java, illustrate its use through detailed case studies, and demonstrate experimentally that it can significantly reduce program execution time. Although automatic program specialization could be seen as being subsumed by existing optimizing compiler technology, we show that specialization and compiler optimization are in fact complementary.},
+journal = {ACM Trans. Program. Lang. Syst.},
+month = jul,
+pages = {452–499},
+numpages = {48},
+keywords = {Java, object-oriented languages, optimization, partial evaluation, Automatic program specialization}
+}
+
+
+
+
+
+
+@inproceedings{Tip1999,
+author = {Tip, Frank and Laffra, Chris and Sweeney, Peter F. and Streeter, David},
+title = {Practical Experience with an Application Extractor for Java},
+year = {1999},
+isbn = {1581132387},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi-org.focus.lib.kth.se/10.1145/320384.320414},
+doi = {10.1145/320384.320414},
+booktitle = {Proceedings of the 14th ACM SIGPLAN Conference on Object-Oriented Programming, Systems, Languages, and Applications},
+pages = {292–305},
+numpages = {14},
+location = {Denver, Colorado, USA},
+series = {OOPSLA ’99}
+}
+
+@article{10.1145/320385.320414,
+author = {Tip, Frank and Laffra, Chris and Sweeney, Peter F. and Streeter, David},
+title = {Practical Experience with an Application Extractor for Java},
+year = {1999},
+issue_date = {October 1999},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {34},
+number = {10},
+issn = {0362-1340},
+url = {https://doi-org.focus.lib.kth.se/10.1145/320385.320414},
+doi = {10.1145/320385.320414},
+journal = {SIGPLAN Not.},
+month = oct,
+pages = {292–305},
+numpages = {14}
+}
+
+@inproceedings{Christensen2020,
+  title={$\{$DECAF$\}$: Automatic, Adaptive Debloating and Hardening of $\{$COTS$\}$ Firmware},
+  author={Christensen, Jake and Anghel, Ionut Mugurel and Taglang, Rob and Chiroiu, Mihai and Sion, Radu},
+  booktitle={29th USENIX Security Symposium (USENIX Security 20)},
+  pages={1713--1730},
+  year={2020}
+}
+
+
+@inproceedings{Ahmet2016,
+author = {Celik, Ahmet and Knaust, Alex and Milicevic, Aleksandar and Gligoric, Milos},
+title = {Build System with Lazy Retrieval for Java Projects},
+year = {2016},
+isbn = {9781450342186},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {},
+doi = {},
+booktitle = {Proceedings of the 2016 24th ACM SIGSOFT International Symposium on Foundations of Software Engineering},
+pages = {643–654},
+numpages = {12},
+keywords = {continuous integration service, Build system},
+location = {Seattle, WA, USA},
+series = {FSE'16}
+}
+
+
+@Article{Soto2020,
+author={Soto-Valero, C{\'e}sar
+and Harrand, Nicolas
+and Monperrus, Martin
+and Baudry, Benoit},
+title={A Comprehensive Study of Bloated Dependencies in the Maven Ecosystem},
+journal={Empirical Software Engineering},
+year={2021},
+month={Mar},
+day={25},
+volume={26},
+number={3},
+pages={45},
+abstract={Build automation tools and package managers have a profound influence on software development. They facilitate the reuse of third-party libraries, support a clear separation between the application's code and its external dependencies, and automate several software development tasks. However, the wide adoption of these tools introduces new challenges related to dependency management. In this paper, we propose an original study of one such challenge: the emergence of bloated dependencies. Bloated dependencies are libraries that are packaged with the application's compiled code but that are actually not necessary to build and run the application. They artificially grow the size of the built binary and increase maintenance effort. We propose DepClean, a tool to determine the presence of bloated dependencies in Maven artifacts. We analyze 9,639 Java artifacts hosted on Maven Central, which include a total of 723,444 dependency relationships. Our key result is as follows: 2.7{\%} of the dependencies directly declared are bloated, 15.4{\%} of the inherited dependencies are bloated, and 57{\%} of the transitive dependencies of the studied artifacts are bloated. In other words, it is feasible to reduce the number of dependencies of Maven artifacts to 1/4 of its current count. Our qualitative assessment with 30 notable open-source projects indicates that developers pay attention to their dependencies when they are notified of the problem. They are willing to remove bloated dependencies: 21/26 answered pull requests were accepted and merged by developers, removing 140 dependencies in total: 75 direct and 65 transitive.},
+issn={1573-7616},
+doi={10.1007/s10664-020-09914-8},
+url={https://doi.org/10.1007/s10664-020-09914-8}
+}
+
+
+
+
+
+@inproceedings{Sheng1998,
+author = {Liang, Sheng and Bracha, Gilad},
+title = {Dynamic Class Loading in the Java Virtual Machine},
+year = {1998},
+isbn = {1581130058},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi-org.focus.lib.kth.se/10.1145/286936.286945},
+doi = {10.1145/286936.286945},
+booktitle = {Proceedings of the 13th ACM SIGPLAN Conference on Object-Oriented Programming, Systems, Languages, and Applications},
+pages = {36–44},
+numpages = {9},
+location = {Vancouver, British Columbia, Canada},
+series = {OOPSLA ’98}
+}
+
+@inproceedings {Quach2018,
+author = {Anh Quach and Aravind Prakash and Lok Yan},
+title = {Debloating Software through Piece-Wise Compilation and Loading},
+booktitle = {27th {USENIX} Security Symposium ({USENIX} Security 18)},
+year = {2018},
+isbn = {978-1-939133-04-5},
+address = {Baltimore, MD},
+pages = {869--886},
+url = {https://www.usenix.org/conference/usenixsecurity18/presentation/quach},
+publisher = {{USENIX} Association},
+month = aug,
+}
+
+
+@InProceedings{Li2018,
+author="Sui, Li
+and Dietrich, Jens
+and Emery, Michael
+and Rasheed, Shawn
+and Tahir, Amjed",
+editor="Ryu, Sukyoung",
+title="On the Soundness of Call Graph Construction in the Presence of Dynamic Language Features - A Benchmark and Tool Evaluation",
+booktitle="Programming Languages and Systems",
+year="2018",
+publisher="Springer International Publishing",
+address="Cham",
+pages="69--88",
+abstract="Static program analysis is widely used to detect bugs and vulnerabilities early in the life cycle of software. It models possible program executions without executing a program, and therefore has to deal with both false positives (precision) and false negatives (soundness). A particular challenge for sound static analysis is the presence of dynamic language features, which are prevalent in modern programming languages, and widely used in practice.",
+isbn="978-3-030-02768-1"
+}
+
+@inproceedings{Mastrangelo2015,
+author = {Mastrangelo, Luis and Ponzanelli, Luca and Mocci, Andrea and Lanza, Michele and Hauswirth, Matthias and Nystrom, Nathaniel},
+title = {Use at Your Own Risk: The Java Unsafe API in the Wild},
+year = {2015},
+isbn = {9781450336895},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi-org.focus.lib.kth.se/10.1145/2814270.2814313},
+doi = {10.1145/2814270.2814313},
+booktitle = {Proceedings of the 2015 ACM SIGPLAN International Conference on Object-Oriented Programming, Systems, Languages, and Applications},
+pages = {695–710},
+numpages = {16},
+keywords = {mining, Java, patterns, Maven Central, unsafe, Stack Overflow},
+location = {Pittsburgh, PA, USA},
+series = {OOPSLA 2015}
+}
+
+@article{Kampstra2008,
+  title={Beanplot: A Boxplot Alternative for Visual Comparison of Distributions},
+  author={Kampstra, Peter and others},
+  journal={Journal of Statistical Software},
+  volume={28},
+  number={1},
+  pages={1--9},
+  year={2008},
+  publisher={American Statistical Association}
+}
+
+
+@Article{Horvath2019,
+author={Horv{\'a}th, Ferenc
+and Gergely, Tam{\'a}s
+and Besz{\'e}des, {\'A}rp{\'a}d
+and Tengeri, D{\'a}vid
+and Balogh, Gerg{\H{o}}
+and Gyim{\'o}thy, Tibor},
+title={Code Coverage Differences of Java Bytecode and Source Code Instrumentation Tools},
+journal={Software Quality Journal},
+year={2019},
+month={Mar},
+day={01},
+volume={27},
+number={1},
+pages={79-123},
+abstract={Many software testing fields, like white-box testing, test case generation, test prioritization, and fault localization, depend on code coverage measurement. If used as an overall completeness measure, the minor inaccuracies of coverage data reported by a tool do not matter that much; however, in certain situations, they can lead to serious confusion. For example, a code element that is falsely reported as covered can introduce false confidence in the test. This work investigates code coverage measurement issues for the Java programming language. For Java, the prevalent approach to code coverage measurement is using bytecode instrumentation due to its various benefits over source code instrumentation. As we have experienced, bytecode instrumentation-based code coverage tools produce different results than source code instrumentation-based ones in terms of the reported items as covered. We report on an empirical study to compare the code coverage results provided by tools using the different instrumentation types for Java coverage measurement on the method level. In particular, we want to find out how much a bytecode instrumentation approach is inaccurate compared to a source code instrumentation method. The differences are systematically investigated both in quantitative (how much the outputs differ) and in qualitative terms (what the causes for the differences are). In addition, the impact on test prioritization and test suite reduction---a possible application of coverage measurement---is investigated in more detail as well.},
+issn={1573-1367},
+doi={10.1007/s11219-017-9389-z},
+url={https://doi.org/10.1007/s11219-017-9389-z}
+}
+
+
+@article{Yang2009,
+  title={A Survey of Coverage-Based Testing Tools},
+  author={Yang, Qian and Li, J Jenny and Weiss, David M},
+  journal={The Computer Journal},
+  volume={52},
+  number={5},
+  pages={589--597},
+  year={2009},
+  publisher={OUP}
+}
+
+
+@inproceedings{Laperdrix2019,
+author = {Azad, Babak Amin and Laperdrix, Pierre and Nikiforakis, Nick},
+title = {Less is More: Quantifying the Security Benefits of Debloating Web Applications},
+year = {2019},
+isbn = {9781939133069},
+publisher = {USENIX Association},
+address = {USA},
+booktitle = {Proceedings of the 28th USENIX Conference on Security Symposium},
+pages = {1697–1714},
+numpages = {18},
+location = {Santa Clara, CA, USA},
+series = {SEC’19}
+}
+
+
+@inproceedings{Koo2019,
+author = {Koo, Hyungjoon and Ghavamnia, Seyedhamed and Polychronakis, Michalis},
+title = {Configuration-Driven Software Debloating},
+year = {2019},
+isbn = {9781450362740},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi-org.focus.lib.kth.se/10.1145/3301417.3312501},
+doi = {10.1145/3301417.3312501},
+abstract = {With legitimate code becoming an attack surface due to the proliferation of code reuse attacks, software debloating is an effective mitigation that reduces the amount of instruction sequences that may be useful for an attacker, in addition to eliminating potentially exploitable bugs in the removed code. Existing debloating approaches either statically remove code that is guaranteed to not run (e.g., non-imported functions from shared libraries), or rely on profiling with realistic workloads to pinpoint and keep only the subset of code that was executed.In this work, we explore an alternative configuration-driven software debloating approach that removes feature-specific code that is exclusively needed only when certain configuration directives are specified---which are often disabled by default. Using a semi-automated approach, our technique identifies libraries solely needed for the implementation of a particular functionality and maps them to certain configuration directives. Based on this mapping, feature-specific libraries are not loaded at all if their corresponding directives are disabled. The results of our experimental evaluation with Nginx, VSFTPD, and OpenSSH show that using the default configuration in each case, configuration-driven debloating can remove 77\% of the code for Nginx, 53\% for VSFTPD, and 20\% for OpenSSH, which represent a significant attack surface reduction.},
+booktitle = {Proceedings of the 12th European Workshop on Systems Security},
+articleno = {9},
+numpages = {6},
+location = {Dresden, Germany},
+series = {EuroSec '19}
+}
+
+@Article{Spinellis2021,
+author={Gkortzis, Antonios
+and Feitosa, Daniel
+and Spinellis, Diomidis},
+title={Software Reuse Cuts Both Ways: An Empirical Analysis of Its Relationship With Security Vulnerabilities},
+journal={Journal of Systems and Software},
+year={2021},
+month={Feb},
+day={01},
+volume={172},
+pages={110653},
+keywords={Software reuse; Security vulnerabilities; Case study; Open-source software},
+abstract={Software reuse is a widely adopted practice among both researchers and practitioners. The relation between security and reuse can go both ways: a system can become more secure by relying on mature dependencies, or more insecure by exposing a larger attack surface via exploitable dependencies. To follow up on a previous study and shed more light on this subject, we further examine the association between software reuse and security threats. In particular, we empirically investigate 1244 open-source projects in a multiple-case study to explore and discuss the distribution of security vulnerabilities between the code created by a development team and the code reused through dependencies. For that, we consider both potential vulnerabilities, as assessed through static analysis, and disclosed vulnerabilities, reported in public databases. The results suggest that larger projects in size are associated with an increase on the amount of potential vulnerabilities in both native and reused code. Moreover, we found a strong correlation between a higher number of dependencies and vulnerabilities. Based on our empirical investigation, it appears that source code reuse is neither a silver bullet to combat vulnerabilities nor a frightening werewolf that entail an excessive number of them.},
+issn={0164-1212},
+url={https://www.sciencedirect.com/science/article/pii/S0164121220301199}
+}
+
+@ARTICLE{Zhong2019,
+  author={Zhong, Hao and Mei, Hong},
+  journal={IEEE Transactions on Software Engineering},
+  title={An Empirical Study on API Usages},
+  year={2019},
+  volume={45},
+  number={4},
+  pages={319-334},}
+
+
+@inproceedings{Chen2020,
+author = {Chen, Lingchao and Hassan, Foyzul and Wang, Xiaoyin and Zhang, Lingming},
+title = {Taming Behavioral Backward Incompatibilities via Cross-Project Testing and Analysis},
+year = {2020},
+isbn = {9781450371216},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi-org.focus.lib.kth.se/10.1145/3377811.3380436},
+doi = {10.1145/3377811.3380436},
+abstract = {In modern software development, software libraries play a crucial role in reducing software development effort and improving software quality. However, at the same time, the asynchronous upgrades of software libraries and client software projects often result in incompatibilities between different versions of libraries and client projects. When libraries evolve, it is often very challenging for library developers to maintain the so-called backward compatibility and keep all their external behavior untouched, and behavioral backward incompatibilities (BBIs) may occur. In practice, the regression test suites of library projects often fail to detect all BBIs. Therefore, in this paper, we propose DeBBI to detect BBIs via cross-project testing and analysis, i.e., using the test suites of various client projects to detect library BBIs. Since executing all the possible client projects can be extremely time consuming, DeBBI transforms the problem of cross-project BBI detection into a traditional information retrieval (IR) problem to execute the client projects with higher probability to detect BBIs earlier. Furthermore, DeBBI considers project diversity and test relevance information for even faster BBI detection. The experimental results show that DeBBI can reduce the end-to-end testing time for detecting the first and average unique BBIs by 99.1\% and 70.8\% for JDK compared to naive cross-project BBI detection. Also, DeBBI has been applied to other popular 3rd-party libraries. To date, DeBBI has detected 97 BBI bugs with 19 already confirmed as previously unknown bugs.},
+booktitle = {Proceedings of the ACM/IEEE 42nd International Conference on Software Engineering},
+pages = {112–124},
+numpages = {13},
+location = {Seoul, South Korea},
+series = {ICSE '20}
+}
+
+
+
+@book{Wohlin2000,
+  title={Experimentation in Software Engineering},
+  author={Wohlin, Claes and Runeson, Per and H{\"o}st, Martin and Ohlsson, Magnus C and Regnell, Bj{\"o}rn and Wessl{\'e}n, Anders},
+  year={2000},
+  publisher={Springer Science \& Business Media}
+}
+
+
+
+@article{Bell2014,
+  title={Phosphor: Illuminating Dynamic Data Flow in Commodity JVMs},
+  author={Bell, Jonathan and Kaiser, Gail},
+  journal={ACM Sigplan Notices},
+  volume={49},
+  number={10},
+  pages={83--101},
+  year={2014},
+  publisher={ACM New York, NY, USA}
+}
+
+
+@article{Agrawal1990,
+author = {Agrawal, Hiralal and Horgan, Joseph R.},
+title = {Dynamic Program Slicing},
+year = {1990},
+issue_date = {Jun. 1990},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {25},
+number = {6},
+issn = {0362-1340},
+url = {},
+doi = {},
+journal = {SIGPLAN Not.},
+month = jun,
+pages = {246–256},
+numpages = {11}
+}
+
+
+@article{Mururu2019,
+  title={Binary Debloating for Security via Demand Driven Loading},
+  author={Mururu, Girish and Porter, Chris and Barua, Prithayan and Pande, Santosh},
+  journal={arXiv preprint arXiv:1902.06570},
+  pages={},
+  year={2019}
+}
+
+
+@INPROCEEDINGS{Inoue2010,
+  author={Inoue, Hiroshi and Hayashizaki, Hiroshige and Wu, Peng and Nakatani, Toshio},
+  booktitle={International Symposium on Code Generation and Optimization (CGO 2011)},
+  title={A trace-based Java JIT compiler retrofitted from a method-based compiler},
+  year={2011},
+  volume={},
+  number={},
+  publisher={IEEE},
+  address = {New York, NY, USA},
+  pages={246-256},
+  doi={10.1109/CGO.2011.5764692}}
+
+
+@article{10.1145/1543135.1542528,
+author = {Gal, Andreas and Eich, Brendan and Shaver, Mike and Anderson, David and Mandelin, David and Haghighat, Mohammad R. and Kaplan, Blake and Hoare, Graydon and Zbarsky, Boris and Orendorff, Jason and Ruderman, Jesse and Smith, Edwin W. and Reitmaier, Rick and Bebenita, Michael and Chang, Mason and Franz, Michael},
+title = {Trace-Based Just-in-Time Type Specialization for Dynamic Languages},
+year = {2009},
+issue_date = {June 2009},
+publisher = {ACM},
+address = {New York, NY, USA},
+volume = {44},
+number = {6},
+issn = {0362-1340},
+url = {https://doi-org.focus.lib.kth.se/10.1145/1543135.1542528},
+doi = {10.1145/1543135.1542528},
+journal = {SIGPLAN Not.},
+month = jun,
+pages = {465–478},
+numpages = {14},
+keywords = {trace-based compilation, dynamically typed languages}
+}
+
+@inproceedings{Gal2009,
+author = {Gal, Andreas and Eich, Brendan and Shaver, Mike and Anderson, David and Mandelin, David and Haghighat, Mohammad R. and Kaplan, Blake and Hoare, Graydon and Zbarsky, Boris and Orendorff, Jason and Ruderman, Jesse and Smith, Edwin W. and Reitmaier, Rick and Bebenita, Michael and Chang, Mason and Franz, Michael},
+title = {Trace-Based Just-in-Time Type Specialization for Dynamic Languages},
+year = {2009},
+isbn = {9781605583921},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi-org.focus.lib.kth.se/10.1145/1542476.1542528},
+doi = {10.1145/1542476.1542528},
+booktitle = {Proceedings of the 30th ACM SIGPLAN Conference on Programming Language Design and Implementation},
+pages = {465–478},
+numpages = {14},
+keywords = {trace-based compilation, dynamically typed languages},
+location = {Dublin, Ireland},
+series = {PLDI ’09}
+}
+
+
+@inproceedings{Xin2019,
+author = {Xin, Qi and Behrang, Farnaz and Fazzini, Mattia and Orso, Alessandro},
+title = {Identifying Features of Android Apps from Execution Traces},
+year = {2019},
+publisher = {IEEE Press},
+booktitle = {Proceedings of the 6th International Conference on Mobile Software Engineering and Systems},
+pages = {35–39},
+numpages = {5},
+address={},
+keywords = {trace analysis, feature identification, program understanding},
+location = {Montreal, Quebec, Canada},
+series = {MOBILESoft ’19}
+}
+
+
+@inproceedings{Binder2007,
+author = {Binder, Walter and Hulaas, Jarle and Moret, Philippe},
+title = {Advanced Java Bytecode Instrumentation},
+year = {2007},
+isbn = {9781595936721},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {},
+doi = {},
+booktitle = {Proceedings of the 5th International Symposium on Principles and Practice of Programming in Java},
+pages = {135–144},
+numpages = {10},
+keywords = {JVM, program transformations, profiling, dynamic metrics, dynamic bytecode instrumentation, Java},
+location = {Lisboa, Portugal},
+series = {PPPJ ’07}
+}
+
+
+@INPROCEEDINGS{Eder2014,
+  author={Eder, Sebastian and Femmer, Henning and Hauptmann, Benedikt and Junker, Maximilian},
+  booktitle={2014 IEEE International Conference on Software Maintenance and Evolution},
+  title={Which Features Do My Users (Not) Use?},
+  year={2014},
+  volume={},
+  number={},
+  pages={446-450},
+  publisher={IEEE},
+  address = {New York, NY, USA},
+  doi={10.1109/ICSME.2014.71}
+}
+
+@inproceedings{Heo2018,
+author = {Heo, Kihong and Lee, Woosuk and Pashakhanloo, Pardis and Naik, Mayur},
+title = {Effective Program Debloating via Reinforcement Learning},
+year = {2018},
+isbn = {9781450356930},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi-org.focus.lib.kth.se/10.1145/3243734.3243838},
+doi = {10.1145/3243734.3243838},
+booktitle = {Proceedings of the 2018 ACM SIGSAC Conference on Computer and Communications Security},
+pages = {380–394},
+numpages = {15},
+keywords = {reinforcement learning, program debloating},
+location = {Toronto, Canada},
+series = {CCS ’18}
+}
+
+@INPROCEEDINGS{Jiang2016a,
+    author={Y. {Jiang} and C. {Zhang} and D. {Wu} and P. {Liu}},
+    booktitle={2016 IEEE 17th International Symposium on High Assurance Systems Engineering (HASE)},
+    title={Feature-Based Software Customization: Preliminary Analysis, Formalization, and Methods},
+    year={2016},
+    volume={},
+    number={},
+    publisher={},
+      address={},
+    pages={122-131}
+}
+
+@inproceedings{Rastogi2017,
+author = {Rastogi, Vaibhav and Davidson, Drew and De Carli, Lorenzo and Jha, Somesh and McDaniel, Patrick},
+title = {Cimplifier: Automatically Debloating Containers},
+year = {2017},
+isbn = {9781450351058},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+doi = {10.1145/3106237.3106271},
+booktitle = {Proceedings of the 2017 11th Joint Meeting on Foundations of Software Engineering},
+pages = {476–486},
+numpages = {11},
+keywords = {least privilege, debloating, privilege separation, containers},
+location = {Paderborn, Germany},
+series = {ESEC/FSE 2017}
+}
+
+@inproceedings{Nguyen2013,
+author = {Nguyen, Khanh and Xu, Guoqing},
+title = {Cachetor: Detecting Cacheable Data to Remove Bloat},
+year = {2013},
+isbn = {9781450322379},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi-org.focus.lib.kth.se/10.1145/2491411.2491416},
+doi = {10.1145/2491411.2491416},
+booktitle = {Proceedings of the 2013 9th Joint Meeting on Foundations of Software Engineering},
+pages = {268–278},
+numpages = {11},
+keywords = {dynamic dependence analysis, cacheable data, Runtime bloat, performance optimization},
+location = {Saint Petersburg, Russia},
+series = {ESEC/FSE 2013}
+}
+
+@article{10.1145/2544173.2509522,
+author = {Bhattacharya, Suparna and Gopinath, Kanchi and Nanda, Mangala Gowri},
+title = {Combining Concern Input with Program Analysis for Bloat Detection},
+year = {2013},
+issue_date = {October 2013},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {48},
+number = {10},
+issn = {0362-1340},
+url = {},
+doi = {},
+journal = {SIGPLAN Not.},
+month = oct,
+pages = {745–764},
+numpages = {20},
+keywords = {feature oriented programming, program concerns, software bloat}
+}
+
+@inproceedings{Bhattacharya2013,
+author = {Bhattacharya, Suparna and Gopinath, Kanchi and Nanda, Mangala Gowri},
+title = {Combining Concern Input with Program Analysis for Bloat Detection},
+year = {2013},
+isbn = {9781450323741},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {},
+doi = {},
+booktitle = {Proceedings of the 2013 ACM SIGPLAN International Conference on Object Oriented Programming Systems Languages \& Applications},
+pages = {745–764},
+numpages = {20},
+keywords = {feature oriented programming, software bloat, program concerns},
+location = {Indianapolis, Indiana, USA},
+series = {OOPSLA ’13}
+}
+
+@article{Wirth1995,
+author = {Wirth, Niklaus},
+title = {A Plea for Lean Software},
+year = {1995},
+issue_date = {February 1995},
+publisher = {IEEE Computer Society Press},
+address = {Washington, DC, USA},
+volume = {28},
+number = {2},
+issn = {0018-9162},
+url = {https://doi-org.focus.lib.kth.se/10.1109/2.348001},
+doi = {10.1109/2.348001},
+abstract = {Memory requirements of today's workstations typically jump substantially--from several to many megabytes--whenever there's a new software release. When demand surpasses capacity, it's time to buy add-on memory. When the system has no more extensibility, it's time to buy a new, more powerful workstation. Do increased performance and functionality keep pace with the increased demand for resources? Mostly the answer is no. The author contends that software's girth has surpassed its functionality, largely because hardware advances make this possible. He maintains that the way to streamline software lies in disciplined methodologies and a return to the essentials. He explores the reasons behind software's increasing heft and relates the history of Project Oberon as an example of how software should be built. Oberon's primary goal was to show that software can be developed with a fraction of the memory capacity and processor power usually required without sacrificing flexibility, functionality, or user convenience. The Oberon system has been in use since 1989, serving purposes that include document preparation, software development, and computer-aided design of electronic circuits, among many others. The system includes storage management, a file system, a window display manager, a network with servers, a compiler, and text, graphics, and document editors.},
+journal = {Computer},
+month = feb,
+pages = {64–68},
+numpages = {5}
+}
+
+
+
+@Article{Macho2021,
+author={Macho, Christian
+and Beyer, Stefanie
+and McIntosh, Shane
+and Pinzger, Martin},
+title={The Nature of Build Changes},
+journal={Empirical Software Engineering},
+year={2021},
+month={Mar},
+day={16},
+volume={26},
+number={3},
+pages={32},
+abstract={Build systems are an essential part of modern software projects. As software projects change continuously, it is crucial to understand how the build system changes because neglecting its maintenance can, at best, lead to expensive build breakage, or at worst, introduce user-reported defects due to incorrectly compiled, linked, packaged, or deployed official releases. Recent studies have investigated the (co-)evolution of build configurations and reasons for build breakage; however, the prior analysis focused on a coarse-grained outcome (i.e., either build changing or not). In this paper, we present BuildDiff, an approach to extract detailed build changes from Maven build files and classify them into 143 change types. In a manual evaluation of 400 build-changing commits, we show that BuildDiff can extract and classify build changes with average precision, recall, and f1-scores of 0.97, 0.98, and 0.97, respectively. We then present two studies using the build changes extracted from 144 open source Java projects to study the frequency and time of build changes. The results show that the top-10 most frequent change types account for 51{\%} of the build changes. Among them, changes to version numbers and changes to dependencies of the projects occur most frequently. We also observe frequently co-occurring changes, such as changes to the source code management definitions, and corresponding changes to the dependency management system and the dependency declaration. Furthermore, our results show that build changes frequently occur around release days. In particular, critical changes, such as updates to plugin configuration parts and dependency insertions, are performed before a release day. The contributions of this paper lay in the foundation for future research, such as for analyzing the (co-)evolution of build files with other artifacts, improving effort estimation approaches by incorporating necessary modifications to the build system specification, or automatic repair approaches for configuration code. Furthermore, our detailed change information enables improvements of refactoring approaches for build configurations and improvements of prediction models to identify error-prone build files.},
+issn={1573-7616},
+doi={10.1007/s10664-020-09926-4},
+url={https://doi.org/10.1007/s10664-020-09926-4}
+}
+
+
+@inproceedings{Durieux2021,
+    author = {{Durieux}, Thomas and {Soto-Valero}, C{\'e}sar and {Baudry}, Benoit},
+    title = "{DUETS: A Dataset of Reproducible Pairs of Java Library-Clients}",
+    year = 2021,
+    publisher = {Association for Computing Machinery},
+    address = {New York, NY, USA},
+    url = {https://ieeexplore.ieee.org/document/9463096},
+    doi = {10.1109/MSR52588.2021.00071},
+    booktitle = {Proceedings of the 2021 IEEE/ACM 18th International Conference on Mining Software Repositories (MSR)},
+    pages={545-549},
+    numpages = {10},
+    series = {MSR'21}
+}
+
+@article{Borges2018,
+title = {What’s in a GitHub Star? Understanding Repository Starring Practices in a Social Coding Platform},
+journal = {Journal of Systems and Software},
+volume = {146},
+pages = {112-129},
+year = {2018},
+issn = {0164-1212},
+doi = {},
+url = {},
+author = {Hudson Borges and Marco {Tulio Valente}},
+keywords = {GitHub stars, Software popularity, Social coding},
+abstract = {Besides a git-based version control system, GitHub integrates several social coding features. Particularly, GitHub users can star a repository, presumably to manifest interest or satisfaction with an open source project. However, the real and practical meaning of starring a project was never the subject of an in-depth and well-founded empirical investigation. Therefore, we provide in this paper a throughout study on the meaning, characteristics, and dynamic growth of GitHub stars. First, by surveying 791 developers, we report that three out of four developers consider the number of stars before using or contributing to a GitHub project. Then, we report a quantitative analysis on the characteristics of the top-5,000 most starred GitHub repositories. We propose four patterns to describe stars growth, which are derived after clustering the time series representing the number of stars of the studied repositories; we also reveal the perception of 115 developers about these growth patterns. To conclude, we provide a list of recommendations to open source project managers (e.g., on the importance of social media promotion) and to GitHub users and Software Engineering researchers (e.g., on the risks faced when selecting projects by GitHub stars).}
+}
+
+
+
+@article{Xu2014,
+author = {Xu, Guoqing and Mitchell, Nick and Arnold, Matthew and Rountev, Atanas and Schonberg, Edith and Sevitsky, Gary},
+title = {Scalable Runtime Bloat Detection Using Abstract Dynamic Slicing},
+year = {2014},
+issue_date = {May 2014},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {23},
+number = {3},
+issn = {1049-331X},
+url = {https://doi-org.focus.lib.kth.se/10.1145/2560047},
+doi = {10.1145/2560047},
+abstract = {Many large-scale Java applications suffer from runtime bloat. They execute large volumes of methods and create many temporary objects, all to execute relatively simple operations. There are large opportunities for performance optimizations in these applications, but most are being missed by existing optimization and tooling technology. While JIT optimizations struggle for a few percent improvement, performance experts analyze deployed applications and regularly find gains of 2\texttimes{} or more. Finding such big gains is difficult, for both humans and compilers, because of the diffuse nature of runtime bloat. Time is spread thinly across calling contexts, making it difficult to judge how to improve performance. Our experience shows that, in order to identify large performance bottlenecks in a program, it is more important to understand its dynamic dataflow than traditional performance metrics, such as running time.This article presents a general framework for designing and implementing scalable analysis algorithms to find causes of bloat in Java programs. At the heart of this framework is a generalized form of runtime dependence graph computed by abstract dynamic slicing, a semantics-aware technique that achieves high scalability by performing dynamic slicing over bounded abstract domains. The framework is instantiated to create two independent dynamic analyses, copy profiling and cost-benefit analysis, that help programmers identify performance bottlenecks by identifying, respectively, high-volume copy activities and data structures that have high construction cost but low benefit for the forward execution.We have successfully applied these analyses to large-scale and long-running Java applications. We show that both analyses are effective at detecting inefficient operations that can be optimized for better performance. We also demonstrate that the general framework is flexible enough to be instantiated for dynamic analyses in a variety of application domains.},
+journal = {ACM Trans. Softw. Eng. Methodol.},
+month = {jun},
+articleno = {23},
+numpages = {50},
+keywords = {copy profiling, Runtime bloat, cost-benefit analysis, dynamic analysis, abstract dynamic slicing}
+}
+
+
+@article{Nguyen2018,
+author = {Nguyen, Khanh and Wang, Kai and Bu, Yingyi and Fang, Lu and Xu, Guoqing},
+title = {Understanding and Combating Memory Bloat in Managed Data-Intensive Systems},
+year = {2018},
+issue_date = {February 2018},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {26},
+number = {4},
+issn = {1049-331X},
+url = {https://doi-org.focus.lib.kth.se/10.1145/3162626},
+doi = {10.1145/3162626},
+abstract = {The past decade has witnessed increasing demands on data-driven business intelligence that led to the proliferation of data-intensive applications. A managed object-oriented programming language such as Java is often the developer’s choice for implementing such applications, due to its quick development cycle and rich suite of libraries and frameworks. While the use of such languages makes programming easier, their automated memory management comes at a cost. When the managed runtime meets large volumes of input data, memory bloat is significantly magnified and becomes a scalability-prohibiting bottleneck.This article first studies, analytically and empirically, the impact of bloat on the performance and scalability of large-scale, real-world data-intensive systems. To combat bloat, we design a novel compiler framework, called Facade, that can generate highly efficient data manipulation code by automatically transforming the data path of an existing data-intensive application. The key treatment is that in the generated code, the number of runtime heap objects created for data classes in each thread is (almost) statically bounded, leading to significantly reduced memory management cost and improved scalability. We have implemented Facade and used it to transform seven common applications on three real-world, already well-optimized data processing frameworks: GraphChi, Hyracks, and GPS. Our experimental results are very positive: the generated programs have (1) achieved a 3\% to 48\% execution time reduction and an up to 88\texttimes{} GC time reduction, (2) consumed up to 50\% less memory, and (3) scaled to much larger datasets.},
+journal = {ACM Trans. Softw. Eng. Methodol.},
+month = {jan},
+articleno = {12},
+numpages = {41},
+keywords = {memory management, managed languages, Big data, performance optimization}
+}
+
+
+@inproceedings{Valero2021,
+author = {Soto-Valero, C\'{e}sar and Durieux, Thomas and Baudry, Benoit},
+title = {A Longitudinal Analysis of Bloated Java Dependencies},
+year = {2021},
+isbn = {9781450385626},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi-org.focus.lib.kth.se/10.1145/3468264.3468589},
+doi = {10.1145/3468264.3468589},
+booktitle = {Proceedings of the 29th ACM Joint Meeting on European Software Engineering Conference and Symposium on the Foundations of Software Engineering},
+pages = {1021–1031},
+numpages = {11},
+keywords = {dependencies, java, software bloat},
+location = {Athens, Greece},
+series = {ESEC/FSE 2021}
+}
+
+@INPROCEEDINGS {Ponta2021,
+author = {S. Ponta and W. Fischer and H. Plate and A. Sabetta},
+booktitle = {IEEE International Conference on Software Maintenance and Evolution (ICSME)},
+title = {The Used, the Bloated, and the Vulnerable: Reducing the Attack Surface of an Industrial Application},
+year = {2021},
+volume = {},
+issn = {},
+pages = {555-558},
+keywords = {industries;java;software maintenance;conferences;loading;pipelines;manuals},
+doi = {10.1109/ICSME52107.2021.00056},
+url = {https://doi.ieeecomputersociety.org/10.1109/ICSME52107.2021.00056},
+publisher = {IEEE Computer Society},
+address = {Los Alamitos, CA, USA},
+month = {oct}
+}
+
+@article{Palepu2017,
+author = {Palepu, Vijay Krishna and Xu, Guoqing and Jones, James A.},
+title = {Dynamic Dependence Summaries},
+year = {2017},
+issue_date = {May 2017},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {25},
+number = {4},
+issn = {1049-331X},
+url = {https://doi.org/10.1145/2968444},
+doi = {10.1145/2968444},
+journal = {ACM Trans. Softw. Eng. Methodol.},
+month = {jan},
+articleno = {30},
+numpages = {41},
+keywords = {summaries, Dynamic analysis, dynamic slicing, dependence analysis}
+}
+
+
+@article{Guo2021,
+author = {Guo, Zhaoqiang and Liu, Shiran and Liu, Jinping and Li, Yanhui and Chen, Lin and Lu, Hongmin and Zhou, Yuming},
+title = {How Far Have We Progressed in Identifying Self-Admitted Technical Debts? A Comprehensive Empirical Study},
+year = {2021},
+issue_date = {July 2021},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {30},
+number = {4},
+issn = {1049-331X},
+url = {https://doi.org/10.1145/3447247},
+doi = {10.1145/3447247},
+abstract = {Background. Self-admitted technical debt (SATD) is a special kind of technical debt that is intentionally introduced and remarked by code comments. Those technical debts reduce the quality of software and increase the cost of subsequent software maintenance. Therefore, it is necessary to find out and resolve these debts in time. Recently, many automatic approaches have been proposed to identify SATD. Problem. Popular IDEs support a number of predefined task annotation tags for indicating SATD in comments, which have been used in many projects. However, such clear prior knowledge is neglected by existing SATD identification approaches when identifying SATD. Objective. We aim to investigate how far we have really progressed in the field of SATD identification by comparing existing approaches with a simple approach that leverages the predefined task tags to identify SATD. Method. We first propose a simple heuristic approach that fuzzily Matches task Annotation Tags (MAT) in comments to identify SATD. In nature, MAT is an unsupervised approach, which does not need any data to train a prediction model and has a good understandability. Then, we examine the real progress in SATD identification by comparing MAT against existing approaches. Result. The experimental results reveal that: (1) MAT has a similar or even superior performance for SATD identification compared with existing approaches, regardless of whether non-effort-aware or effort-aware evaluation indicators are considered; (2) the SATDs (or non-SATDs) correctly identified by existing approaches are highly overlapped with those identified by MAT; and (3) supervised approaches misclassify many SATDs marked with task tags as non-SATDs, which can be easily corrected by their combinations with MAT. Conclusion. It appears that the problem of SATD identification has been (unintentionally) complicated by our community, i.e., the real progress in SATD comments identification is not being achieved as it might have been envisaged. We hence suggest that, when many task tags are used in the comments of a target project, future SATD identification studies should use MAT as an easy-to-implement baseline to demonstrate the usefulness of any newly proposed approach.},
+journal = {ACM Trans. Softw. Eng. Methodol.},
+month = {jul},
+articleno = {45},
+numpages = {56},
+keywords = {match, Self-admitted technical debt, task annotation tag, baseline, code comment}
+}
+
+@article{Agadakos2020,
+author = {Agadakos, Ioannis and Demarinis, Nicholas and Jin, Di and Williams-King, Kent and Alfajardo, Jearson and Shteinfeld, Benjamin and Williams-King, David and Kemerlis, Vasileios P. and Portokalidis, Georgios},
+title = {Large-Scale Debloating of Binary Shared Libraries},
+year = {2020},
+issue_date = {December 2020},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {1},
+number = {4},
+issn = {2692-1626},
+url = {},
+doi = {},
+journal = {Digital Threats: Research and Practice},
+month = {dec},
+articleno = {19},
+numpages = {28},
+keywords = {Code debloating, static binary analysis, software security}
+}
+
+
+@article{Ziegler2019,
+author = {Ziegler, Andreas and Geus, Julian and Heinloth, Bernhard and H\"{o}nig, Timo and Lohmann, Daniel},
+title = {Honey, I Shrunk the ELFs: Lightweight Binary Tailoring of Shared Libraries},
+year = {2019},
+issue_date = {October 2019},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+volume = {18},
+number = {5s},
+issn = {1539-9087},
+url = {https://doi-org.focus.lib.kth.se/10.1145/3358222},
+doi = {10.1145/3358222},
+abstract = {In the embedded domain, industrial sectors (i.e., automotive industry, avionics) are undergoing radical changes. They broadly adopt commodity hardware and move away from special-purpose control units. During this transition, heterogeneous software components are consolidated to run on commodity operating systems.To efficiently consolidate such components, a modular encapsulation of common functionality into reusable binary files&nbsp;(i.e., shared libraries) is essential. However, shared libraries are often unnecessarily large as they entail a lot of generic functionality that is not required in a narrowly defined scenario. As the source code of proprietary components is often unavailable and the industry is heading towards binary-only distribution, we propose an approach towards lightweight binary tailoring.As demonstrated in the evaluation, lightweight binary tailoring effectively reduces the amount of code in all shared libraries on a Linux-based system by 63&nbsp;percent and shrinks their files by 17&nbsp;percent. The reduction in size is beneficial to cut down costs (e.g., lower storage and memory footprint) and eases code analyses that are necessary for code audits.},
+journal = {ACM Trans. Embed. Comput. Syst.},
+month = {oct},
+articleno = {102},
+numpages = {23},
+keywords = {binary tailoring, Linux, Shared libraries}
+}
+
+
+@INPROCEEDINGS{Li2013,
+  author={Li, Nan and Meng, Xin and Offutt, Jeff and Deng, Lin},
+  booktitle={2013 IEEE 24th International Symposium on Software Reliability Engineering (ISSRE)},
+  title={Is Bytecode Instrumentation as Good as Source Code Instrumentation: An Empirical Study With Industrial Tools},
+  year={2013},
+  volume={},
+  number={},
+  publisher={},
+address={},
+  pages={380-389},
+  doi={10.1109/ISSRE.2013.6698891}}
+
+
+  @INPROCEEDINGS{Tengeri2016,
+      author={Tengeri, Dávid and Horváth, Ferenc and Beszédes, Árpád and Gergely, Tamás and Gyimóthy, Tibor},
+      booktitle={2016 IEEE 23rd International Conference on Software Analysis, Evolution, and Reengineering (SANER)},
+      title={Negative Effects of Bytecode Instrumentation on Java Source Code Coverage},
+      year={2016},
+      volume={1},
+      number={},
+      publisher={},
+      address={},
+      pages={225-235},
+      doi={10.1109/SANER.2016.61}
+  }
+
+
+  @inbook{Caivano2021,
+author = {Caivano, Danilo and Cassieri, Pietro and Romano, Simone and Scanniello, Giuseppe},
+title = {An Exploratory Study on Dead Methods in Open-Source Java Desktop Applications},
+year = {2021},
+isbn = {9781450386654},
+publisher = {Association for Computing Machinery},
+address = {New York, NY, USA},
+url = {https://doi.org/10.1145/3475716.3475773},
+abstract = {Background. Dead code is a code smell. It can refer to code blocks, fields, methods, etc. that are unused and/or unreachable. Empirical evidence shows that dead code harms source code comprehensibility and maintainability in software applications. Researchers have gathered little empirical evidence on the spread of dead code in software applications. Moreover, we know little about the role of this code smell during software evolution.Aims. Our goal is to gather preliminary empirical evidence on the spread and evolution of dead methods in open-source Java desktop applications. Given the exploratory nature of our investigation, we believe that its results can justify more resource- and time-demanding research on dead methods.Method. We quantitatively analyzed the commit histories of 13 open-source Java desktop applications, whose software projects were hosted on GitHub, for a total of 1,044 commits. We focused on dead methods detected at a commit level to investigate the spread and evolution of dead methods in the studied applications. The perspective of our explorative study is that of both practitioners and researchers.Results. The most important take-away results can be summarized as follows: (i) dead methods seems to affect open-source Java desktop applications; (ii) dead methods generally survive for a long time, in terms of commits, before being "buried" or "revived;" (iii) dead methods are rarely revived; and (iv) most dead methods are dead since the creation of the corresponding methods. Conclusions. We conclude that developers should carefully handle dead methods in open-source Java desktop applications since this code smell is harmful, widespread, rarely revived, and survives for a long time in software applications. Our results also justify future research on dead methods.},
+booktitle = {Proceedings of the 15th ACM / IEEE International Symposium on Empirical Software Engineering and Measurement (ESEM)},
+articleno = {10},
+numpages = {11}
+}
