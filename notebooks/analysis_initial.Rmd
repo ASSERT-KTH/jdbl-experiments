@@ -64,6 +64,14 @@ results <- results %>% filter(ID %!in% c("apache_sling-org-apache-sling-api_2.16
 
 results <- results %>% distinct()
 View(results)
+
+
+
+colnames(results)
+head(results)
+
+results %>% filter(Debloat == "True") %>% group_by(Lib) %>% summarize(n = n())
+
 ```
 
 
