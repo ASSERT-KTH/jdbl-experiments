@@ -25,7 +25,7 @@ rm(list=ls())
 ```{r echo=FALSE}
 # Read the data
 # raw_results <- read.delim("Data/raw_results_final_3.csv", sep = ",", header = T, stringsAsFactors = TRUE)
-raw_results <- read.delim("Data/final_results_revision.csv", sep = ",", header = T, stringsAsFactors = TRUE)
+raw_results <- read.delim("Data/raw_results_final_4.csv", sep = ",", header = T, stringsAsFactors = TRUE)
 
 # Prepare the data
 results <- raw_results %>%
@@ -45,8 +45,17 @@ results <- raw_results %>%
 colnames(results)
 
 
+results %>% 
+  select(ID, Debloat, Lib, Lib.original.test.failing, Lib.original.test.error, Debloat.Time) %>% 
+  filter(Debloat == "True" & Lib.original.test.failing == 0 & Lib.original.test.error == 0) %>% 
+  select(ID) %>% 
+  distinct()
+
+
 # raw_results %>% filter(Nb.Dependenies == 1) %>% select(ID) %>% distinct()
 # raw_results %>% filter(Nb.Dependenies > 1) %>% select(ID) %>% distinct()
+
+
 ```
 
 
@@ -62,15 +71,11 @@ results <- results %>% filter(ID %!in% c("apache_sling-org-apache-sling-api_2.16
                              "vert-x3_vertx-unit_3.6.3",
                              "vert-x3_vertx-unit_3.8.3"))
 
-results <- results %>% distinct()
-View(results)
-
-
-
 colnames(results)
 head(results)
 
-results %>% filter(Debloat == "True") %>% group_by(Lib) %>% summarize(n = n())
+results %>% filter(Debloat == "True") %>% group_by(ID) %>% summarize(n = n())
+
 
 ```
 

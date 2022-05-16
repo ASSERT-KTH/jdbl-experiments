@@ -67,10 +67,23 @@ save_figure <- function(the_ggplot_object, the_name, the_with, the_height){
 }
 ```
 
+
+
+```{r}
+data <- read.delim("Data/raw_results.csv", sep = ",", header = T, stringsAsFactors = TRUE)
+
+data %>%  
+  filter(Debloat == "True")
+```
+
+
+
 # Read the data
 
 ```{r}
 data <- read.delim("Data/lib_debloat_status_per_version.csv", sep = ",", header = T, stringsAsFactors = TRUE)
+
+data %>% arrange(desc(NbVersions))
 ```
 
 # Statistical analysis of the skeweness of the data
@@ -88,31 +101,12 @@ agostino.test(data$NbDebloatedVersions/data$NbVersions)
 # Plot debloated versions per library
 
 ```{r}
-data %>% 
-  mutate(PercentageDebloat = (100 * NbDebloatedVersions)/NbVersions) %>% 
-  mutate(PercentageRange = 
-           ifelse(PercentageDebloat <= 20, "0-20", 
-                  ifelse(PercentageDebloat > 20 & PercentageDebloat <= 40, "21-40",
-                         ifelse(PercentageDebloat > 40 & PercentageDebloat <= 60, "41-60",
-                                ifelse(PercentageDebloat > 60 & PercentageDebloat <= 80, "61-80",
-                                       "81-100")
-                                )
-                         )
-                  )
-           ) %>% 
-  ggplot(aes(x=factor(PercentageRange)))+
-  geom_bar(stat="count", width=0.7, fill="steelblue")+
-  xlab("% of versions successfuly debloated") +
-  ylab("# of unique libraries") +
-  theme_bw()
-
 df_debloat_success <- data %>% 
-  mutate(NbNotDebloatedVersions = NbVersions - NbDebloatedPassVersions) %>%
   mutate(ID = row_number()) %>% 
   select(Library, ID, NbDebloatedPassVersions) %>%
   rename(Versions = NbDebloatedPassVersions) %>% 
   mutate(`Debloating result` = "Debloating success")
-  
+
 df_debloat_fail_jar <- data %>% 
   mutate(NbNotDebloatedVersions = NbVersions - NbDebloatedVersions) %>%
   mutate(ID = row_number()) %>% 
@@ -120,15 +114,12 @@ df_debloat_fail_jar <- data %>%
   rename(Versions = NbNotDebloatedVersions) %>% 
   mutate(`Debloating result` = "No debloated JAR")
 
-
 df_debloat_fail_test <- data %>% 
-  mutate(NbNotDebloatedVersions = NbVersions - NbDebloatedPassVersions) %>%
+  mutate(NbNotDebloatedVersions = NbDebloatedVersions - NbDebloatedPassVersions) %>%
   mutate(ID = row_number()) %>% 
   select(Library, ID, NbNotDebloatedVersions) %>% 
   rename(Versions = NbNotDebloatedVersions) %>% 
   mutate(`Debloating result` = "Not all tests passs")
-
-
 
 barplot_versions_debloat_per_lib <- rbind(df_debloat_success, df_debloat_fail_jar, df_debloat_fail_test) %>% 
   ggplot(aes(x = reorder(ID,(-Versions)), y = Versions, fill = `Debloating result`)) + 
@@ -142,6 +133,11 @@ barplot_versions_debloat_per_lib <- rbind(df_debloat_success, df_debloat_fail_ja
   theme(legend.position = "top", legend.direction = "horizontal", legend.title = element_blank())
   # theme(axis.text.x = element_text(angle = 90))
 barplot_versions_debloat_per_lib
+
+View(rbind(df_debloat_success, df_debloat_fail_jar, df_debloat_fail_test))
+View(data)
+
+rbind(df_debloat_success, df_debloat_fail_jar, df_debloat_fail_test) %>% arrange(desc(Versions))
 
 barplot_versions_debloat_per_lib
 save_figure(barplot_versions_debloat_per_lib, "Figures/barplot_versions_debloat_per_lib", 5.5, 3.5)
