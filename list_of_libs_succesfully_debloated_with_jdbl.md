@@ -1,4 +1,6 @@
-|Library_URL                                                                                            |Version  |
+Summary table with the full list 211 library versions successfully debloated with JDBL.[^1]
+
+|Library URL on GitHub                                                                                  |Version  |
 |-------------------------------------------------------------------------------------------------------|---------|
 |[10cella/hashids-java](https://github.com/10cella/hashids-java)                                        |1.0.1    |
 |[alibaba/fastjson](https://github.com/alibaba/fastjson)                                                |1.2.46   |
@@ -211,3 +213,7 @@
 |[zeromq/jeromq](https://github.com/zeromq/jeromq)                                                      |0.5.1    |
 |[zeromq/jeromq](https://github.com/zeromq/jeromq)                                                      |0.3.6    |
 |[zeroturnaround/zt-exec](https://github.com/zeroturnaround/zt-exec)                                    |1.7      |
+
+
+[^1]: By "successful debloated", we mean that a debloated JAR file is produced after the project's build, and that all the original tests pass on the debloated version.
+
