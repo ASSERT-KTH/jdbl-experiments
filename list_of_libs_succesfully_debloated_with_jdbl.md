@@ -1,4 +1,4 @@
-Summary table with the full list 211 library versions successfully debloated with JDBL.[^1]
+Summary table with the full list of 211 library versions successfully debloated with JDBL.[^1]
 
 |Library URL on GitHub                                                                                  |Version  |
 |-------------------------------------------------------------------------------------------------------|---------|
