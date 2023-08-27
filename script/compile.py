@@ -45,8 +45,14 @@ if __name__ == "__main__":
     parser.add_argument('-u', "--url", required=True, help="The url to the git repository")
     parser.add_argument("--commit", required=True, help="The commit of the lib to debloat")
     parser.add_argument("--iteration", type=int, default=3, help="The number of test execution")
+    parser.add_argument("--output", help="The output folder of the test-results")
+    parser.add_argument("--test-result", help="The output folder of the test-results")
+    parser.add_argument("--coverage", nargs='?', default=False, help="Get the coverage")
 
     args = parser.parse_args()
+    
+    if args.output:
+        args.output = os.path.abspath(args.output)
 
     working_directory = tempfile.mkdtemp()
 
@@ -57,7 +63,38 @@ if __name__ == "__main__":
         "commit": project.get_commit(),
         "test_results": []
     }
+    (includes, excludes) = project.pom.get_included_excluded_tests()
+    exclude_config = []
+    for exclude in excludes:
+        exclude_config.append({
+            "name": "exclude",
+            "text": exclude
+        })
+    include_config = []
+    for include in includes:
+        include_config.append({
+            "name": "include",
+            "text": include
+        })
+    project.pom.add_plugin("org.apache.maven.plugins", "maven-surefire-plugin", "2.19.1", [{
+        "name": "configuration",
+        "children": [
+            {
+                "name": "excludes",
+                "children": exclude_config
+            },
+            {
+                "name": "includes",
+                "children": include_config
+            }
+        ]
+    }])
+    project.inject_jacoco_plugin()
     for i in range(0, args.iteration):
         project.test(clean=False, stdout="output.log")
+        if args.output is not None:
+              project.copy_test_results(args.output)
+        if args.coverage:
+            project.copy_jacoco(args.output)
         output['test_results'].append(readTestResults(project.path))
     print(json.dumps(output))

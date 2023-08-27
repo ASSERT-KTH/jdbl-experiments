@@ -42,7 +42,7 @@ if __name__ == "__main__":
         dep.checkout_commit(args.lib_commit)
 
         debloat = Debloat(dep)
-        debloat.inject_library()
+        debloat.inject_jdbl()
         dep.inject_jacoco_plugin()
         dep.test()
         dep.copy_test_results(path_test_results)

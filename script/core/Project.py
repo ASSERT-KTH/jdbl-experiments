@@ -1,15 +1,11 @@
 import subprocess
 import traceback
 import os
-from github import Github
 import xml.etree.ElementTree as xml
 
 from core.PomExtractor import PomExtractor
 
-token = None
-if 'GITHUB_OAUTH' in os.environ and len(os.environ['GITHUB_OAUTH']) > 0:
-    token = os.environ['GITHUB_OAUTH']
-g = Github(token)
+ENABLE_MAVEN_PROXY = False
 
 
 class Project:
@@ -42,8 +38,8 @@ class Project:
             'v', '').replace('_', '.').replace('-', '.')
         releases = self.get_releases()
         for r in releases:
-            v = r.name.lower().replace('v.', '').replace(
-                'v', '').replace('_', '.').replace('-', '.')
+            v = r['name'].lower().replace('v.', '').replace(
+                'v', '').replace('_', '.').replace('-', '.').replace('release', '').replace(self.name, '')
             try:
                 index = v.index(version)
                 v = v[index:]
@@ -51,7 +47,7 @@ class Project:
                 if len(v) > len(temp_version):
                     temp_version += '.0'
                 if v == temp_version:
-                    return self.checkout_commit(r.commit.sha)
+                    return self.checkout_commit(r['commit'])
             except ValueError:
                 continue
             except Exception:
@@ -69,22 +65,141 @@ class Project:
             return True
         except:
             return False
+    
+    def get_releases(self):
+        cmd = 'cd %s; git ls-remote --tags origin' % (self.path)
+        output = subprocess.check_output(cmd, shell=True).decode('UTF-8')
+        lines = output.split("\n")
+        releases = []
+        for line in lines:
+            if "refs/tags/" not in line:
+                continue
+            commit = line.split("\t")[0]
+            tag = line.split("refs/tags/")[1].strip().replace("^{}", "")
+            releases.append({
+                "name": tag,
+                "commit": commit
+            })
+        return releases
+
 
     def get_commit(self):
         cmd = 'cd %s; git rev-parse HEAD' % (self.path)
         return subprocess.check_output(cmd, shell=True).decode('UTF-8').strip()
 
     def clean(self):
-        cmd = 'cd %s;mvn clean -B;' % (self.path)
+        cmd = 'cd %s;mvn clean -B -q > /dev/null;' % (self.path)
         try:
             subprocess.check_call(cmd, shell=True)
             return True
         except:
             return False
 
+    def dependency_tree(self):
+        maven_proxy = ''
+        maven_proxy_path = os.path.join(os.path.dirname(
+            os.path.realpath(__file__)), "..","maven-proxy.xml")
+        if ENABLE_MAVEN_PROXY and os.path.exists(maven_proxy_path):
+            maven_proxy = '-gs %s' % (maven_proxy_path)
+        cmd = "cd %s; mvn %s dependency:tree -Dverbose=true -DoutputFile=dependency_tree.txt -q;cat dependency_tree.txt;rm dependency_tree.txt" % (self.path, maven_proxy)
+        def get_index_artifact(line):
+            index = 0
+            while line[index] == ' ' or line[index] == '+' or line[index] == '|' or line[index] == '\\' or line[index] == '-':
+                index += 1
+            return index
+        def extractArtifact(line):
+            index = get_index_artifact(line)
+            data = line[index:]
+            output = {
+                "artifactid": None,
+                "groupid": None,
+                "version": None,
+                "package": None,
+                "scope": None,
+                "omitted": False,
+                "omitted_reason": None
+            }
+            if " " in data:
+                split = data.split(" ")
+                data = split[0]
+                if len(split) > 1:
+                    if "version selected from constraint" in split[1]:
+                        output['range'] = split[1].replace(
+                            " (version selected from constraint ", "")[:-1]
+                    elif "omitted" in line:
+                        output['omitted'] = True
+                        if "omitted for duplicate" in line:
+                            output['omitted_reason'] = "duplicated"
+                        elif "omitted for conflict" in line:
+                            output['omitted_reason'] = "conflict"
+                        else:
+                            output['omitted_reason'] = "other"
+                        data = data[1:]
+            info = data.split(":")
+            output['groupid'] = info[0]
+            output['artifactid'] = info[1]
+            output['package'] = info[2]
+            output['version'] = info[3]
+            if len(info) > 4:
+                output['scope'] = info[4]
+            return output
+        output = subprocess.check_output(cmd, shell=True).decode("utf-8")
+        print(output)
+        lines = output.split("\n")
+        modules = []
+        parent_artifact = None
+        previous_artifact = None
+        for line in lines:
+            if len(line) == 0:
+                continue
+            level = 0
+            if '-' in line[:get_index_artifact(line)]:
+                level = get_index_artifact(line)
+            artifact = extractArtifact(line)
+            artifact['child'] = []
+            artifact['level'] = level
+            artifact['child_level'] = level + 3
+            
+            artifact['parent'] = parent_artifact
+            if level == 0:
+                parent_artifact = artifact
+                modules.append(parent_artifact)
+            
+            if parent_artifact['child_level'] == level:
+                parent_artifact['child'].append(artifact)
+            elif parent_artifact['child_level'] < level:
+                parent_artifact = previous_artifact
+                artifact['parent'] = parent_artifact
+                parent_artifact['child'].append(artifact)
+            elif level != 0:
+                while parent_artifact['child_level'] != level:
+                    parent_artifact = parent_artifact['parent']
+                parent_artifact['child'].append(artifact)
+            previous_artifact = artifact
+
+        def remove_parent(a):
+            if 'parent' in a:
+                del a['parent']
+            if 'level' in a:
+                del a['level']
+            if 'child_level' in a:
+                del a['child_level']
+            for child in a['child']:
+                remove_parent(child)
+
+        for m in modules:
+            remove_parent(m)
+        return modules
+        
     def classpath(self):
-        cmd = "cd %s; mvn dependency:build-classpath -Dscope=test;" % (
-            self.path)
+        maven_proxy = ''
+        maven_proxy_path = os.path.join(os.path.dirname(
+            os.path.realpath(__file__)), "..","maven-proxy.xml")
+        if ENABLE_MAVEN_PROXY and os.path.exists(maven_proxy_path):
+            maven_proxy = '-gs %s' % (maven_proxy_path)
+
+        cmd = "cd %s; mvn %s dependency:build-classpath -Dscope=test;" % (
+            self.path, maven_proxy)
         try:
             cp = []
             output = subprocess.check_output(cmd, shell=True).decode("utf-8")
@@ -109,10 +224,10 @@ class Project:
             timeout_cmd = 'timeout -k 1m -s SIGKILL %s' % timeout
         maven_proxy = ''
         maven_proxy_path = os.path.join(os.path.dirname(
-            os.path.realpath(__file__)), "maven-proxy.xml")
-        if os.path.exists(maven_proxy_path):
+            os.path.realpath(__file__)), "..","maven-proxy.xml")
+        if ENABLE_MAVEN_PROXY and os.path.exists(maven_proxy_path):
             maven_proxy = '-gs %s' % (maven_proxy_path)
-        cmd = 'cd %s;%s%s mvn %s compile -e --fail-never -ntp -Dmaven.test.failure.ignore=true -B -Dmaven.javadoc.skip=true -Drat.skip=true -Danimal.sniffer.skip=true -Dmaven.javadoc.skip=true -Dlicense.skip=true -Dsource.skip=true' % (
+        cmd = 'cd %s;%s%s mvn %s test -DskipTests -e --fail-never -ntp -Dgpg.skip=true -Dmaven.test.failure.ignore=true -B -Dmaven.javadoc.skip=true -Drat.skip=true -Danimal.sniffer.skip=true -Dmaven.javadoc.skip=true -Dlicense.skip=true -Dsource.skip=true' % (
             self.path, clean_cmd, timeout_cmd, maven_proxy)
         if stdout is not None:
             cmd += ' > %s 2>&1' % (stdout)
@@ -131,8 +246,8 @@ class Project:
             timeout_cmd = 'timeout -k 1m -s SIGKILL %s' % timeout
         maven_proxy = ''
         maven_proxy_path = os.path.join(os.path.dirname(
-            os.path.realpath(__file__)), "maven-proxy.xml")
-        if os.path.exists(maven_proxy_path):
+            os.path.realpath(__file__)), "..","maven-proxy.xml")
+        if ENABLE_MAVEN_PROXY and os.path.exists(maven_proxy_path):
             maven_proxy = '-gs %s' % (maven_proxy_path)
         cmd = 'cd %s;%s%s mvn %s test -DtrimStackTrace=false -e --fail-never -ntp -Dmaven.test.failure.ignore=true -B -Dmaven.javadoc.skip=true -Drat.skip=true -Danimal.sniffer.skip=true -Dmaven.javadoc.skip=true -Dlicense.skip=true -Dsource.skip=true' % (
             self.path, clean_cmd, timeout_cmd, maven_proxy)
@@ -219,10 +334,10 @@ class Project:
             timeout_cmd = 'timeout -k 1m -s SIGKILL %s' % timeout
         maven_proxy = ''
         maven_proxy_path = os.path.join(os.path.dirname(
-            os.path.realpath(__file__)), "maven-proxy.xml")
-        if os.path.exists(maven_proxy_path):
+            os.path.realpath(__file__)), "..","maven-proxy.xml")
+        if ENABLE_MAVEN_PROXY and os.path.exists(maven_proxy_path):
             maven_proxy = '-gs %s' % (maven_proxy_path)
-        cmd = 'cd %s; %s mvn %s install -DskipTests -ntp -Dmaven.test.error.ignore=true -Dmaven.test.failure.ignore=true -B -Dmaven.javadoc.skip=true -Drat.skip=true -Danimal.sniffer.skip=true -Dmaven.javadoc.skip=true -Dlicense.skip=true -Dsource.skip=true' % (
+        cmd = 'cd %s; %s mvn %s install -DskipTests -ntp -Dgpg.skip=true -Dmaven.test.error.ignore=true -Dmaven.test.failure.ignore=true -B -Dmaven.javadoc.skip=true -Drat.skip=true -Danimal.sniffer.skip=true -Dmaven.javadoc.skip=true -Dlicense.skip=true -Dsource.skip=true' % (
             self.path,
             timeout_cmd,
             maven_proxy)
@@ -240,10 +355,10 @@ class Project:
             timeout_cmd = 'timeout -k 1m -s SIGKILL %s' % timeout
         maven_proxy = ''
         maven_proxy_path = os.path.join(os.path.dirname(
-            os.path.realpath(__file__)), "maven-proxy.xml")
-        if os.path.exists(maven_proxy_path):
+            os.path.realpath(__file__)), "..","maven-proxy.xml")
+        if ENABLE_MAVEN_PROXY and os.path.exists(maven_proxy_path):
             maven_proxy = '-gs %s' % (maven_proxy_path)
-        cmd = 'cd %s; mvn clean -q -B;%s mvn %s package -e --fail-never -ntp -Dmaven.test.error.ignore=true -Dmaven.test.failure.ignore=true -B -Dmaven.javadoc.skip=true -Drat.skip=true -Danimal.sniffer.skip=true -Dmaven.javadoc.skip=true -Dlicense.skip=true -Dsource.skip=true' % (
+        cmd = 'cd %s; mvn clean -q -B;%s mvn %s package -e --fail-never -ntp -Dgpg.skip=true  -Dmaven.test.error.ignore=true -Dmaven.test.failure.ignore=true -B -Dmaven.javadoc.skip=true -Drat.skip=true -Danimal.sniffer.skip=true -Dmaven.javadoc.skip=true -Dlicense.skip=true -Dsource.skip=true' % (
             self.path,
             timeout_cmd,
             maven_proxy)
@@ -270,7 +385,6 @@ class Project:
         if not os.path.exists(os.path.join(self.path, "target", "surefire-reports")):
             return False
         cmd = 'cd %s/target/; cp -r surefire-reports %s' % (self.path, dst)
-        print(cmd)
         try:
             subprocess.check_call(cmd, shell=True)
             return True
@@ -333,7 +447,7 @@ class Project:
 
         artifact_id = library.pom.get_artifact()
         group_id = library.pom.get_group()
-        cmd = "cd %s; mvn install:install-file -Dfile=%s -DgroupId=%s -DartifactId=%s -Dversion=%s -Dpackaging=jar -B -Dmaven.javadoc.skip=true;" % (
+        cmd = "cd %s; mvn install:install-file -Dfile=%s -DgroupId=%s -DartifactId=%s -Dversion=%s -Dpackaging=jar -B -Dmaven.javadoc.skip=true -q > /dev/null;" % (
             self.path, path_jar, group_id, artifact_id, version)
         try:
             subprocess.check_call(cmd, shell=True)
@@ -346,7 +460,6 @@ class Project:
 
     def reset_surefire_plugin(self):
         (includes, excludes, configuration) = self.pom.get_included_excluded_tests()
-        print(configuration)
         conf = []
         exclude_config = []
         for exclude in excludes:
@@ -385,7 +498,6 @@ class Project:
                 "name": "test",
                 "text": configuration["test"]
             })
-        print(conf)
         self.pom.add_plugin("org.apache.maven.plugins", "maven-surefire-plugin", "2.19.1", [{
             "name": "configuration",
             "children": conf

@@ -10,6 +10,8 @@ import subprocess
 import re
 import xml.etree.ElementTree as xml
 
+from core.PomExtractor import PomExtractor
+
 parser = argparse.ArgumentParser()
 parser.add_argument("--output", help="The output directory")
 
@@ -214,149 +216,87 @@ results = {}
 considered_cases = {}
 invalid_libs = set()
 invalid_debloat = set()
-with open(PATH_file, 'r') as fd:
-    data = json.load(fd)
-    for lib_id in data:
-        lib = data[lib_id]
-        lib_id = lib['repo_name']
-        lib_path = os.path.join(PATH_results, lib['repo_name'].replace('/', '_'))
-        for version in lib['clients']:
-            if version not in lib['releases']:
-                continue
-            version_path = os.path.join(lib_path, version)
-            original_path = os.path.join(version_path, 'original')
-            debloat_path = os.path.join(version_path, 'debloat')
-            original_jar_path = os.path.join(original_path, 'original.jar')   
-            debloat_jar_path = os.path.join(debloat_path, 'debloat.jar')
-            
-            current_lib = {
-                'repo_name': lib['repo_name'],
-                'compiled': os.path.exists(original_jar_path),
-                'debloat': os.path.exists(debloat_jar_path),
-                'clients': {}
-            }
-            current_lib['original_test'] = readTestResults(original_path)
-            current_lib['debloat_test'] = readTestResults(debloat_path)
-            if current_lib['debloat_test'] is not None and current_lib['original_test'] is not None:
-                if (current_lib['debloat_test']['error'] > current_lib['original_test']['error']) or (current_lib['debloat_test']['failing'] > current_lib['original_test']['failing']):
-                    build_errors['failing_test_debloat'] += 1
-            
-            if not os.path.exists(original_jar_path) and os.path.exists(original_path): 
-                build_errors['lib'] += 1
-            
-            jarClasses = {}
-            if os.path.exists(original_jar_path):
-                jarClasses = get_jar_content(original_jar_path)
-            
-            debloat_jar_classes = {}
-            if os.path.exists(debloat_jar_path):
-                debloat_jar_classes = get_jar_content(debloat_jar_path)
-            
-            if not os.path.exists(debloat_jar_path) and os.path.exists(debloat_path):
-                build_errors['debloat'] += 1
-                invalid_debloat.add("%s:%s" % (lib_id, version))
 
-            current_lib['type_nb_class'] = 0
-            current_lib['type_nb_class_abstract'] = 0
-            current_lib['type_nb_interface'] = 0
-            current_lib['type_nb_constant'] = 0
-            current_lib['type_nb_signeton'] = 0
-            current_lib['type_nb_enum'] = 0
-            current_lib['type_nb_exception'] = 0
-            current_lib['type_nb_unknown'] = 0
+# with open(PATH_file, 'r') as fd:
+#     data = json.load(fd)
+#     for lib_id in data:
+#         lib = data[lib_id]
+#         lib_id = lib['repo_name']
+#         lib_path = os.path.join(PATH_results, lib['repo_name'].replace('/', '_'))
+#         for version in lib['clients']:
+#             if version not in lib['releases']:
+#                 continue
 
-            current_lib['nb_class'] = 0
-            current_lib['nb_method'] = 0
-            current_lib['nb_debloat_class'] = 0
-            current_lib['nb_preserved_class'] = 0
-            current_lib['nb_debloat_method'] = 0
+for lib in os.listdir(PATH_results):
+    if lib == "executions":
+        continue
+    lib_id = lib
+    lib_path = os.path.join(PATH_results, lib)
+    for version in os.listdir(lib_path):
+        version_path = os.path.join(lib_path, version)
+        original_path = os.path.join(version_path, 'original')
+        pom = PomExtractor(original_path)
+        debloat_path = os.path.join(version_path, 'debloat')
+        original_jar_path = os.path.join(original_path, 'original.jar')   
+        debloat_jar_path = os.path.join(debloat_path, 'debloat.jar')
+        
+        current_lib = {
+            'repo_name': lib,
+            'compiled': os.path.exists(original_jar_path),
+            'debloat': os.path.exists(debloat_jar_path),
+            'clients': {}
+        }
+        current_lib['original_test'] = readTestResults(original_path)
+        current_lib['debloat_test'] = readTestResults(debloat_path)
+        if current_lib['debloat_test'] is not None and current_lib['original_test'] is not None:
+            if (current_lib['debloat_test']['error'] > current_lib['original_test']['error']) or (current_lib['debloat_test']['failing'] > current_lib['original_test']['failing']):
+                build_errors['failing_test_debloat'] += 1
+        
+        if not os.path.exists(original_jar_path) and os.path.exists(original_path): 
+            build_errors['lib'] += 1
+        
+        jarClasses = {}
+        if os.path.exists(original_jar_path):
+            jarClasses = get_jar_content(original_jar_path)
+        
+        debloat_jar_classes = {}
+        if os.path.exists(debloat_jar_path):
+            debloat_jar_classes = get_jar_content(debloat_jar_path)
+        
+        if not os.path.exists(debloat_jar_path) and os.path.exists(debloat_path):
+            build_errors['debloat'] += 1
+            invalid_debloat.add("%s:%s" % (lib_id, version))
 
-            current_lib['dependencies'] = {}
-            dep_classes = []
-            classes_dep_map = {}
-            if os.path.exists(os.path.join(debloat_path, 'debloat-dependencies-report.csv')):
-                with open(os.path.join(debloat_path, 'debloat-dependencies-report.csv'), encoding="utf-8") as fd:
-                    lines = fd.readlines()
-                    current_dep = None
-                    for l in lines:
-                        (dep, bloat, class_name) = l.strip().split(',')
-                        if len(jarClasses) > 0 and class_name not in jarClasses:
-                            continue
-                        jarClasses[class_name]['from'] = dep
-                        dep_classes.append(class_name)
-                        classes_dep_map[class_name] = dep
+        current_lib['type_nb_class'] = 0
+        current_lib['type_nb_class_abstract'] = 0
+        current_lib['type_nb_interface'] = 0
+        current_lib['type_nb_constant'] = 0
+        current_lib['type_nb_signeton'] = 0
+        current_lib['type_nb_enum'] = 0
+        current_lib['type_nb_exception'] = 0
+        current_lib['type_nb_unknown'] = 0
 
-                        if dep not in current_lib['dependencies']:
-                            current_lib['dependencies'][dep] = {
-                                'nb_class': 0,
-                                'nb_debloat_class': 0,
-                                'nb_preserved_class': 0,
-                                'nb_method': 0,
-                                'nb_debloat_method': 0,
-                            }
-         
-            all_classes = set()
-            debloated_class = []
-            if os.path.exists(os.path.join(debloat_path, 'debloat-report.csv')):
-                with open(os.path.join(debloat_path, 'debloat-report.csv')) as fd:
-                    lines = fd.readlines()
-                    for l in lines:
-                        if len(l.split(",")) < 2:
-                            continue
-                        type = l.split(",")[0]
-                        class_name = l.split(",")[1].strip()
-                        if ":" in class_name:
-                            class_name = class_name.split(":")[0]
-                        
-                        if len(jarClasses) > 0 and class_name not in jarClasses:
-                            continue
-                        all_classes.add(class_name)
-                        if jarClasses[class_name]['from'] == "unknown":
-                            jarClasses[class_name]['from'] = "source"
+        current_lib['nb_class'] = 0
+        current_lib['nb_method'] = 0
+        current_lib['nb_debloat_class'] = 0
+        current_lib['nb_preserved_class'] = 0
+        current_lib['nb_debloat_method'] = 0
 
-                        if "Method" in type:
-                            # if class_name in dep_classes:
-                            #    current_lib['dependencies'][classes_dep_map[class_name]]['nb_method'] += 1
-                            # current_lib['nb_method'] += 1
-                            if "BloatedMethod" in type:
-                                current_lib['nb_debloat_method'] += 1
-                                if class_name in dep_classes:
-                                    current_lib['dependencies'][classes_dep_map[class_name]]['nb_debloat_method'] += 1
-                            elif "UsedMethod" == type:
-                                jarClasses[class_name]['bloat_type'] = "used"
-                        elif "Class" in type:
-                            o_type = l.split(",")[2].strip().lower()
-                            if "type_nb_%s" % (o_type) in current_lib:
-                                current_lib["type_nb_%s" % (o_type)] += 1
+        current_lib['dependencies'] = {}
+        dep_classes = []
+        classes_dep_map = {}
+        if os.path.exists(os.path.join(debloat_path, 'debloat-dependencies-report.csv')):
+            with open(os.path.join(debloat_path, 'debloat-dependencies-report.csv'), encoding="utf-8") as fd:
+                lines = fd.readlines()
+                current_dep = None
+                for l in lines:
+                    (dep, bloat, class_name) = l.strip().split(',')
+                    if len(jarClasses) > 0 and class_name not in jarClasses:
+                        continue
+                    jarClasses[class_name]['from'] = dep
+                    dep_classes.append(class_name)
+                    classes_dep_map[class_name] = dep
 
-                            if "BloatedClass" in type:
-                                jarClasses[class_name]['bloat_type'] = "bloated"
-                            elif "PreservedClass" in type:
-                                jarClasses[class_name]['bloat_type'] = "preserved"
-                            elif "UsedClass" == type:
-                                jarClasses[class_name]['bloat_type'] = "used"
-            if os.path.exists(os.path.join(debloat_path, 'coverage-results.csv')):
-                with open(os.path.join(debloat_path, 'coverage-results.csv')) as fd:
-                    lines = fd.readlines()
-                    for l in lines:
-                        if len(l.split(",")) < 3:
-                            continue
-                        (cov_tool, cl, method) = l.split(",")
-                        if cl not in jarClasses:
-                            continue
-                        jarClasses[cl][cov_tool] = True
-
-            current_lib['missing_classes'] = len(jarClasses) - len(all_classes)
-            current_lib['missing_lib_classes'] = 0
-
-            for cl in jarClasses:
-                if cl in dep_classes:
-                    current_lib['missing_lib_classes'] += 1
-                current_lib['nb_class'] += 1
-                current_lib['nb_method'] += len(jarClasses[cl]['methods'])                
-                
-                if jarClasses[cl]['from'] != "source":
-                    dep = jarClasses[cl]['from']
                     if dep not in current_lib['dependencies']:
                         current_lib['dependencies'][dep] = {
                             'nb_class': 0,
@@ -365,262 +305,339 @@ with open(PATH_file, 'r') as fd:
                             'nb_method': 0,
                             'nb_debloat_method': 0,
                         }
-                    current_lib['dependencies'][dep]['nb_method'] += len(jarClasses[cl]['methods'])
-                        
-                    current_lib['dependencies'][dep]['nb_class'] += 1
-                    if cl not in debloat_jar_classes:
-                        current_lib['dependencies'][dep]['nb_debloat_class'] += 1
-                        current_lib['dependencies'][dep]['nb_debloat_method'] += len(jarClasses[cl]['methods'])
-                    elif jarClasses[cl]['bloat_type'] == "preserved":
-                        current_lib['dependencies'][dep]['nb_preserved_class'] += 1
+        
+        all_classes = set()
+        debloated_class = []
+        if os.path.exists(os.path.join(debloat_path, 'debloat-report.csv')):
+            with open(os.path.join(debloat_path, 'debloat-report.csv')) as fd:
+                lines = fd.readlines()
+                for l in lines:
+                    if len(l.split(",")) < 2:
+                        continue
+                    type = l.split(",")[0]
+                    class_name = l.split(",")[1].strip()
+                    if ":" in class_name:
+                        class_name = class_name.split(":")[0]
                     
-                if cl not in debloat_jar_classes:
-                    current_lib['nb_debloat_class'] += 1
-                    current_lib['nb_debloat_method'] += len(jarClasses[cl]['methods'])
-                    debloated_class.append(cl)
-                elif jarClasses[cl]['bloat_type'] == "preserved":
-                    current_lib['nb_preserved_class'] += 1
-            cov_tools = ["JCov", "JaCoCo", "JVM", "Yajta"]
-            file_id = lib_id.replace("/", "_") + "_" + version
-            if len(jarClasses) > 0 and os.path.exists(debloat_path):
-                with open(os.path.join(debloat_path, f"class_usage.csv"), 'w') as fd:
-                    fd.write("class,origin,bloatType")
-                    for t in cov_tools:
-                        fd.write(f",{t}")
-                    fd.write("\n")
-                    for cl in jarClasses:
-                        line = f"{cl},{jarClasses[cl]['from']},{jarClasses[cl]['bloat_type']}"
-                        for t in cov_tools:
-                            if t in jarClasses[cl]:
-                                line += ",1"
-                            else:
-                                line += ",0"
-                        line += "\n"
-                        fd.write(line)
-            current_lib['coverage'] = parseCoverage(debloat_path, deps=dep_classes, debloated_class=debloated_class, classes_dep_map=classes_dep_map, current_lib=current_lib, include=jarClasses)
+                    if len(jarClasses) > 0 and class_name not in jarClasses:
+                        continue
+                    all_classes.add(class_name)
+                    if jarClasses[class_name]['from'] == "unknown":
+                        jarClasses[class_name]['from'] = "source"
 
-            current_lib['original_execution_time'] = read_execution_time_log(os.path.join(original_path, 'execution-time.log'))
-            current_lib['debloat_execution_time'] = read_execution_time_log(os.path.join(debloat_path, 'execution-time.log'))
-            current_lib['debloat_time'] = read_execution_time_log(os.path.join(debloat_path, 'debloat-execution-time.log'))
+                    if "Method" in type:
+                        # if class_name in dep_classes:
+                        #    current_lib['dependencies'][classes_dep_map[class_name]]['nb_method'] += 1
+                        # current_lib['nb_method'] += 1
+                        if "BloatedMethod" in type:
+                            current_lib['nb_debloat_method'] += 1
+                            if class_name in dep_classes:
+                                current_lib['dependencies'][classes_dep_map[class_name]]['nb_debloat_method'] += 1
+                        elif "UsedMethod" == type:
+                            jarClasses[class_name]['bloat_type'] = "used"
+                    elif "Class" in type:
+                        o_type = l.split(",")[2].strip().lower()
+                        if "type_nb_%s" % (o_type) in current_lib:
+                            current_lib["type_nb_%s" % (o_type)] += 1
 
-            total_time += current_lib['original_execution_time']
-            total_time += current_lib['debloat_execution_time']
+                        if "BloatedClass" in type:
+                            jarClasses[class_name]['bloat_type'] = "bloated"
+                        elif "PreservedClass" in type:
+                            jarClasses[class_name]['bloat_type'] = "preserved"
+                        elif "UsedClass" == type:
+                            jarClasses[class_name]['bloat_type'] = "used"
+        if os.path.exists(os.path.join(debloat_path, 'coverage-results.csv')):
+            with open(os.path.join(debloat_path, 'coverage-results.csv')) as fd:
+                lines = fd.readlines()
+                for l in lines:
+                    if len(l.split(",")) < 3:
+                        continue
+                    (cov_tool, cl, method) = l.split(",")
+                    if cl not in jarClasses:
+                        continue
+                    jarClasses[cl][cov_tool] = True
 
-            if os.path.exists(os.path.join(debloat_path, 'debloat-execution-time.log')):
-                with open(os.path.join(debloat_path, 'debloat-execution-time.log')) as fd:
-                    # Total debloat time: 33.458 s
-                    content = fd.read().strip()
-                    if len(content) > 0:
-                        current_lib['debloatTime'] = float(content.replace("Total debloat time: ", '').replace(" s", ''))
+        current_lib['missing_classes'] = len(jarClasses) - len(all_classes)
+        current_lib['missing_lib_classes'] = 0
 
-            if os.path.exists(original_jar_path):
-                current_lib['original_jar_size'] = os.stat(original_jar_path).st_size
-            else:
-                current_lib['original_jar_size'] = 0
-            if os.path.exists(debloat_jar_path):
-                current_lib['debloat_jar_size'] = os.stat(debloat_jar_path).st_size
-            else:
-                current_lib['debloat_jar_size'] = 0
+        for cl in jarClasses:
+            if cl in dep_classes:
+                current_lib['missing_lib_classes'] += 1
+            current_lib['nb_class'] += 1
+            current_lib['nb_method'] += len(jarClasses[cl]['methods'])                
             
-            if os.path.exists(os.path.join(debloat_path, 'dup.jar')):
-                current_lib['workaround_jar_size'] = os.stat(os.path.join(debloat_path, 'dup.jar')).st_size
-            else:
-                current_lib['workaround_jar_size'] = 0
-
-            for c in lib['clients'][version]:
-                if 'artifactId' not in c or 'groupId' not in c:
-                    continue
-                client = "%s:%s" % (c['groupId'], c['artifactId'])
-                client_path = os.path.join(version_path, "clients", c['repo_name'].replace('/', '_'))
-                original_client_path = os.path.join(client_path, 'original')
-                debloat_client_path = os.path.join(client_path, 'debloat')
-
-                client_results = {
-                    'repo_name': c['repo_name'],
-                    'compiled': os.path.exists(os.path.join(original_client_path, "test-results")),
-                    'debloat': os.path.exists(os.path.join(debloat_client_path, "test-results")),
-                    'groupId': c['groupId'],
-                    'artifactId': c['artifactId'],
-                    'static_use': 'unknown'
-                }
-                client_results['original_execution_time'] = read_execution_time_log(os.path.join(original_client_path, 'execution-time.log'))
-                client_results['debloat_execution_time'] = read_execution_time_log(os.path.join(debloat_client_path, 'execution-time.log'))
-
-                total_time += client_results['debloat_execution_time']
-                total_time += client_results['original_execution_time']
-
-                path_usage = os.path.join(os.path.dirname(__file__), 'usageAnalysis', c['repo_name'].replace("/", '_') + '.csv')
-                if os.path.exists(path_usage):
-                    client_results['static_use'] = False
-                    with open(path_usage, 'r', encoding="utf-8") as usage_fd:
-                        content = usage_fd.read()
-                        for cl in jarClasses:
-                            if cl in content:
-                                client_results['static_use'] = True 
-                                break
-                if client_results['debloat']:
-                    lib_with_clients.add(lib_id)
-                    build_errors['none'] += 1
-                elif os.path.exists(original_client_path):
-                    if client_results['compiled']:
-                        build_errors['client_debloat'] += 1
-                        invalid_libs.add("%s:%s" %(lib_id, version))
-                    else:
-                        build_errors['client'] += 1
-                current_lib['clients'][c['repo_name']] = client_results
-
-
-                if lib_id not in considered_cases:
-                    considered_cases[lib_id] = {
-                        'repo_name': lib['repo_name'],
-                        'groupId': lib['groupId'],
-                        'artifactId': lib['artifactId'],
-                        'releases': lib['releases'],
-                        'clients': {}
+            if jarClasses[cl]['from'] != "source":
+                dep = jarClasses[cl]['from']
+                if dep not in current_lib['dependencies']:
+                    current_lib['dependencies'][dep] = {
+                        'nb_class': 0,
+                        'nb_debloat_class': 0,
+                        'nb_preserved_class': 0,
+                        'nb_method': 0,
+                        'nb_debloat_method': 0,
                     }
-                if version not in considered_cases[lib_id]['clients']:
-                    considered_cases[lib_id]['clients'][version] = []
-                considered_cases[lib_id]['clients'][version].append(c)
+                current_lib['dependencies'][dep]['nb_method'] += len(jarClasses[cl]['methods'])
+                    
+                current_lib['dependencies'][dep]['nb_class'] += 1
+                if cl not in debloat_jar_classes:
+                    current_lib['dependencies'][dep]['nb_debloat_class'] += 1
+                    current_lib['dependencies'][dep]['nb_debloat_method'] += len(jarClasses[cl]['methods'])
+                elif jarClasses[cl]['bloat_type'] == "preserved":
+                    current_lib['dependencies'][dep]['nb_preserved_class'] += 1
                 
-                client_results['original_test'] = readTestResults(original_client_path)
+            if cl not in debloat_jar_classes:
+                current_lib['nb_debloat_class'] += 1
+                current_lib['nb_debloat_method'] += len(jarClasses[cl]['methods'])
+                debloated_class.append(cl)
+            elif jarClasses[cl]['bloat_type'] == "preserved":
+                current_lib['nb_preserved_class'] += 1
+        cov_tools = ["JCov", "JaCoCo", "JVM", "Yajta"]
+        file_id = lib_id.replace("/", "_") + "_" + version
+        if len(jarClasses) > 0 and os.path.exists(debloat_path):
+            with open(os.path.join(debloat_path, f"class_usage.csv"), 'w') as fd:
+                fd.write("class,origin,bloatType")
+                for t in cov_tools:
+                    fd.write(f",{t}")
+                fd.write("\n")
+                for cl in jarClasses:
+                    line = f"{cl},{jarClasses[cl]['from']},{jarClasses[cl]['bloat_type']}"
+                    for t in cov_tools:
+                        if t in jarClasses[cl]:
+                            line += ",1"
+                        else:
+                            line += ",0"
+                    line += "\n"
+                    fd.write(line)
+        current_lib['coverage'] = parseCoverage(debloat_path, deps=dep_classes, debloated_class=debloated_class, classes_dep_map=classes_dep_map, current_lib=current_lib, include=jarClasses)
 
-                exclude = []
-                if current_lib['coverage'] is not None and 'classes' in current_lib['coverage']:
-                    exclude = current_lib['coverage']['classes']
-                client_results['coverage_original'] = parseCoverage(original_client_path, exclude)
-                client_results['coverage_debloat'] = parseCoverage(debloat_client_path, exclude)
-                client_results['test_cover_lib'] = False
-                if client_results['coverage_original'] is not None and current_lib['coverage'] is not None:
-                    for cl in client_results['coverage_original']['covered_classes']:
-                        if cl in current_lib['coverage']['classes']:
-                            client_results['test_cover_lib'] = True
+        current_lib['original_execution_time'] = read_execution_time_log(os.path.join(original_path, 'execution-time.log'))
+        current_lib['debloat_execution_time'] = read_execution_time_log(os.path.join(debloat_path, 'execution-time.log'))
+        current_lib['debloat_time'] = read_execution_time_log(os.path.join(debloat_path, 'debloat-execution-time.log'))
+
+        total_time += current_lib['original_execution_time']
+        total_time += current_lib['debloat_execution_time']
+
+        if os.path.exists(os.path.join(debloat_path, 'debloat-execution-time.log')):
+            with open(os.path.join(debloat_path, 'debloat-execution-time.log')) as fd:
+                # Total debloat time: 33.458 s
+                content = fd.read().strip()
+                if len(content) > 0:
+                    current_lib['debloatTime'] = float(content.replace("Total debloat time: ", '').replace(" s", ''))
+
+        if os.path.exists(original_jar_path):
+            current_lib['original_jar_size'] = os.stat(original_jar_path).st_size
+        else:
+            current_lib['original_jar_size'] = 0
+        if os.path.exists(debloat_jar_path):
+            current_lib['debloat_jar_size'] = os.stat(debloat_jar_path).st_size
+        else:
+            current_lib['debloat_jar_size'] = 0
+        
+        if os.path.exists(os.path.join(debloat_path, 'dup.jar')):
+            current_lib['workaround_jar_size'] = os.stat(os.path.join(debloat_path, 'dup.jar')).st_size
+        else:
+            current_lib['workaround_jar_size'] = 0
+
+        for c in os.listdir(os.path.join(version_path, "clients")):
+        # for c in lib['clients'][version]:
+            # if 'artifactId' not in c or 'groupId' not in c:
+            #     continue
+            # name = c['repo_name']
+            name = c
+            # client_path = os.path.join(version_path, "clients", name.replace('/', '_'))
+            client_path = os.path.join(version_path, "clients", c)
+            original_client_path = os.path.join(client_path, 'original')
+            debloat_client_path = os.path.join(client_path, 'debloat')
+            client_pom = PomExtractor(original_client_path)
+            client = "%s:%s" % (client_pom.get_group(), client_pom.get_artifact())
+
+            client_results = {
+                'repo_name': name,
+                'compiled': os.path.exists(os.path.join(original_client_path, "test-results")),
+                'debloat': os.path.exists(os.path.join(debloat_client_path, "test-results")),
+                'groupId': client_pom.get_group(),
+                'artifactId': client_pom.get_artifact(),
+                'version': client_pom.get_version(),
+                'static_use': 'unknown'
+            }
+            client_results['original_execution_time'] = read_execution_time_log(os.path.join(original_client_path, 'execution-time.log'))
+            client_results['debloat_execution_time'] = read_execution_time_log(os.path.join(debloat_client_path, 'execution-time.log'))
+
+            total_time += client_results['debloat_execution_time']
+            total_time += client_results['original_execution_time']
+
+            path_usage = os.path.join(os.path.dirname(__file__), 'usageAnalysis', name.replace("/", '_') + '.csv')
+            if os.path.exists(path_usage):
+                client_results['static_use'] = False
+                with open(path_usage, 'r', encoding="utf-8") as usage_fd:
+                    content = usage_fd.read()
+                    for cl in jarClasses:
+                        if cl in content:
+                            client_results['static_use'] = True 
                             break
-                    pass
-
-                client_results['debloat_test'] = readTestResults(debloat_client_path)
-                
-                if client_results['original_test'] is not None and client_results['debloat_test'] is not None and client_results['original_test']['passing'] == client_results['debloat_test']['passing']:
-                    count_debloated_clients += 1
-                out = []
-
-                out.append("%s_%s" %(lib['repo_name'].replace("/", "_"), version))
-                out.append(lib['groupId'])
-                out.append(lib['artifactId'])
-                out.append(version)
-                out.append(str(current_lib['compiled']))
-                out.append(str(current_lib['debloat']))
-                out.append(str(current_lib['debloat_time']))
-
-                if current_lib['original_test'] is not None:
-                    out.append(str(current_lib['original_test']['error']))
-                    out.append(str(current_lib['original_test']['failing']))
-                    out.append(str(current_lib['original_test']['passing']))
+            if client_results['debloat']:
+                lib_with_clients.add(lib_id)
+                build_errors['none'] += 1
+            elif os.path.exists(original_client_path):
+                if client_results['compiled']:
+                    build_errors['client_debloat'] += 1
+                    invalid_libs.add("%s:%s" %(lib_id, version))
                 else:
-                    out.append('')
-                    out.append('')
-                    out.append('')
-                if current_lib['debloat_test'] is not None:
-                    out.append(str(current_lib['debloat_test']['error']))
-                    out.append(str(current_lib['debloat_test']['failing']))
-                    out.append(str(current_lib['debloat_test']['passing']))
-                else:
-                    out.append('')
-                    out.append('')
-                    out.append('')
+                    build_errors['client'] += 1
+            current_lib['clients'][name] = client_results
 
-                out.append(str(current_lib['original_jar_size']))
-                out.append(str(current_lib['debloat_jar_size']))
-                out.append(str(current_lib['workaround_jar_size']))
 
-                # nb classes
-                out.append(str(current_lib['nb_class']))
-                # nb methods
-                out.append(str(current_lib['nb_method']))
-                # nb debloated classes
-                out.append(str(current_lib['nb_debloat_class']))
-                # nb preserved classes
-                out.append(str(current_lib['nb_preserved_class']))
-                # nb debloated methods
-                out.append(str(current_lib['nb_debloat_method']))
+            if lib_id not in considered_cases:
+                considered_cases[lib_id] = {
+                    'repo_name': current_lib['repo_name'],
+                    'groupId': pom.get_group(),
+                    'artifactId': pom.get_artifact(),
+                    # 'releases': lib['releases'],
+                    'clients': {}
+                }
+            if version not in considered_cases[lib_id]['clients']:
+                considered_cases[lib_id]['clients'][version] = []
+            considered_cases[lib_id]['clients'][version].append(c)
+            
+            client_results['original_test'] = readTestResults(original_client_path)
 
-                count_bloated_dependencies = 0
-                count_bloated_class_dependencies = 0
-                count_bloated_preserved_dependencies = 0
-                count_class_dependencies = 0
-                count_method_dependencies = 0
-                count_bloated_method_dependencies = 0
-                for dep in current_lib['dependencies']:
-                    count_bloated_class_dependencies += current_lib['dependencies'][dep]['nb_debloat_class']
-                    count_bloated_preserved_dependencies += current_lib['dependencies'][dep]['nb_preserved_class']
-                    count_class_dependencies += current_lib['dependencies'][dep]['nb_class']
-                    count_method_dependencies += current_lib['dependencies'][dep]['nb_method']
-                    count_bloated_method_dependencies += current_lib['dependencies'][dep]['nb_debloat_method']
-                    if current_lib['dependencies'][dep]['nb_class'] == current_lib['dependencies'][dep]['nb_debloat_class']:
-                        count_bloated_dependencies += 1
-
-                # nb dependencies
-                out.append(str(len(current_lib['dependencies'])))
-                # nb bloated dependencies
-                out.append(str(count_bloated_dependencies))
-                # nb dependency class
-                out.append(str(count_class_dependencies))
-                # nb bloated dependency class
-                out.append(str(count_bloated_class_dependencies))
-                # nb preserved dependency class
-                out.append(str(count_bloated_preserved_dependencies))
-                # nb dependency class
-                out.append(str(count_method_dependencies))
-                # nb bloated dependency class
-                out.append(str(count_bloated_method_dependencies))
-
-                if current_lib['coverage'] is not None:
-                    out.append(str(current_lib['coverage']['coverage']))
-                    out.append(str(current_lib['coverage']['dep_coverage']))
-                    out.append(str(current_lib['coverage']['all_coverage']))
-                else:
-                    out.append('')
-                    out.append('')
-                    out.append('')
-
-                out.append(c['groupId'])
-                out.append(c['artifactId'])
-                out.append(str(client_results['compiled']))
-                out.append(str(client_results['debloat']))
-                if client_results['original_test'] is not None:
-                    out.append(str(client_results['original_test']['error']))
-                    out.append(str(client_results['original_test']['failing']))
-                    out.append(str(client_results['original_test']['passing']))
-                else:
-                    out.append('')
-                    out.append('')
-                    out.append('')
-                if client_results['debloat_test'] is not None:
-                    out.append(str(client_results['debloat_test']['error']))
-                    out.append(str(client_results['debloat_test']['failing']))
-                    out.append(str(client_results['debloat_test']['passing']))
-                else:
-                    out.append('')
-                    out.append('')
-                    out.append('')
-                if client_results['coverage_debloat'] is not None:
-                    out.append(str(client_results['coverage_debloat']['coverage']))
-                    del client_results['coverage_debloat']['classes']
-                else:
-                    out.append('')
-                out.append(str(client_results['test_cover_lib']))
-                out.append(str(client_results['static_use']))
-
-                
-                line = ",".join(out)
-                if current_lib['compiled']:
-                    print(line)
-                csv += (line) + '\n'
+            exclude = []
             if current_lib['coverage'] is not None and 'classes' in current_lib['coverage']:
-                del current_lib['coverage']['classes']
-                del current_lib['coverage']['lib_classes']
-            if lib_id not in results:
-                results[lib_id] = {}
-            results[lib_id][version] = current_lib
+                exclude = current_lib['coverage']['classes']
+            client_results['coverage_original'] = parseCoverage(original_client_path, exclude)
+            client_results['coverage_debloat'] = parseCoverage(debloat_client_path, exclude)
+            client_results['test_cover_lib'] = False
+            if client_results['coverage_original'] is not None and current_lib['coverage'] is not None:
+                for cl in client_results['coverage_original']['covered_classes']:
+                    if cl in current_lib['coverage']['classes']:
+                        client_results['test_cover_lib'] = True
+                        break
+                pass
+
+            client_results['debloat_test'] = readTestResults(debloat_client_path)
+            
+            if client_results['original_test'] is not None and client_results['debloat_test'] is not None and client_results['original_test']['passing'] == client_results['debloat_test']['passing']:
+                count_debloated_clients += 1
+            out = []
+
+            out.append("%s_%s" %(name.replace("/", "_"), version))
+            out.append(pom.get_group())
+            out.append(pom.get_artifact())
+            out.append(version)
+            out.append(str(current_lib['compiled']))
+            out.append(str(current_lib['debloat']))
+            out.append(str(current_lib['debloat_time']))
+
+            if current_lib['original_test'] is not None:
+                out.append(str(current_lib['original_test']['error']))
+                out.append(str(current_lib['original_test']['failing']))
+                out.append(str(current_lib['original_test']['passing']))
+            else:
+                out.append('')
+                out.append('')
+                out.append('')
+            if current_lib['debloat_test'] is not None:
+                out.append(str(current_lib['debloat_test']['error']))
+                out.append(str(current_lib['debloat_test']['failing']))
+                out.append(str(current_lib['debloat_test']['passing']))
+            else:
+                out.append('')
+                out.append('')
+                out.append('')
+
+            out.append(str(current_lib['original_jar_size']))
+            out.append(str(current_lib['debloat_jar_size']))
+            out.append(str(current_lib['workaround_jar_size']))
+
+            # nb classes
+            out.append(str(current_lib['nb_class']))
+            # nb methods
+            out.append(str(current_lib['nb_method']))
+            # nb debloated classes
+            out.append(str(current_lib['nb_debloat_class']))
+            # nb preserved classes
+            out.append(str(current_lib['nb_preserved_class']))
+            # nb debloated methods
+            out.append(str(current_lib['nb_debloat_method']))
+
+            count_bloated_dependencies = 0
+            count_bloated_class_dependencies = 0
+            count_bloated_preserved_dependencies = 0
+            count_class_dependencies = 0
+            count_method_dependencies = 0
+            count_bloated_method_dependencies = 0
+            for dep in current_lib['dependencies']:
+                count_bloated_class_dependencies += current_lib['dependencies'][dep]['nb_debloat_class']
+                count_bloated_preserved_dependencies += current_lib['dependencies'][dep]['nb_preserved_class']
+                count_class_dependencies += current_lib['dependencies'][dep]['nb_class']
+                count_method_dependencies += current_lib['dependencies'][dep]['nb_method']
+                count_bloated_method_dependencies += current_lib['dependencies'][dep]['nb_debloat_method']
+                if current_lib['dependencies'][dep]['nb_class'] == current_lib['dependencies'][dep]['nb_debloat_class']:
+                    count_bloated_dependencies += 1
+
+            # nb dependencies
+            out.append(str(len(current_lib['dependencies'])))
+            # nb bloated dependencies
+            out.append(str(count_bloated_dependencies))
+            # nb dependency class
+            out.append(str(count_class_dependencies))
+            # nb bloated dependency class
+            out.append(str(count_bloated_class_dependencies))
+            # nb preserved dependency class
+            out.append(str(count_bloated_preserved_dependencies))
+            # nb dependency class
+            out.append(str(count_method_dependencies))
+            # nb bloated dependency class
+            out.append(str(count_bloated_method_dependencies))
+
+            if current_lib['coverage'] is not None:
+                out.append(str(current_lib['coverage']['coverage']))
+                out.append(str(current_lib['coverage']['dep_coverage']))
+                out.append(str(current_lib['coverage']['all_coverage']))
+            else:
+                out.append('')
+                out.append('')
+                out.append('')
+
+            out.append(client_pom.get_group())
+            out.append(client_pom.get_artifact())
+            out.append(str(client_results['compiled']))
+            out.append(str(client_results['debloat']))
+            if client_results['original_test'] is not None:
+                out.append(str(client_results['original_test']['error']))
+                out.append(str(client_results['original_test']['failing']))
+                out.append(str(client_results['original_test']['passing']))
+            else:
+                out.append('')
+                out.append('')
+                out.append('')
+            if client_results['debloat_test'] is not None:
+                out.append(str(client_results['debloat_test']['error']))
+                out.append(str(client_results['debloat_test']['failing']))
+                out.append(str(client_results['debloat_test']['passing']))
+            else:
+                out.append('')
+                out.append('')
+                out.append('')
+            if client_results['coverage_debloat'] is not None:
+                out.append(str(client_results['coverage_debloat']['coverage']))
+                del client_results['coverage_debloat']['classes']
+            else:
+                out.append('')
+            out.append(str(client_results['test_cover_lib']))
+            out.append(str(client_results['static_use']))
+
+            
+            line = ",".join(out)
+            if current_lib['compiled']:
+                print(line)
+            csv += (line) + '\n'
+        if current_lib['coverage'] is not None and 'classes' in current_lib['coverage']:
+            del current_lib['coverage']['classes']
+            del current_lib['coverage']['lib_classes']
+        if lib_id not in results:
+            results[lib_id] = {}
+        results[lib_id][version] = current_lib
 
 print("Number of error", build_errors)
 print("Invalid debloated lib on client", invalid_libs)

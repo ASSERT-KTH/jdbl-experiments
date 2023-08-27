@@ -12,6 +12,10 @@ USER jdbl
 
 WORKDIR /home/jdbl
 
+RUN git clone https://github.com/castor-software/depclean.git
+RUN cd depclean;  git checkout dc1647b1fe15fd3d5bfdfa9eb2e9b0c1e51334ac;
+RUN cd depclean; mvn install -Dmaven.test.skip;
+
 ARG LIB_VER
 RUN git clone https://github.com/castor-software/jdbl.git
 RUN cd jdbl;  git checkout $LIB_VER;
@@ -26,8 +30,10 @@ ENV GITHUB_OAUTH=''
 
 COPY coverageAgent.jar coverageAgent.jar
 COPY extractclassusage.jar extractclassusage.jar
+COPY maven-proxy.xml maven-proxy.xml
 COPY __init__.py /__init__.py
 COPY jdbl.py jdbl.py
+COPY bloat_report.py bloat_report.py
 COPY main.py main.py
 COPY compile.py compile.py
 COPY usage.py usage.py

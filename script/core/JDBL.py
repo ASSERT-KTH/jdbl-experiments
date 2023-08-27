@@ -1,5 +1,4 @@
 import tempfile
-import subprocess
 import os
 import shutil
 import time
@@ -16,13 +15,14 @@ def write_time(time:float, dir_path:str):
         fd.write(str(time))
 
 class JDBL:
-    def __init__(self, library: Project, client: Project, version: str = None, working_directory: str = None, commit: str = None, client_commit: str = None, output: str = None):
+    def __init__(self, library: Project, client: Project, version: str = None, working_directory: str = None, commit: str = None, client_commit: str = None, output: str = None, module: str = None):
         global OUTPUT_dir
         self.library = library
         self.lib_commit = commit
         self.client_commit = client_commit
         self.client = client
         self.version = version
+        self.module = module
         self.working_directory = working_directory
         if working_directory is None:
             self.working_directory = tempfile.mkdtemp()
@@ -52,19 +52,20 @@ class JDBL:
             if not current_status['success']:
                 print("[Exit] Unable to clone the library", flush=True)
                 return
+            if self.client is not None:
+                print("2. Clone client...", flush=True)
+                current_status = {
+                    "name": 'clone client',
+                    "start": previous_time,
+                    "success": False
+                }
+                results['steps'].append(current_status)
+                current_status['success'] = self.client.clone(
+                    self.working_directory)
+                if self.client_commit is not None:
+                    self.client.checkout_commit(self.client_commit)
 
-            print("2. Clone client...", flush=True)
-            current_status = {
-                "name": 'clone client',
-                "start": previous_time,
-                "success": False
-            }
-            results['steps'].append(current_status)
-            current_status['success'] = self.client.clone(
-                self.working_directory)
-            if self.client_commit is not None:
-                self.client.checkout_commit(self.client_commit)
-            current_status['commit'] = self.client.get_commit()
+                current_status['commit'] = self.client.get_commit()
 
             previous_time = time.time()
             current_status['end'] = previous_time
@@ -75,7 +76,7 @@ class JDBL:
             dep_artifact = self.library.pom.get_artifact()
             dep_group = self.library.pom.get_group()
 
-            if self.version is None and self.lib_library is None:
+            if self.version is None:
                 print("3. Extract library version", flush=True)
 
                 current_status = {
@@ -115,6 +116,9 @@ class JDBL:
                     self.version)
                 current_status['commit'] = self.library.get_commit()
 
+            if self.module is not None:
+                self.library.path = os.path.join(self.library.path, self.module)
+            
             previous_time = time.time()
             current_status['end'] = previous_time
             if not current_status['success']:
@@ -141,11 +145,15 @@ class JDBL:
                 if not os.path.exists(lib_original_path):
                     os.mkdir(lib_original_path)
 
+                
                 current_status['success'] = self.library.copy_pom(
                     lib_original_path + "/pom.xml")
 
                 current_status['success'] = self.library.package(
                     stdout=lib_original_path + "/execution.log") and current_status['success']
+                if not current_status['success']:
+                    print("[exit] Unable to compile the library", flush=True)
+                    return
 
                 current_status['success'] = self.library.copy_jar(
                     lib_original_path + "/original.jar") and current_status['success']
@@ -179,7 +187,7 @@ class JDBL:
                     __file__), '..', 'coverageAgent.jar'), os.path.join(self.library.path, 'coverageAgent.jar'))
                 if not os.path.exists(lib_debloat_path):
                     os.mkdir(lib_debloat_path)
-                current_status['success'] = Debloat(self.library).run(
+                current_status['success'] = Debloat(self.library).jdbl(
                     stdout=lib_debloat_path + "/execution.log")
                 current_status['success'] = self.library.copy_pom(
                     lib_debloat_path + "/pom.xml") and current_status['success']
